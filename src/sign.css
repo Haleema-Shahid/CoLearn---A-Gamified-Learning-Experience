@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+body {
+  display: flex;
+  height: 100vh;
+}
+
+
+.login-box h2 {
+  color:#072f57; 
+  font-size: 20px;
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+}
+
+
+
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+  border-radius: 5px; /* rounded corners */
+  margin-bottom: 10px; /* gap between fields */
+  border: 1px solid rgb(117, 117, 117); /* light grey border */
+  padding: 10px; /* space between text and input box */
+  width: 300px; /* same as submit button width */
+  height: 40px;
+  background-color: rgb(255, 255, 255);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+
+}
+.login-box input[type="submit"] {
+  display: block; /* centralized button */
+  margin: 0 auto; /* centralized button */
+  background-color: #072f57; /* cool blue button color */
+  border: none; /* remove border */
+  padding: 10px 20px; /* add padding */
+  border-radius: 5px; /* rounded corners */
+  cursor: pointer; /* change cursor to pointer */
+  font-size: 20px;
+  color: azure;
+  text-align: center;
+  margin-top: 30px;
+  width: 300px; /* same as submit button width */
+height: 40px; 
+  
+}
+
+.login-box input[type="text"]:focus,
+.login-box input[type="password"]:focus{
+  border: 1px solid #00008B; /* dark blue border */
+}
+.login-box{
+  
+  text-align: left;
+  color: rgb(42, 85, 195);
+
+}
+
+.split {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+.left {
+  left: 0;
+  background: linear-gradient(to bottom, #87CEEB, #00008B);
+  width: 60%;
+  overflow: hidden;
+  padding-top: 0%;
+
+}
+
+
+.centered img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  
+}
+.right {
+  right: 0;
+  background-color: rgb(255, 255, 255);
+  width: 40%;
+  display: flex;
+  justify-content: center;
+}
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%; /* or any other width */
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+.field-container {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+label, input {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+}
+label {
+  margin-bottom:15px;
+  width: 100%; /* or any other width */
+  font-size: 17px;
+  color: #072f57; 
+}
+input {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: left;
+}
+
