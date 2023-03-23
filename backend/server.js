@@ -1,24 +1,30 @@
 const express = require('express')
 const app = express()
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
 const routesUrls = require('./routes/route')
 const dotenv = require('dotenv')
 const cors = require('cors')
+const session = require('express-session');
 
+app.use(session({
+  secret: 'haleema1073',
+  resave: false,
+  saveUninitialized: false
+}));
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+//const { MongoClient, ServerApiVersion } = require('mongodb');
 
 dotenv.config() 
 
 
-const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-//client.connect(()=>console.log("db connected"))
-client.connect(err => {
-  if (err) throw err;
-  const collection = client.db("colearnDb").collection("user");
-  client.close();
-});
+// const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+// //client.connect(()=>console.log("db connected"))
+// client.connect(err => {
+//   if (err) throw err;
+//   const collection = client.db("colearnDb").collection("user");
+//   client.close();
+// });
 
 app.use(express.json())
 app.use(cors())
