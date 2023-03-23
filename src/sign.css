@@ -67,8 +67,8 @@ height: 40px;
 }
 .left {
   left: 0;
-  background: linear-gradient(to bottom, #87CEEB, #00008B);
-  width: 60%;
+  background-color: rgb(255, 255, 255);
+  width: 50%;
   overflow: hidden;
   padding-top: 0%;
 
@@ -85,7 +85,7 @@ height: 40px;
 .right {
   right: 0;
   background-color: rgb(255, 255, 255);
-  width: 40%;
+  width: 50%;
   display: flex;
   justify-content: center;
 }

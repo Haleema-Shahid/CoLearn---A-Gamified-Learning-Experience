@@ -11,9 +11,23 @@ import { BrowserRouter, Switch, Route,Routes } from 'react-router-dom';
 import ClassHeader from './components/ClassHeader/ClassHeader';
 import ClassDefault from './components/ClassDefault/ClassDefault';
 import TopicsBoard from './components/TopicsMainPage/TopicsBoard';
+import AssignmentPage from './components/AssignmentPage/AssignmentPage'
+import SignUp from './components/LogInSignUp/SignUp'
+import SignIn from './components/LogInSignUp/SignIn'
+import LoginNav from './components/Navigations/LoginNav'
+import nav from './components/Navigations/nav'
+import Sidebar from './components/Navigations/Sidebar'
+
+
 function App() {
   return (
     <div className="App">
+      <AssignmentPage/>
+      {/* <SignUp/> */}
+      
+      {/* <nav></nav>
+      <SignIn></SignIn> */}
+
       <BrowserRouter>
         <Routes>
         <Route path="/" element={<TeacherDashboard />} />
