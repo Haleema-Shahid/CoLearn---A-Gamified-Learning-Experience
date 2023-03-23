@@ -29,21 +29,46 @@ router.post('/signup', async (request, response)=> { // add async keyword to use
     }
 })
 
-router.get('/login', async (request, response) => {
+// router.get('/user', async (request, response) => {
+//     const collection = client.db("colearnDb").collection("user");
+//     const user = await collection.findOne({ email: request.body.email, password: request.body.password, role: request.body.role});
+
+//     if (user) {
+//         request.session.userId = user._id;
+//         //console.log(request.session.userId);
+//         console.log(user);
+//         //response.send(user);
+//     } else {
+//         console.log("error")
+//         //response.status(401).send('Invalid email or password');
+//     }
+// });
+router.get('/user/:userId', async (request, response) => {
     const collection = client.db("colearnDb").collection("user");
     const user = await collection.findOne({ email: request.body.email, password: request.body.password, role: request.body.role});
 
     if (user) {
-        request.session.userId = user._id;
-        //console.log(request.session.userId);
-        console.log(user);
-        //response.send(user);
+        const userId = user._id.toString(); // convert the ObjectId to a string
+        response.redirect(`/user/${userId}`); // redirect to the new URL with the user ID in the parameter
     } else {
         console.log("error")
         //response.status(401).send('Invalid email or password');
     }
 });
 
+router.get('/user/:userId', async (request, response) => {
+    const collection = client.db("colearnDb").collection("user");
+    const user = await collection.findOne({ _id: ObjectId(request.params.userId) }); // get the user from the database using the user ID in the URL parameter
+
+    if (user) {
+        request.session.userId = user._id;
+        console.log(user);
+        //response.send(user);
+    } else {
+        console.log("error")
+        //response.status(404).send('User not found');
+    }
+});
 router.post('/class', async(request, response)=>{
     const users = client.db("colearnDb").collection("user");
     const classes = client.db("colearnDb").collection("class");
