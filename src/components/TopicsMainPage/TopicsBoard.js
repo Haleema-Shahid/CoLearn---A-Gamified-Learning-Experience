@@ -57,7 +57,7 @@ function TopicsBoard() {
       <h1>Week {weekNumber} Topics</h1>
       {/* <Link to={`/users/${userID}/classes/${classID}/weeks/${weekID}/add-topic`}>Add Topic</Link> */}
       {topics.map((topic) => (
-        <TopicCard key={topic.id} title={topic.title} description={topic.description} />
+        <TopicCard key={topic.id} title={topic.title} description={topic.description} userID={userID} classID={classID} weekID={weekID} weekNumber={weekNumber}/>
       ))}
     </div>
   );

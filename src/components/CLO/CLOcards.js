@@ -45,7 +45,7 @@ function CLOCard(props) {
   };
 
   return (
-    <Card sx={{ maxWidth: 900 }}>
+    <Card sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         sx={{
          

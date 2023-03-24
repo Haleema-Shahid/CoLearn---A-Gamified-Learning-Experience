@@ -137,7 +137,7 @@ function ClassHeader(props) {
 
   return (
     <div>
-      <Container>
+      <Container sx={{paddingBottom:"20px"}}>
         <GradientBackground >
           <Typography variant="h2" component="h1" gutterBottom sx={{ fontSize: '2.5rem' }}>
             Class {classID} Header

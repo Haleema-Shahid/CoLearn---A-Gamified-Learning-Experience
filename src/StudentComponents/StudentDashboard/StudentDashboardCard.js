@@ -25,7 +25,7 @@ const styles = {
 
 }
 
-function TopicCard(props) {
+function StudentDashboardCard(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -39,15 +39,13 @@ function TopicCard(props) {
     setAnchorEl(null);
   };
 
+  const handleDeleteClick = () => {
+    props.onDelete(props.name, props.section);
+    handleMenuClose();
+  };
 
   return (
-    <div style={{ margin: "auto",
-    display: "flex",
-    flexDirection: "column",
-    paddingLeft: "50px",
-    justifyContent: "left",
-    alignItems: "center"}}>
-    <Card sx={{ height: 20 + "vh", width: "50%", marginBottom: "16px", marginTop: "10px" }}>
+    <Card sx={{ height: 20 + "vh", maxwidth: 300 }}>
       <CardHeader
         sx={{
           height: '50%',
@@ -74,26 +72,52 @@ function TopicCard(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                
-                <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
-                <Link to={`/user/${props.userID}/class/${props.classID}/week/${props.weekID}/${props.weekNumber}/topic/${props.key}}`}><MenuItem >Add an Assignment</MenuItem></Link>
-                <MenuItem onClick={handleMenuClose}>Add a Material</MenuItem>
-                <MenuItem onClick={handleMenuClose}>View Topic</MenuItem>
+                <MenuItem onClick={handleMenuClose}>View Assignments</MenuItem>
+                <MenuItem onClick={handleDeleteClick}>Leave Class</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
+                {/* <Link to={`/user/${props.userID}/class/${props.id}`}> */}
+                  <MenuItem onClick={handleMenuClose}>View CLO</MenuItem>
+                  {/* </Link> */}
+                <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
               </Menu>
             </div>
             </div>
         }
-        title={props.title}
+        title={props.name}
       //subheader={props.section}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {props.description}
+          {props.section}
         </Typography>
       </CardContent>
     </Card>
-    </div>
+
+    // <div className="class-card">
+    //     <div className='class-name-container'>
+    //         <div className='dropdown'>
+    //             <div className='dropbtn optionContainer btn-right showLeft '>
+    //                 <li></li>
+    //                 <li></li>
+    //                 <li></li>
+    //             </div>
+    //             <div class="dropdown-content-forTeacher-class">
+    //                 <a href="#home">Delete</a>
+    //                 <a href="#about">Copy Code</a>
+    //                 <a href="#about">View CLO</a>
+    //                 <a href="#about">Class Analytics</a>
+    //                 <a href="#about">Leaderboard</a>
+    //             </div>
+    //         </div>
+
+    //         <h3 className="class-name">{props.name}</h3>
+    //     </div>
+    //     <div class-section-container>
+    //         <p className="class-section">{props.section}</p>
+    //     </div>
+    // </div>
   );
 }
 
-export default TopicCard
+export default StudentDashboardCard
