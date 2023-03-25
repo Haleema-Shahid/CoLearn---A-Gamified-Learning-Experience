@@ -24,15 +24,16 @@ import Assignments from './StudentComponents/ClassAssignments/Assignment'
 function App() {
   return (
     <div className="App">
+
       {/* <HelpingMaterial></HelpingMaterial> */}
-    
       {/* <SignUp/> */}
+      <SignIn/>
       
       {/* <nav></nav>
       <SignIn></SignIn> */}
       {/* <LoginNav></LoginNav> */}
 
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
@@ -42,6 +43,8 @@ function App() {
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
         </Routes>
+
+
       </BrowserRouter>
       {/* ---------------Student work ---------------*/}
       {/* <Assignments></Assignments> */}

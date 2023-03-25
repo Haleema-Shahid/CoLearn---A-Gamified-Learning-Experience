@@ -33,14 +33,59 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+  const [role, setrole] = useState('');
+  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const info = new FormData(e.currentTarget);
+    const email = info.get('email');
+    const password = info.get('password');
+    const role = e.target['radio-buttons-group'].value;
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password, role: role })
+    };
+  
+    const response = await fetch('http://localhost:4000/api/login', requestOptions);
+    const data = response.json();
+  
+    if (response.ok) {
+      // Do something with the user data
+      console.log(data);
+      history.push(`/user/${data.userId}`);
+    } else {
+      // Handle the error
+      console.log('Error:', response.status);
+    }
+  }
+  
+  
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+    
+    
+  //   setemail(data.get('email'));
+  //   setpassword(data.get('password'));
+  //   setrole(event.target['radio-buttons-group'].value)
+    
+  //   const loginCredentials = {
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //     role: event.target['radio-buttons-group'].value
+  //   }
+  //   getUser(loginCredentials)
+
+
+  //   console.log({
+  //     email: data.get('email')
+  //   });
+  // };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,8 +136,8 @@ export default function SignIn() {
               //  value={value}
               //  onChange={handleChange}
               >
-                <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
-                <FormControlLabel value="Student" control={<Radio />} label="Student" />
+                <FormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+                <FormControlLabel value="student" control={<Radio />} label="Student" />
               </RadioGroup>
             </FormControl>
             </Grid>

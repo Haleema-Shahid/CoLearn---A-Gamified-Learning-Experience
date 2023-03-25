@@ -14,7 +14,7 @@ app.use(session({
 
 //const { MongoClient, ServerApiVersion } = require('mongodb');
 
-dotenv.config() 
+//dotenv.config() 
 
 
 // const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
@@ -29,5 +29,6 @@ dotenv.config()
 app.use(express.json())
 app.use(cors())
 app.use('/api',routesUrls) 
+
 
 app.listen(4000, ()=> console.log("Server is up and running\n"))

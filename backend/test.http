@@ -9,20 +9,22 @@
 #     "role": "teacher"
 # }
 
-# GET http://localhost:4000/api/login
-# Content-Type: application/json
-
-# {
-#     "email": "haleemashahid20@gmail.com",
-#     "password": "haleema",
-#     "role": "teacher"
-# }
-
-POST http://localhost:4000/api/createclass
+POST http://localhost:4000/api/login
 Content-Type: application/json
-Cookie: session=641804348235e2e67ca07f54
 
 {
-    "name" : "Programming Fundamentals",
-    "description": "CS-1E"
+    "email": "haleemashahid20@gmail.com",
+    "password": "haleema",
+    "role": "teacher"
 }
+
+# POST http://localhost:4000/api/createclass
+# Content-Type: application/json
+# Cookie: session=641804348235e2e67ca07f54
+
+# {
+#     "name" : "Programming Fundamentals",
+#     "description": "CS-1E"
+# }
+
+# GET http://localhost:4000/api/hello
