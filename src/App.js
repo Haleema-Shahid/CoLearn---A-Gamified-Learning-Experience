@@ -17,25 +17,37 @@ import SignIn from './components/LogInSignUp/SignIn'
 import LoginNav from './components/Navigations/LoginNav'
 import nav from './components/Navigations/nav'
 import Sidebar from './components/Navigations/Sidebar'
-
+import HelpingMaterial from './components/HelpingMaterial/HelpingMaterial'
+import StudentDashboard from './StudentComponents/StudentDashboard/StudentDashboard'
+import Assignments from './StudentComponents/ClassAssignments/Assignment'
 
 function App() {
   return (
     <div className="App">
-      {/* <AssignmentPage/> */}
+
+      {/* <HelpingMaterial></HelpingMaterial> */}
       {/* <SignUp/> */}
       <SignIn/>
       
       {/* <nav></nav>
       <SignIn></SignIn> */}
+      {/* <LoginNav></LoginNav> */}
 
       {/* <BrowserRouter>
         <Routes>
         <Route path="/" element={<TeacherDashboard />} />
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
+        <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
+        <Route path="/user/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
         </Routes>
-      </BrowserRouter> */}
+
+
+      </BrowserRouter>
+      {/* ---------------Student work ---------------*/}
+      {/* <Assignments></Assignments> */}
+      {/* <StudentDashboard></StudentDashboard> */}
+
     </div>
   );
 }

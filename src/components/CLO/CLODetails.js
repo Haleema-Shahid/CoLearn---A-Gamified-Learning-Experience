@@ -29,11 +29,11 @@ class CloDetails extends Component {
 
     return (
       <div >
-        <h2>Class Details</h2>
+        {/* <h2>Class Details</h2>
         <p>User ID: {userID}</p>
         <p>Class ID: {classID}</p>
-        <p>weeks: {cloWeeks}</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', justifyContent: 'center',alignItems: 'center' }}>
+        <p>weeks: {cloWeeks}</p> */}
+        <div style={{ gap: '16px', justifyContent: 'center',alignItems: 'center', paddingLeft:"20%" }}>
         {cards}
         </div>
       </div>
