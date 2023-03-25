@@ -22,19 +22,20 @@ import Sidebar from './components/Navigations/Sidebar'
 function App() {
   return (
     <div className="App">
-      <AssignmentPage/>
+      {/* <AssignmentPage/> */}
       {/* <SignUp/> */}
+      <SignIn/>
       
       {/* <nav></nav>
       <SignIn></SignIn> */}
 
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
         <Route path="/" element={<TeacherDashboard />} />
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   );
 }
