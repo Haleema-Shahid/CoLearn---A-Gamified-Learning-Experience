@@ -34,7 +34,9 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<TeacherDashboard />} />
+        <Route path="/" element={<SignIn />} />
+        <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/user/:userId" element={<TeacherDashboard />} />
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
