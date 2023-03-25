@@ -15,7 +15,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState} from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -37,7 +39,8 @@ export default function SignIn() {
   const [password, setpassword] = useState('');
   const [role, setrole] = useState('');
   
-
+  const navigate = useNavigate();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const info = new FormData(e.currentTarget);
@@ -52,39 +55,25 @@ export default function SignIn() {
     };
   
     const response = await fetch('http://localhost:4000/api/login', requestOptions);
-    const data = response.json();
-  
+    const data = await response.json();
+    
     if (response.ok) {
       // Do something with the user data
-      console.log(data);
-      history.push(`/user/${data.userId}`);
+      //console.log(data._id);
+      const userId = data._id;
+      if(data.role == 'teacher'){
+        navigate(`/t/${userId}`)
+      }
+      else if(data.role == 'student'){
+        navigate(`/s/${userId}`)
+      }
+
     } else {
       // Handle the error
       console.log('Error:', response.status);
     }
   }
   
-  
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-    
-    
-  //   setemail(data.get('email'));
-  //   setpassword(data.get('password'));
-  //   setrole(event.target['radio-buttons-group'].value)
-    
-  //   const loginCredentials = {
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //     role: event.target['radio-buttons-group'].value
-  //   }
-  //   getUser(loginCredentials)
-
-
-  //   console.log({
-  //     email: data.get('email')
-  //   });
-  // };
 
 
   return (
@@ -155,14 +144,14 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to={`/signup`}>
+                
                   Forgot password?
-                </Link>
+                
               </Grid>
               <Grid item>
-                <Link to={`/signup`}>
+              
                   {"Don't have an account? Sign Up"}
-                </Link>
+                
               </Grid>
             </Grid>
           </Box>

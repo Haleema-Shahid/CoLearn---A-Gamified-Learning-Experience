@@ -43,7 +43,7 @@ router.post('/login', async (request, response) => {
         console.log("error")
         response.status(401).send('Invalid email or password');
     }
-    console.log("zawyar")
+    //console.log("zawyar")
 });
 
 //get user

@@ -27,17 +27,18 @@ function App() {
 
       {/* <HelpingMaterial></HelpingMaterial> */}
       {/* <SignUp/> */}
-      <SignIn/>
+      {/* <SignIn/> */}
       
       {/* <nav></nav>
       <SignIn></SignIn> */}
       {/* <LoginNav></LoginNav> */}
 
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/user/:userId" element={<TeacherDashboard />} />
+        <Route path="/t/:userId" element={<TeacherDashboard />} />
+        <Route path="/s/:userId" element={<StudentDashboard />} />
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
@@ -46,9 +47,9 @@ function App() {
 
 
       </BrowserRouter>
-      {/* ---------------Student work ---------------*/}
+      {/*---------------Student work ---------------*/}
       {/* <Assignments></Assignments> */}
-      {/* <StudentDashboard></StudentDashboard> */}
+      {/* <StudentDashboard></StudentDashboard>*/}
 
     </div>
   );

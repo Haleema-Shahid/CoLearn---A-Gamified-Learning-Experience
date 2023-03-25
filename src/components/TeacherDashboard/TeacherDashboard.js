@@ -3,9 +3,10 @@ import './TeacherDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import TeacherDashboardCard from './TeacherDashboardCard';
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function TeacherDashboard() {
-  const[userID, setUserID]=useState(121);
+  const { userID} = useParams();
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
   const [section, setSection] = useState('');
@@ -24,7 +25,7 @@ function TeacherDashboard() {
   };
 
   const handleCreateClassSubmit = (event) => {
-
+    //fetch api here
     if (className === '' || section === '') {
       // Class name or section is empty, do not create new class
       setShowCreateClassModal(false);
