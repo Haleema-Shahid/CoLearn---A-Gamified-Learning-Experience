@@ -22,7 +22,8 @@ function TeacherDashboard() {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
   const [description, setdescription] = useState('');
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState([{id:1,name:"Advanced Programming",description:"B",students:[1,2,3,4],teacher:userId,weeks:
+  [{id:1, topics:[{id:1}]}]}]);
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
