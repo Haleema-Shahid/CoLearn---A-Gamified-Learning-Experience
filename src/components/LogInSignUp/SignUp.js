@@ -8,7 +8,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import Link1 from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -16,14 +16,17 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Radio } from '@mui/material';
+import { useState} from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link1 color="inherit" href="https://mui.com/">
         Co-Learn - A Gamified Learning Experience
-      </Link>{' '}
+      </Link1>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -33,14 +36,41 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const info = new FormData(e.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
-  };
+    const firstName = info.get(firstName);
+    const lastName = info.get(lastName);
+    const email = info.get('email');
+    const password = info.get('password');
+    const role = e.target['radio-buttons-group'].value;
+    
+  
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName:firstName, lastName:lastName, email: email, password: password, role: role })
+    };
+  
+    const response = await fetch('http://localhost:4000/api/login', requestOptions);
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Do something with the user data
+      //console.log(data._id);
+     
+
+    } else {
+      // Handle the error
+      console.log('Error:', response.status);
+    }
+  }
+  
+ 
 
   return (
     <ThemeProvider theme={theme}>
@@ -143,7 +173,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to={'/'}>
                   Already have an account? Sign in
                 </Link>
               </Grid>
