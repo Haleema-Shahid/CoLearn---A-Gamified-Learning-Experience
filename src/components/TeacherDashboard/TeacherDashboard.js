@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TeacherDashboard.css';
 
 import TeacherDashboardCard from './TeacherDashboardCard';
@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-
+import { useNavigate } from 'react-router-dom';
 import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
@@ -18,15 +18,33 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function TeacherDashboard() {
-  const { userID } = useParams();
+  const { userId } = useParams();
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
-  const [section, setSection] = useState('');
-  const [classes, setClasses] = useState([{ name: "Advanced Programming", section: "B", id: "A2561" }, { name: "Database", section: "B", id: "A2562" }, { name: "Programming Fundamentals", section: "B", id: "A2563" }]);
+  const [description, setdescription] = useState('');
+  const [classes, setClasses] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
 
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/t/${userId}`);
+        const data = await response.json();
+        if(data)
+          setClasses(data.classes);
+        else{
+          setClasses([]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [userId]);
 
   const handleCreateClassClick = () => {
     setShowCreateClassModal(true);
@@ -37,8 +55,8 @@ function TeacherDashboard() {
     setClassName(event.target.value);
   };
 
-  const handleSectionChange = (event) => {
-    setSection(event.target.value);
+  const handledescriptionChange = (event) => {
+    setdescription(event.target.value);
   };
 
   const handleClose = (event, reason) => {
@@ -52,14 +70,25 @@ function TeacherDashboard() {
 
   const handleCreateClassSubmit = async (e) => {
     e.preventDefault();
+    const info = new FormData(e.currentTarget);
+    const name = info.get('class-name-input');
+    const desc = info.get('description-input');
     //fetch api here
-    if (className === '' || section === '') {
-      // Class name or section is empty, do not create new class
-      setShowCreateClassModal(false);
-      return;
+    console.log(name);
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ classname: name, description: desc, user_id: userId })
+    };
+
+    console.log(userId);
+    const response = await fetch(`/t/${userId}/class`, requestOptions);
+    const data = await response.json();
+    if(data){
+      navigate(`/t/${userId}`);
     }
     //checking if this class name and section already exists
-    if (classes.filter(cls => cls.name === className && cls.section === section).length > 0) {
+    if (classes.filter(cls => cls.name === className && cls.description === description).length > 0) {
       console.log("entered");
       setOpen(true);
       return
@@ -68,44 +97,26 @@ function TeacherDashboard() {
 
 
     // Create new class from backend and fetch in front end again
-    setClasses([...classes, { name: className, section }]);
-    setShowCreateClassModal(false);
-    setClassName('');
-    setSection('');
+    // setClasses([...classes, { name: className, description }]);
+    // setShowCreateClassModal(false);
+    // setClassName('');
+    // setdescription('');
 
+    
 
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ userID:userID, className:className, section: section })
-    // };
-
-    // const response = await fetch('http://localhost:4000/api/login', requestOptions);
-    // const data = await response.json();
-
-    // if (response.ok) {
-    //   // Do something with the user data
-    //   //console.log(data._id);
-
-
-    // } else {
-    //   // Handle the error
-    //   console.log('Error:', response.status);
-    // }
-
-
+    
 
   };
 
   const handleCancelClick = () => {
     setShowCreateClassModal(false);
     setClassName('');
-    setSection('');
+    setdescription('');
     setCreateNewClassButton(false)
   };
 
-  const handleDeleteClass = (name, section) => {
-    setClasses(classes.filter(cls => !(cls.name === name && cls.section === section)));
+  const handleDeleteClass = (name, description) => {
+    setClasses(classes.filter(cls => !(cls.name === name && cls.description === description)));
   };
 
   return (
@@ -147,8 +158,8 @@ function TeacherDashboard() {
                 required
                 id="sectionInput"
                 label="Section"
-                value={section}
-                onChange={handleSectionChange}
+                value={description}
+                onChange={handledescriptionChange}
                 fullWidth
               />
               <Button
@@ -180,11 +191,11 @@ function TeacherDashboard() {
       {!showCreateClassModal && (
         <div className="classes-grid">
           {classes.map((classObj) => (
-            <Link to={`/user/${userID}/class/${classObj.id}`} key={classObj.id}>
-              <div className="container_card" key={classObj.name + classObj.section} >
-                <TeacherDashboardCard name={classObj.name} section={classObj.section} id={classObj.id} userID={userID} onDelete={handleDeleteClass} />
-              </div>
-            </Link>
+            // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
+            <div className="container_card" key={classObj.name + classObj.description} >
+             <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj.id} userId={userId} onDelete={handleDeleteClass }/>
+            </div>
+            // </Link>
           ))}
         </div>
       )}

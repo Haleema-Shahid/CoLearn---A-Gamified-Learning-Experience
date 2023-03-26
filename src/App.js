@@ -33,14 +33,15 @@ function App() {
       <SignIn></SignIn> */}
       {/* <LoginNav></LoginNav> */}
       {/* <ClassDefault></ClassDefault> */}
+      {/* <TeacherDashboard></TeacherDashboard> */}
 
       <BrowserRouter>
         <Routes>
-        {/* <Route path="/" element={<SignIn />} />
+        <Route path="/" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/t/:userId" element={<TeacherDashboard />} />
-        <Route path="/s/:userId" element={<StudentDashboard />} /> */}
-        <Route path="/" element={<TeacherDashboard />} />
+        <Route path="/s/:userId" element={<StudentDashboard />} />
+      
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
