@@ -16,11 +16,17 @@ import CLO from '../CLO/CLOstarter';
 import React, { useState } from 'react';
 import CloDetails from '../CLO/CLODetails';
 import ClassHeader from '../ClassHeader/ClassHeader';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import TeacherClassTabs from './TeacherClassTabs';
 
 
 function ClassDefault() {
   const { userId, classId } = useParams();
   const [numberOfWeeks, setNumberOfWeeks] = useState(0);
+  const [students, setStudent] = useState([]);
+  //set students through API call
   const handleNumberOfWeeksChange = (weeks) => {
     setNumberOfWeeks(weeks);
     console.log("the selected number of weeks is: ")
@@ -29,9 +35,26 @@ function ClassDefault() {
 
   return (
     <div>
+      <Box
+       sx={{
+        display: 'flex',
+        flexDirection:'column',
+        justifyContent: 'space-between',
+   
+        bgcolor: 'background.paper',
+        
+      }}
+      >
       <ClassHeader userID={userId} classID={classId} />
-      {numberOfWeeks === 0 && <CLO classID={classId} cloWeeks={numberOfWeeks} onNumberOfWeeksChange={handleNumberOfWeeksChange}/>}
-      {numberOfWeeks > 0 && <CloDetails userID={userId} classID={classId} cloWeeks={numberOfWeeks} />}
+      <div style={{alignContent:"center", alignItems:"center"}}>
+      <TeacherClassTabs userId={userId} classId={classId}></TeacherClassTabs>
+      </div>
+     
+     
+
+      {/* {numberOfWeeks === 0 && <CLO classID={classId} cloWeeks={numberOfWeeks} onNumberOfWeeksChange={handleNumberOfWeeksChange}/>}
+      {numberOfWeeks > 0 && <CloDetails userID={userId} classID={classId} cloWeeks={numberOfWeeks} />} */}
+      </Box>
 
     </div>
   );

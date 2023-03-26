@@ -32,14 +32,15 @@ function App() {
       {/* <nav></nav>
       <SignIn></SignIn> */}
       {/* <LoginNav></LoginNav> */}
-      <TeacherDashboard></TeacherDashboard>
+      {/* <ClassDefault></ClassDefault> */}
 
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
-        <Route path="/" element={<SignIn />} />
+        {/* <Route path="/" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/t/:userId" element={<TeacherDashboard />} />
-        <Route path="/s/:userId" element={<StudentDashboard />} />
+        <Route path="/s/:userId" element={<StudentDashboard />} /> */}
+        <Route path="/" element={<TeacherDashboard />} />
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
@@ -47,7 +48,7 @@ function App() {
         </Routes>
 
 
-      </BrowserRouter> */}
+      </BrowserRouter>
       {/*---------------Student work ---------------*/}
       {/* <Assignments></Assignments> */}
       {/* <StudentDashboard></StudentDashboard>*/}

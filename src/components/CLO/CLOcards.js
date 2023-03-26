@@ -33,6 +33,7 @@ const styles = {
 function CLOCard(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [weekInfo, setWeekInfo]=useState(props.weekInfo);
 
   const handleMenuOpen = (event) => {
     event.stopPropagation(); // stop event propagation to the card
@@ -44,8 +45,11 @@ function CLOCard(props) {
     setAnchorEl(null);
   };
 
+  const handleCardClick = () => {
+    props.onClick(props.weekNumber);
+  }
   return (
-    <Card sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
+    <Card onClick={handleCardClick} sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         sx={{
          
@@ -71,11 +75,8 @@ function CLOCard(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
+                <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
-                <Link to={`/user/${props.userID}/class/${props.id}`}><MenuItem onClick={handleMenuClose}>View CLO</MenuItem></Link>
-                <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
               </Menu>
             </div>
             </div>
