@@ -32,8 +32,9 @@ function App() {
       {/* <nav></nav>
       <SignIn></SignIn> */}
       {/* <LoginNav></LoginNav> */}
+      <TeacherDashboard></TeacherDashboard>
 
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
@@ -46,7 +47,7 @@ function App() {
         </Routes>
 
 
-      </BrowserRouter>
+      </BrowserRouter> */}
       {/*---------------Student work ---------------*/}
       {/* <Assignments></Assignments> */}
       {/* <StudentDashboard></StudentDashboard>*/}
