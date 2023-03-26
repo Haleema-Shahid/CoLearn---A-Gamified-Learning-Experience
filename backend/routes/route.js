@@ -1,6 +1,6 @@
 const express = require('express')
 const session = require('express-session')
-
+const { ObjectId} = require('mongodb');
 const router = express.Router()
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
@@ -46,42 +46,43 @@ router.post('/login', async (request, response) => {
     //console.log("zawyar")
 });
 
-//get user
-router.get('/user/:userId', async (request, response) => {
-    const collection = client.db("colearnDb").collection("user");
-    const user = await collection.findOne({ _id: ObjectId(request.params.userId) }); // get the user from the database using the user ID in the URL parameter
-
-    if (user) {
-        request.session.userId = user._id;
-        console.log(user);
-        response.send(user);
+//get teacher for teacher dashboard
+router.get('/t/:userId', async (request, response) => {
+    const collection = client.db("colearnDb").collection("class");
+    const classes = await collection.find({ teacherId: ObjectId(request.params.teacherId) }).toArray(); // get all classes made by the teacher with the specified ID
+  
+    if (classes.length > 0) {
+      response.send(classes);
     } else {
-        console.log("error")
-        //response.status(404).send('User not found');
+      //console.log("No classes found for this teacher.")
+      response.status(404).send('Classes not found');
     }
 });
 
 //class create
-router.post('/user/:userId/class/:classId', async(request, response)=>{
+router.post('/t/:userId/class', async(request, response)=>{
     const users = client.db("colearnDb").collection("user");
     const classes = client.db("colearnDb").collection("class");
     
-    const user = await collection.findOne({ _id: ObjectId(request.params.userId) }); // get the user from the database using the user ID in the URL parameter
+    //const user = await classes.findOne({ teacher: ObjectId(request.body.user_id) }); // get the user from the database using the user ID in the URL parameter
 
     //console.l
-    if(request.body.name){
+    if(request.body.classname){
         const newClass = {
-            name: request.body.name,
+            name: request.body.classname,
             description: request.body.description,
-            teacher: request.session.userId,
+            teacher: ObjectId(request.body.user_id),
             students: [],
             weeks: []
         }
         classes.insertOne(newClass);
-        const classId = classes.findOne(newClass)._id.toString();
-        response.redirect(`/user/:userId/class/${classId}`);
-        //console.log("inserted");
-        console.log(classes.findOne(newClass));
+        const thisClass = classes.findOne(newClass); 
+        //const classId = classes.findOne(newClass)._id.toString();
+        //response.redirect(`/user/:userId/class/${classId}`);
+        console.log("inserted");
+        console.log(thisClass);
+        response.json(thisClass);
+        //console.log(classes.findOne(newClass));
     }
     else{
         console.log("error");
