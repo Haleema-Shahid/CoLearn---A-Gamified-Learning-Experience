@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloDetails from './CLODetails';
+import TopicsBoard from '../TopicsMainPage/TopicsBoard'
 
 class Clo extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Clo extends Component {
       userId: props.userId,
       classId: props.classId,
       weekNumber: 1,
-      weekInfo: [{ topics: ["A12", "A13"] }],
+      weekInfo: [{_id:1, number:1,  topics: [{_id:1, name:"polymorphism",assignments:[{}],material:[{}]}]}],
       isWeekSelected: false,
       selectedWeek: null
     };
@@ -75,7 +76,7 @@ class Clo extends Component {
           }
           {this.state.isWeekSelected && (
             <div>
-              <h1>nothing</h1>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekID={this.state.weekInfo[this.state.selectedWeek].id} weekNumber={this.state.weekInfo[this.state.selectedWeek].number} topics={this.state.weekInfo[this.state.selectedWeek].topics}/>
               </div>
           )
           }
