@@ -28,7 +28,7 @@ app.use(session({
 
 app.use(express.json())
 app.use(cors())
-app.use('/api',routesUrls) 
+app.use('/backend',routesUrls) 
 
 
 app.listen(4000, ()=> console.log("Server is up and running\n"))

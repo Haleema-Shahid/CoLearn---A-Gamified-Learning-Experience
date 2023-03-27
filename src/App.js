@@ -41,7 +41,6 @@ function App() {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/t/:userId" element={<TeacherDashboard />} />
         <Route path="/s/:userId" element={<StudentDashboard />} />
-      
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />

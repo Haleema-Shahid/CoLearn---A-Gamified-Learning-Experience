@@ -28,19 +28,34 @@ function TeacherDashboard() {
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchData = async () => {
+      console.log("in useEffect");
       try {
-        const response = await fetch(`/t/${userId}`);
+        console.log("in try block");
+        console.log(userId);
+        const requestOptions = {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId })
+        };
+        const response = await fetch(`http://localhost:4000/backend/t/${userId}`);
         const data = await response.json();
-        if(data)
-          setClasses(data.classes);
-        else{
+        console.log("data is ");
+        if (data) {
+          //console.log(data);
+          setClasses(data);
+          //setClasses(Object.assign([], data.classes));          
+          //console.log(classes);
+          
+        }
+        else {
+          console.log("no classes found");
           setClasses([]);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
     fetchData();
@@ -71,8 +86,8 @@ function TeacherDashboard() {
   const handleCreateClassSubmit = async (e) => {
     e.preventDefault();
     const info = new FormData(e.currentTarget);
-    const name = info.get('class-name-input');
-    const desc = info.get('description-input');
+    const name = className;
+    const desc = description;
     //fetch api here
     console.log(name);
     const requestOptions = {
@@ -82,9 +97,9 @@ function TeacherDashboard() {
     };
 
     console.log(userId);
-    const response = await fetch(`/t/${userId}/class`, requestOptions);
+    const response = await fetch(`http://localhost:4000/backend/create-class`, requestOptions);
     const data = await response.json();
-    if(data){
+    if (data) {
       navigate(`/t/${userId}`);
     }
     //checking if this class name and section already exists
@@ -102,9 +117,9 @@ function TeacherDashboard() {
     // setClassName('');
     // setdescription('');
 
-    
 
-    
+
+
 
   };
 
@@ -134,7 +149,7 @@ function TeacherDashboard() {
       {showCreateClassModal && (
 
         <div >
-          <Box  component="form" onSubmit={handleCreateClassSubmit}
+          <Box component="form" onSubmit={handleCreateClassSubmit}
             sx={{
               margin: "auto",
               display: "flex",
@@ -193,7 +208,7 @@ function TeacherDashboard() {
           {classes.map((classObj) => (
             // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
             <div className="container_card" key={classObj.name + classObj.description} >
-             <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj.id} userId={userId} onDelete={handleDeleteClass }/>
+              <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
             // </Link>
           ))}

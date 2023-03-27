@@ -54,7 +54,7 @@ export default function SignIn() {
       body: JSON.stringify({ email: email, password: password, role: role })
     };
   
-    const response = await fetch('http://localhost:4000/api/login', requestOptions);
+    const response = await fetch('http://localhost:4000/backend/login', requestOptions);
     const data = await response.json();
     
     if (response.ok) {
