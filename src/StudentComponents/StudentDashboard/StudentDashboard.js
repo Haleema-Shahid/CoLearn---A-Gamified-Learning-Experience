@@ -1,15 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StudentDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import StudentDashboardCard from './StudentDashboardCard';
 import { Link } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+
 
 function StudentDashboard() {
-  const[userID, setUserID]=useState(121);
+  const { userId } = useParams();
   const [showJoinClassModal, setShowJoinClassModal] = useState(false);
   const [ClassCode, setClassCode] = useState('');
-  const [classes, setClasses] = useState([{ name: "Advanced Programming", section: "B",id:"A2561" }, { name: "Database", section: "B", id:"A2562"}, { name: "Programming Fundamentals", section: "B", id:"A2563" }]);
+  const [classes, setClasses] = useState([]);
 
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/backend/s/${userId}`);
+        const data = await response.json();
+        if (data) {
+          setClasses(data);
+        }
+        else {
+          console.log("no classes found");
+          setClasses([]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [userId]);
   const handleJoinClassClick = () => {
     setShowJoinClassModal(true);
   };
@@ -69,9 +93,9 @@ function StudentDashboard() {
       {!showJoinClassModal && (
         <div className="classes-grid">
           {classes.map((classObj) => (
-            // <Link to={`/user/${userID}/class/${classObj.id}`} key={classObj.id}>
+            // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
             <div className="container_card" key={classObj.name + classObj.section} >
-             <StudentDashboardCard name={classObj.name} section={classObj.section} id={classObj.id} userID={userID} onDelete={handleDeleteClass }/>
+             <StudentDashboardCard name={classObj.name} section={classObj.section} id={classObj.id} userId={userId} onDelete={handleDeleteClass }/>
             </div>
             // </Link>
           ))}

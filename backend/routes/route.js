@@ -64,6 +64,24 @@ router.get('/t/:userId', async (request, response) => {
     }
 });
 
+//get student for student dashboard
+router.get('/s/:userId', async (request, response) => {
+    //console.log(request.params.userId);
+    const collection = client.db("colearnDb").collection("class");
+    const classes = await collection.find({ "students.id": new ObjectId(request.params.userId)}).toArray(); // get all classes made by the teacher with the specified ID
+    //const classIds = classes.map((classObj) => classObj._id);
+    //const result = [];
+    //console.log(classIds);
+    if (classes.length > 0) {
+      response.json(classes);
+    } else {
+      console.log("No classes found for this teacher.")
+      //const only_class = await collection.findOne({ }).toArray(); // get all classes made by the teacher with the specified ID
+
+      //response.status(404).send('Classes not found');
+    }
+});
+
 //class create
 router.post('/create-class', async(request, response)=>{
     const users = client.db("colearnDb").collection("user");
