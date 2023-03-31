@@ -22,7 +22,7 @@ function TeacherDashboard() {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
   const [description, setdescription] = useState('');
-  const [classes, setClasses] = useState();
+  const [classes, setClasses] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
@@ -47,12 +47,11 @@ function TeacherDashboard() {
           //console.log(data);
           setClasses(data);
           //setClasses(Object.assign([], data.classes));          
-          //console.log(classes);
-          
+          //console.log(classes);          
         }
         else {
           console.log("no classes found");
-          setClasses([]);
+          //setClasses([]);
         }
       } catch (error) {
         console.log(error);
@@ -206,7 +205,7 @@ function TeacherDashboard() {
       {!showCreateClassModal && (
         <div className="classes-grid">
           {classes.map((classObj) => (
-            // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
+            // <Link to={`/user/${userId}/class/${classObj._id}`} key={classObj._id}>
             <div className="container_card" key={classObj.name + classObj.description} >
               <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
