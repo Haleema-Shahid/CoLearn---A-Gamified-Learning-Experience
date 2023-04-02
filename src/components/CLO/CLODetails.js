@@ -16,6 +16,8 @@ class CloDetails extends Component {
     };
   }
 
+
+
   addTopic = (topic) => {
     // Update the weekInfo state with the new topic
     //u need to make the backend here

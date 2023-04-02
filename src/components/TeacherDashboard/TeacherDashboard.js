@@ -112,14 +112,9 @@ function TeacherDashboard() {
 
     // Create new class from backend and fetch in front end again
     // setClasses([...classes, { name: className, description }]);
-    // setShowCreateClassModal(false);
-    // setClassName('');
-    // setdescription('');
-
-
-
-
-
+    setShowCreateClassModal(false);
+    setClassName('');
+    setdescription('');
   };
 
   const handleCancelClick = () => {
