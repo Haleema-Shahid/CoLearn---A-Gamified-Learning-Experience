@@ -60,7 +60,7 @@ class CloDetails extends Component {
         {cards}
         </div>)
          }
-  {this.state.showAddForm && <AddTopic addToTopics={this.addTopic} topics={this.state.weekInfo[this.state.currWeekNumber].topics} ></AddTopic>}
+  {this.state.showAddForm && (<AddTopic addToTopics={this.addTopic} topics={this.state.weekInfo[this.state.currWeekNumber].topics} ></AddTopic>)}
       </div>
     );
   }

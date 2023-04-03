@@ -20,11 +20,13 @@ import Sidebar from './components/Navigations/Sidebar'
 import HelpingMaterial from './components/HelpingMaterial/HelpingMaterial'
 import StudentDashboard from './StudentComponents/StudentDashboard/StudentDashboard'
 import Assignments from './StudentComponents/ClassAssignments/Assignment'
+import AddTopic from './components/TopicsMainPage/AddTopic'
 
 function App() {
   return (
     <div className="App">
 
+      {/* <AddTopic></AddTopic> */}
       {/* <HelpingMaterial></HelpingMaterial> */}
       {/* <SignUp/> */}
       {/* <SignIn/> */}
@@ -37,11 +39,12 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<SignIn />} />
+        {/* <Route path="/" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/t/:userId" element={<TeacherDashboard />} />
-        <Route path="/s/:userId" element={<StudentDashboard />} />
-      
+        <Route path="/s/:userId" element={<StudentDashboard />} /> */}
+      <Route path="/" element={<TeacherDashboard />}/>
+        
         <Route path="/user/:userId/class/:classId" element={<ClassDefault />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} />
         <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
