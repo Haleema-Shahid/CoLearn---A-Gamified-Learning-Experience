@@ -22,26 +22,39 @@ function TeacherDashboard() {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
   const [description, setdescription] = useState('');
-  const [classes, setClasses] = useState([{id:1,name:"Advanced Programming",description:"B",students:[1,2,3,4],teacher:userId,weeks:
-  [{id:1, topics:[{id:1}]}]}]);
+  const [classes, setClasses] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchData = async () => {
+      console.log("in useEffect");
       try {
-        const response = await fetch(`/t/${userId}`);
+        console.log("in try block");
+        console.log(userId);
+        const requestOptions = {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId })
+        };
+        const response = await fetch(`http://localhost:4000/backend/t/${userId}`);
         const data = await response.json();
-        if(data)
-          setClasses(data.classes);
-        else{
-          setClasses([]);
+        console.log("data is ");
+        if (data) {
+          //console.log(data);
+          setClasses(data);
+          //setClasses(Object.assign([], data.classes));          
+          //console.log(classes);          
+        }
+        else {
+          console.log("no classes found");
+          //setClasses([]);
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
     fetchData();
@@ -72,8 +85,8 @@ function TeacherDashboard() {
   const handleCreateClassSubmit = async (e) => {
     e.preventDefault();
     const info = new FormData(e.currentTarget);
-    const name = info.get('class-name-input');
-    const desc = info.get('description-input');
+    const name = className;
+    const desc = description;
     //fetch api here
     console.log(name);
     const requestOptions = {
@@ -83,9 +96,9 @@ function TeacherDashboard() {
     };
 
     console.log(userId);
-    const response = await fetch(`/t/${userId}/class`, requestOptions);
+    const response = await fetch(`http://localhost:4000/backend/create-class`, requestOptions);
     const data = await response.json();
-    if(data){
+    if (data) {
       navigate(`/t/${userId}`);
     }
     //checking if this class name and section already exists
@@ -99,14 +112,9 @@ function TeacherDashboard() {
 
     // Create new class from backend and fetch in front end again
     // setClasses([...classes, { name: className, description }]);
-    // setShowCreateClassModal(false);
-    // setClassName('');
-    // setdescription('');
-
-    
-
-    
-
+    setShowCreateClassModal(false);
+    setClassName('');
+    setdescription('');
   };
 
   const handleCancelClick = () => {
@@ -135,7 +143,7 @@ function TeacherDashboard() {
       {showCreateClassModal && (
 
         <div >
-          <Box  component="form" onSubmit={handleCreateClassSubmit}
+          <Box component="form" onSubmit={handleCreateClassSubmit}
             sx={{
               margin: "auto",
               display: "flex",
@@ -192,9 +200,9 @@ function TeacherDashboard() {
       {!showCreateClassModal && (
         <div className="classes-grid">
           {classes.map((classObj) => (
-            // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
+            // <Link to={`/user/${userId}/class/${classObj._id}`} key={classObj._id}>
             <div className="container_card" key={classObj.name + classObj.description} >
-             <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj.id} userId={userId} onDelete={handleDeleteClass }/>
+              <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
             // </Link>
           ))}

@@ -48,30 +48,53 @@ router.post('/login', async (request, response) => {
 
 //get teacher for teacher dashboard
 router.get('/t/:userId', async (request, response) => {
+    console.log("in reuest");
+    console.log(request.params.userId);
     const collection = client.db("colearnDb").collection("class");
-    const classes = await collection.find({ teacherId: ObjectId(request.params.teacherId) }).toArray(); // get all classes made by the teacher with the specified ID
-  
+    const classes = await collection.find({ teacher: new ObjectId(request.params.userId) }).toArray(); // get all classes made by the teacher with the specified ID
+    //const result = [];
+    console.log(classes.length);
     if (classes.length > 0) {
-      response.send(classes);
+      response.json(classes);
     } else {
-      //console.log("No classes found for this teacher.")
-      response.status(404).send('Classes not found');
+      console.log("No classes found for this teacher.")
+      //const only_class = await collection.findOne({ }).toArray(); // get all classes made by the teacher with the specified ID
+
+      //response.status(404).send('Classes not found');
+    }
+});
+
+//get student for student dashboard
+router.get('/s/:userId', async (request, response) => {
+    //console.log(request.params.userId);
+    const collection = client.db("colearnDb").collection("class");
+    const classes = await collection.find({ "students.id": new ObjectId(request.params.userId)}).toArray(); // get all classes made by the teacher with the specified ID
+    //const classIds = classes.map((classObj) => classObj._id);
+    //const result = [];
+    //console.log(classIds);
+    if (classes.length > 0) {
+      response.json(classes);
+    } else {
+      console.log("No classes found for this teacher.")
+      //const only_class = await collection.findOne({ }).toArray(); // get all classes made by the teacher with the specified ID
+
+      //response.status(404).send('Classes not found');
     }
 });
 
 //class create
-router.post('/t/:userId/class', async(request, response)=>{
+router.post('/create-class', async(request, response)=>{
     const users = client.db("colearnDb").collection("user");
     const classes = client.db("colearnDb").collection("class");
     
     //const user = await classes.findOne({ teacher: ObjectId(request.body.user_id) }); // get the user from the database using the user ID in the URL parameter
-
+    console.log("in post request");
     //console.l
     if(request.body.classname){
         const newClass = {
             name: request.body.classname,
             description: request.body.description,
-            teacher: ObjectId(request.body.user_id),
+            teacher: new ObjectId(request.body.user_id),
             students: [],
             weeks: []
         }
@@ -87,31 +110,39 @@ router.post('/t/:userId/class', async(request, response)=>{
     else{
         console.log("error");
     }
-
-    
-
-
-
 });
 
-//class get
-router.get('/user/:userId/class/:classId', async(request, response)=>{
-    const classes = client.db("colearnDb").collection("class");
-    const userClass = classes.findOne({_id: ObjectId(request.params.classId)});
+//get weeks of specific class
+router.get('/user/:userId/class/:classId/weeks', async(request, response)=>{
+    const weeks = client.db("colearnDb").collection("week");
+    //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
 
-    if(userClass){
-        const classId = userClass._id.toString();
-        response.send(userClass)
+    if(weeks){
+        const data = await weeks.find({ classId: new ObjectId(request.params.classId) }).toArray(); // get all weeks of the class with the specified ID
+        if(data.length()>0){
+            response.json(data);
+        }
+        else{
+            console.log("no weeks returned");
+        }        
         //response.redirect(`/user/:userId/class/${classId}`)
     }
     else{
         console.log("error in get class");
     }
 });
-router.post('/week', async(request, response)=>{
-    const classes = client.db("colearnDb").collection("class");
-    
 
+//add week
+router.post('/user/:userId/class/:classId/week', async(request, response)=>{
+    //const classes = client.db("colearnDb").collection("class");
+    const weeks = client.db("colearnDb").collection("week");
+    //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
+    const newWeek = {
+        number: request.body.weekNumber,
+        topics: [],
+        classId: new ObjectId(request.params.classId)
+    }
+    weeks.insertOne(newWeek);
 })
 
 router.post('/assignment', async(request, response)=>{

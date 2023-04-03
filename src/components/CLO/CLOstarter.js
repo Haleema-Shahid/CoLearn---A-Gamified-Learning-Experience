@@ -11,19 +11,28 @@ import CloDetails from './CLODetails';
 import TopicsBoard from '../TopicsMainPage/TopicsBoard'
 
 class Clo extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
       userId: props.userId,
       classId: props.classId,
-      weekNumber: 1,
-      weekInfo: [{_id:1, number:1,  topics: [{_id:1, name:"polymorphism",assignments:[{}],material:[{}]}]}],
+      weekNumber: 0,
+      weekInfo: [],
       isWeekSelected: false,
       selectedWeek: null
     };
   }
 
-
+  componentDidMount() {
+    fetch('https://example.com/api/data')
+      .then(response => response.json())
+      .then(data => {
+        // Update state with API data
+        this.setState({ apiData: data });
+      })
+      .catch(error => console.error(error));
+  }
   onWeekSelect = (weekIndex) => {
     console.log(weekIndex);
     console.log("selected");
