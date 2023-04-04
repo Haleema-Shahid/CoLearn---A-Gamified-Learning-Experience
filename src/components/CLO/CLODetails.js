@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import CLOCard from './CLOcards';
 import './CLODetails.css'
 import { Link } from 'react-router-dom';
-import AddTopic from '../TopicsMainPage/AddTopic'
+import AddTopic from '../Topics/TopicsMainPage/AddTopic'
 
 
 class CloDetails extends Component {
@@ -58,11 +58,10 @@ class CloDetails extends Component {
     return (
       <div >
       
-        {!this.state.showAddForm && (<div style={{ gap: '16px', justifyContent: 'center',alignItems: 'center', paddingLeft:"20%" }}>
+        <div style={{ gap: '16px', justifyContent: 'center',alignItems: 'center', paddingLeft:"20%" }}>
         {cards}
-        </div>)
-         }
-  {this.state.showAddForm && (<AddTopic addToTopics={this.addTopic} topics={this.state.weekInfo[this.state.currWeekNumber].topics} ></AddTopic>)}
+        </div>
+  {/* {this.state.showAddForm && (<AddTopic addToTopics={this.addTopic} topics={this.state.weekInfo[this.state.currWeekNumber].topics} ></AddTopic>)} */}
       </div>
     );
   }

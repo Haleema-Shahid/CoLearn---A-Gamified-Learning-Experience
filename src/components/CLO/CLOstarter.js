@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloDetails from './CLODetails';
-import TopicsBoard from '../TopicsMainPage/TopicsBoard'
+import TopicsBoard from '../Topics/TopicsBoard'
 
 class Clo extends Component {
   

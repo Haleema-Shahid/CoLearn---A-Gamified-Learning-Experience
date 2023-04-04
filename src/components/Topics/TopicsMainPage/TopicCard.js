@@ -1,5 +1,3 @@
-//CLO cards are the cards that represent each week
-//eache week has its own list of topics for now it will get the weekid, title or number(this will be dynamic) and render it as cards
 import * as React from 'react';
 import { stopPropagation } from 'react';
 import { useState } from 'react';
@@ -23,18 +21,13 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
 const styles = {
-    card: {
-      width: 600,
-      height: 300,
-      margin: '0 auto',
-    },
-  };
 
-function CLOCard(props) {
+
+}
+
+function TopicCard(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [weekNumber, setWeekNumber]=useState(props.weekNumber);
- 
 
   const handleMenuOpen = (event) => {
     event.stopPropagation(); // stop event propagation to the card
@@ -45,24 +38,31 @@ function CLOCard(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
-  const handleCardClick = () => {
-    console.log("card clicked for week")
-    props.onClick(props.weekNumber);
+  const handleTopic = () => {
+    console.log("clicked view topic")
+    props.onViewTopic(props.topicObject);
+    handleMenuClose();
   };
 
-  const handleAddTopic = () => {
-    props.showAddTopicForm(weekNumber)
-    console.log("clicked add topic")
-  };
+  const handleClick = () => {
+    handleTopic();
+  }
+
 
   return (
-    <Card onClick={handleCardClick} sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
+    <div style={{ margin: "auto",
+    display: "flex",
+    flexDirection: "column",
+    paddingLeft: "50px",
+    justifyContent: "left",
+    alignItems: "center"}}>
+    <Card  sx={{ height: 20 + "vh", width: "50%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         sx={{
-         
+          height: '50%',
           background: `linear-gradient(to right, #1e3c72, #2a5298)`,
-          color: 'white'
+          color: 'white',
+          height: '50%',
 
         }}
         action={
@@ -83,23 +83,27 @@ function CLOCard(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
+                
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
+                <Link to={`/user/${props.userID}/class/${props.classID}/week/${props.weekID}/${props.weekNumber}/topic/${props.id}}`}><MenuItem >Add an Assignment</MenuItem></Link>
+                <MenuItem onClick={handleMenuClose}>Add a Material</MenuItem>
+                <MenuItem onClick={props.onViewTopic}>View Topic</MenuItem>
               </Menu>
             </div>
             </div>
         }
-        title={props.weekNumber}
+        title={props.title}
+        onClick={handleClick}
       //subheader={props.section}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          Topics for week {props.weekNumber}
+          {props.description}
         </Typography>
       </CardContent>
     </Card>
-
+    </div>
   );
 }
 
-export default CLOCard
+export default TopicCard
