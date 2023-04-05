@@ -45,13 +45,7 @@ class CloDetails extends Component {
     // Map each week to a Card component
     const cards = [];
     for (let i = 1; i <= numberWeeks; i++) {
-      console.log({numberWeeks});
-      console.log(this.state.weekInfo);
-    //   const weekData = weeks[i-1];
-    //   const title = `Week ${i}`;
-    //   const body = weekData ? weekData.topics : 'No data available';
-    //in this i place the week id is to come
-      cards.push(<CLOCard key={i} weekNumber={i} weekInfo={this.state.weekInfo[i]} onAddTopic={this.addTopic} onClick={() => this.props.onWeekSelect(i-1)} showAddTopicForm={this.showAddTopicForm} />);
+      cards.push(<CLOCard key={i} weekNumber={i} weekInfo={this.state.weekInfo[i]}  onWeekSelect={() => this.props.onWeekSelect(i-1)}  />);
     }
 
     

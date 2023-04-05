@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloDetails from './CLODetails';
-import TopicsBoard from '../Topics/TopicsBoard'
+import TopicsBoard from '../Topics/TopicsMainPage/TopicsBoard'
 import ViewTopic from '../Topics/TopicsView/ViewTopic';
 
 class Clo extends Component {
@@ -51,8 +51,9 @@ class Clo extends Component {
         files: ["file1.pdf"],
         deadline: "2022-03-20",
         tags: ["tag1"],
-      },]}, 
-      {id:2, title: "arrays", description: "something", materials:[{
+      }]}, 
+      {id:2, title: "arrays", description: "something", 
+      materials:[{
         id: 1,
         title: "Material 1",
         description: "This is the description of Material 1.",
@@ -65,7 +66,8 @@ class Clo extends Component {
         description: "This is the description of Material 2.",
         files: ["file1.pdf"],
         creationDate: "2022-03-02",
-      },], assignments:[{
+      }], 
+      assignments:[{
         id: 1,
         title: "Assignment 1",
         description: "This is the description of Assignment 1.",
@@ -80,22 +82,22 @@ class Clo extends Component {
         files: ["file1.pdf"],
         deadline: "2022-03-20",
         tags: ["tag1"],
-      }], assignments:[{
-        id: 1,
-        title: "Assignment 1",
-        description: "This is the description of Assignment 1.",
+      }, {
+        id: 3,
+        title: "Assignment 3",
+        description: "This is the description of Assignment 3.",
         files: ["file1.pdf", "file2.docx"],
         deadline: "2022-03-15",
         tags: ["tag1", "tag2"],
       },
       {
-        id: 2,
-        title: "Assignment 2",
-        description: "This is the description of Assignment 2.",
+        id: 4,
+        title: "Assignment 4",
+        description: "This is the description of Assignment 4.",
         files: ["file1.pdf"],
         deadline: "2022-03-20",
         tags: ["tag1"],
-      },]}]
+      }]}]
     }],
       isWeekSelected: false,
       selectedWeek: null,
@@ -114,9 +116,13 @@ class Clo extends Component {
       .catch(error => console.error(error));
   }
   onWeekSelect = (weekIndex) => {
+    console.log("weekIndex is:")
     console.log(weekIndex);
     console.log("selected");
-    this.setState({ selectedWeek: weekIndex, isWeekSelected: true });
+    
+    this.setState({ selectedWeek: weekIndex, isWeekSelected: true }, () => {
+      console.log("selected week number is: ", this.state.selectedWeek);
+    });
   };
 
   handleWeekNumberInput = (event) => {
@@ -148,6 +154,8 @@ class Clo extends Component {
   };
 
   handleTopicSelect=(topic)=>{
+    
+    console.log("topic selected");
     this.setState({selectedTopic:topic})
     this.setState({showViewTopic:true})
     
@@ -155,6 +163,7 @@ class Clo extends Component {
 
   render() {
     const { classId, weekNumber } = this.state;
+    console.log("in clo starter");
    
 
     return (
@@ -171,12 +180,15 @@ class Clo extends Component {
           }
           {this.state.isWeekSelected && !this.state.showViewTopic && (
             <div>
-              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekID={this.state.weekInfo[this.state.selectedWeek].id} weekNumber={this.state.weekInfo[this.state.selectedWeek].number} topics={this.state.weekInfo[this.state.selectedWeek].topics} onTopicSelect={this.handleTopicSelect}/>
+            console.log("in this piece")
+            <div>
+              <TopicsBoard userID={this.state.userId} classID={this.state.classId} weekID={this.state.weekInfo[this.state.selectedWeek].id} weekNumber={this.state.weekInfo[this.state.selectedWeek].number} topics={this.state.weekInfo[this.state.selectedWeek].topics} onTopicSelect={this.handleTopicSelect}/>
+              </div>
               </div>
           )
           }
           {
-            this.state.isWeekSelected && this.state.isTopicSelected && this.state.showViewTopic &&(
+            this.state.isWeekSelected  && this.state.showViewTopic &&(
               <ViewTopic 
               title={this.state.selectedTopic.title}
               description={this.state.selectedTopic.description}

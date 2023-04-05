@@ -48,7 +48,9 @@ function CLOCard(props) {
 
   const handleCardClick = () => {
     console.log("card clicked for week")
-    props.onClick(props.weekNumber);
+    console.log(props.weekNumber-1);
+    props.onWeekSelect(props.weekNumber-1);
+    handleMenuClose();
   };
 
   const handleAddTopic = () => {
@@ -56,8 +58,13 @@ function CLOCard(props) {
     console.log("clicked add topic")
   };
 
+  const handleWeekClick=()=>{
+    handleCardClick();
+
+  }
+
   return (
-    <Card onClick={handleCardClick} sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
+    <Card  sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         sx={{
          
@@ -83,8 +90,10 @@ function CLOCard(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
+                <MenuItem onClick={handleWeekClick}>View Week Material</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Tester</MenuItem>
               </Menu>
             </div>
             </div>
