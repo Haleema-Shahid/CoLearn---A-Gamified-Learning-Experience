@@ -22,7 +22,7 @@ function TeacherDashboard() {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
   const [description, setdescription] = useState('');
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState([{classname:"AP",description: "sdsd",userid:"0012"}]);
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);

@@ -129,21 +129,14 @@ function TopicsBoard(props) {
   const handleViewTopic = (topic) => {
     console.log("in here");
     console.log(topic)
-    setSelectedTopic(topic);
+    props.onTopicSelect(topic);
   };
 
   return (
     <div>
       <h1>Week  Topics</h1>
       {/* <Link to={`/users/${userID}/classes/${classID}/weeks/${weekID}/add-topic`}>Add Topic</Link> */}
-      {selectedTopic ? (
-        <ViewTopic
-          // title={selectedTopic.title}
-          // description={selectedTopic.description}
-          // materials={selectedTopic.materials}
-          // assignments={selectedTopic.assignments}
-        />
-      ) : (
+      {
         topics.map((topic) => (
           
           <TopicCard
@@ -161,7 +154,7 @@ function TopicsBoard(props) {
           />
     
         ))
-      )}
+      }
       {/* {topics.map((topic) => (
         <TopicCard key={topic.id} title={topic.title} description={topic.description} userID={userID} classID={classID} weekID={weekID} weekNumber={weekNumber}/>
       ))} */}

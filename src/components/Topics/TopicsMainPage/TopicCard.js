@@ -38,14 +38,15 @@ function TopicCard(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const handleTopic = () => {
+  const handleTopicSelection = () => {
+   
     console.log("clicked view topic")
-    props.onViewTopic(props.topicObject);
-    handleMenuClose();
+    // props.onViewTopic(props.topicObject);
+    // handleMenuClose();
   };
 
-  const handleClick = () => {
-    handleTopic();
+  const handleSomething= () => {
+    console.log("clicked view topic");
   }
 
 
@@ -56,7 +57,7 @@ function TopicCard(props) {
     paddingLeft: "50px",
     justifyContent: "left",
     alignItems: "center"}}>
-    <Card  sx={{ height: 20 + "vh", width: "50%", marginBottom: "16px", marginTop: "10px" }}>
+    <Card  onClick={handleTopicSelection} sx={{ height: 20 + "vh", width: "50%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         sx={{
           height: '50%',
@@ -87,13 +88,13 @@ function TopicCard(props) {
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
                 <Link to={`/user/${props.userID}/class/${props.classID}/week/${props.weekID}/${props.weekNumber}/topic/${props.id}}`}><MenuItem >Add an Assignment</MenuItem></Link>
                 <MenuItem onClick={handleMenuClose}>Add a Material</MenuItem>
-                <MenuItem onClick={props.onViewTopic}>View Topic</MenuItem>
+                <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
+                <MenuItem onClick={handleSomething}>something</MenuItem>
               </Menu>
             </div>
             </div>
         }
         title={props.title}
-        onClick={handleClick}
       //subheader={props.section}
       />
       <CardContent>
