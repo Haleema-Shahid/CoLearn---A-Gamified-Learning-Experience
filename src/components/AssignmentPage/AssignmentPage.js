@@ -215,7 +215,7 @@ function AssignmentPage() {
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div>
                     <div>
-                    <Link to={`/user/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
+                    <Link to={`/t/user/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
                         <Button
 
                             variant="contained"
