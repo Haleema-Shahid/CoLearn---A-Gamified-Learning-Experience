@@ -10,7 +10,7 @@ import TeacherDashboard from './components/TeacherDashboard/TeacherDashboard';
 import { BrowserRouter, Switch, Route,Routes } from 'react-router-dom';
 import ClassHeader from './components/ClassHeader/ClassHeader';
 import ClassDefault from './components/ClassDefault/ClassDefault';
-import TopicsBoard from './components/Topics/TopicsBoard';
+//import TopicsBoard from './components/Topics/TopicsBoard';
 import AssignmentPage from './components/AssignmentPage/AssignmentPage'
 import SignUp from './components/LogInSignUp/SignUp'
 import SignIn from './components/LogInSignUp/SignIn'
@@ -45,9 +45,13 @@ function App() {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/t/:userId" element={<TeacherDashboard />} />
         <Route path="/s/:userId" element={<StudentDashboard />} />
-        <Route path="/" element={<TeacherDashboard />}/>
+
+     
+
+        {/* <Route path="/" element={<TeacherDashboard />}/> */}
         
-        <Route path="/t/user/:userId/class/:classId" element={<ClassDefault />} />
+        <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
+
         {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
         <Route path="/t/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
         <Route path="/t/user/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
