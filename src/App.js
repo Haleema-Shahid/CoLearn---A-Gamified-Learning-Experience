@@ -45,9 +45,11 @@ function App() {
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/t/:userId" element={<TeacherDashboard />} />
         <Route path="/s/:userId" element={<StudentDashboard />} />
+
         {/* <Route path="/" element={<TeacherDashboard />}/> */}
         
         <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
+
         {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
         <Route path="/t/user/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
         <Route path="/t/user/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
