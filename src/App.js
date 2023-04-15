@@ -46,6 +46,8 @@ function App() {
         <Route path="/t/:userId" element={<TeacherDashboard />} />
         <Route path="/s/:userId" element={<StudentDashboard />} />
 
+     
+
         {/* <Route path="/" element={<TeacherDashboard />}/> */}
         
         <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
