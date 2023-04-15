@@ -74,7 +74,7 @@ function TeacherDashboardCard(props) {
               >
                 <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
-                <Link to={`/user/${props.userId}/class/${props.id}`}><MenuItem >View CLO</MenuItem></Link>
+                <Link to={`/t/${props.userId}/class/${props.id}`}><MenuItem >View CLO</MenuItem></Link>
                 <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
               </Menu>
