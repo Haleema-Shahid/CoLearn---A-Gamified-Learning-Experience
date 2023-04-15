@@ -22,6 +22,7 @@ import StudentDashboard from './StudentComponents/StudentDashboard/StudentDashbo
 import Assignments from './StudentComponents/ClassAssignments/Assignment'
 import AddTopic from './components/Topics/TopicsMainPage/AddTopic'
 import ViewTopic from './components/Topics/TopicsView/ViewTopic'
+import TeacherMaterial from './components/TeacherMaterial/TeacherMaterial';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
         <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
         <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
+        <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
         </Routes>
 
 
