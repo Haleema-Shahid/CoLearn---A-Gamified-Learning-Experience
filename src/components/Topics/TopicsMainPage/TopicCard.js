@@ -87,7 +87,7 @@ function TopicCard({ id, topicObject, title, description, onViewTopic, userID, c
               >
                 
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
-                <Link to={`/t/user/${userID}/class/${classID}/week/${weekID}/${weekNumber}/topic/${id}}`}><MenuItem >Add an Assignment</MenuItem></Link>
+                <Link to={`/t/${userID}/class/${classID}/week/${weekID}/${weekNumber}/topic/${id}}`}><MenuItem >Add an Assignment</MenuItem></Link>
                 <MenuItem onClick={handleMenuClose}>Add a Material</MenuItem>
                 <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
                 <MenuItem onClick={handleSomething}>something</MenuItem>

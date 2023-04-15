@@ -29,6 +29,9 @@ function AssignmentPage() {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [creationDate, setCreationDate]=useState("");
+    const [creationTime, setCreationTime]=useState("");
+
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
     const [AssignmentFiles, setAssignmentFiles] = useState("")
@@ -44,6 +47,11 @@ function AssignmentPage() {
 
 
     const handleSubmit = (event) => {
+        //here goes the backend for uploading the assignment
+        //creation date and time setter
+        const now = dayjs();
+        setCreationDate(now.format('YYYY-MM-DD'));
+        setCreationTime(now.format('HH:mm:ss'));
         event.preventDefault();
         console.log("Assignment details:", {
             title,
