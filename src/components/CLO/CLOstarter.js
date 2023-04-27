@@ -116,7 +116,7 @@ class Clo extends Component {
       const data = await response.json();
       console.log("weeks");
       console.log(data);
-      this.setState({ weekInfo: data });
+      this.setState({ weekNumber: data.length, weekInfo: data });
     } catch (error) {
       console.error(error);
     }
