@@ -23,8 +23,8 @@ class Clo extends Component {
       //if implementing backend we can get the week id that already exist and if we click the week then on topic board we can get all
       //data related to that week
       //for now weekinfo has almost all the data for ease to show how data is being processes
-      weekInfo:[],
-      
+      //weekInfo:[],
+      weekInfo: [],
       
     //   weekInfo: [{id:1, topics:[{id:1, title: "datatypes", description: "something", materials:[{
     //     id: 1,
@@ -109,19 +109,33 @@ class Clo extends Component {
     };
   }
 
-  componentDidMount() {
-    const {userId, classId} = this.state;
-    //const classId = this.props.classId;
-    console.log("user id is ",userId);
-    console.log("class id is ",classId);
-    fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`)
-      .then(response => response.json())
-      .then(data => {
-        // Update state with API data
-        this.setState({ weekInfo: data });
-      })
-      .catch(error => console.error(error));
+  async componentDidMount() {
+    const { userId, classId } = this.state;
+    try {
+      const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`);
+      const data = await response.json();
+      console.log("weeks");
+      console.log(data);
+      this.setState({ weekInfo: data });
+    } catch (error) {
+      console.error(error);
+    }
   }
+  
+  // componentDidMount = () => {
+  //   // console.log("ENTERED COMPONENT DID MOUNT");
+  //   // const {userId, classId} = this.state;
+  //   // //const classId = this.props.classId;
+  //   // console.log("user id is ",userId);
+  //   // console.log("class id is ",classId);
+  //   // fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`)
+  //   //   .then(response => response.json())
+  //   //   .then(data => {
+  //   //     // Update state with API data
+  //   //     this.setState({ weekInfo: data });
+  //   //   })
+  //   //   .catch(error => {console.error(error); console.log("HHAHAHA BITCH")});
+  // }
   onWeekSelect = (weekIndex) => {
     console.log("weekIndex is:")
     console.log(weekIndex);
@@ -154,17 +168,33 @@ class Clo extends Component {
   };
 
   onAddWeekClick = () => {
+    const { userId, classId } = this.state;
     if (this.state.weekNumber < 16) {
       this.setState((prevState) => {
-        const newWeekInfo = [...prevState.weekInfo, { topics: [] }];
+        //const newWeekInfo = prevState.weekInfo.concat({ topics: [] });
+        console.log("prevState.weekinfo is ");
+        console.log(prevState.weekInfo);
         return {
           weekNumber: prevState.weekNumber + 1,
-          weekInfo: newWeekInfo,
+          weekInfo: [...prevState.weekInfo, { topics: [] }],
         };
+      }, () => {
+        // Make API call to add new week to database
+        fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ weekNumber: this.state.weekNumber, topics: [] }),
+        })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => console.error(error));
       });
     }
   };
-
+  
+  
   handleTopicSelect=(topic)=>{
     
     console.log("topic selected");

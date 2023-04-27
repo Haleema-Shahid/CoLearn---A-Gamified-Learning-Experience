@@ -113,28 +113,61 @@ router.post('/create-class', async(request, response)=>{
 });
 
 //get weeks of specific class for teacher
-router.get('/t/:userId/class/:classId/weeks', async(request, response)=>{
-    const weeks = client.db("colearnDb").collection("week");
-    //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
+// router.get('/t/:userId/class/:classId/weeks', async(request, response)=>{
+//     console.log("INSIDE THE API");
+//     const data = client.db("colearnDb").collection("week");
+//     //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
 
-    if(weeks){
-        const data = await weeks.find({ classId: new ObjectId(request.params.classId) }).toArray(); // get all weeks of the class with the specified ID
-        console.log(data);
-        if(data.length>0){
-            response.json(data);
-        }
-        else{
-            console.log("no weeks returned");
-        }        
-        //response.redirect(`/user/:userId/class/${classId}`)
+//     if(weeks){
+//         const data = await weeks.find({ classId: new ObjectId(request.params.classId) }).toArray(); // get all weeks of the class with the specified ID
+//         console.log(data);
+//         if(data.length>0){
+//             response.json(data);
+//         }
+//         else{
+//             console.log("no weeks returned");
+//             response.json();
+//         }        
+//         //response.redirect(`/user/:userId/class/${classId}`)
+//     }
+//     else{
+//         console.log("error in get class");
+//         response.json();
+//     }
+// });
+router.get('/t/:userId/class/:classId/weeks', async (req, res) => {
+    try {
+      const { userId, classId } = req.params;
+  
+      // Check if the userId and classId are valid ObjectId types
+      if (!ObjectId.isValid(userId) || !ObjectId.isValid(classId)) {
+        return res.status(400).json({ message: "Invalid user or class ID" });
+      }
+  
+      // Get the 'weeks' collection from the database
+      const weeks = client.db("colearnDb").collection("week");
+  
+      // Find all weeks of the class with the specified ID
+      const weekData = await weeks.find({ classId: new ObjectId(classId) }).toArray();
+      console.log("weekData");
+      console.log(weekData);
+  
+      if (weekData.length > 0) {
+        console.log("weekData is not empty");
+        return res.json(weekData);
+      } else {
+        console.log("weekData is empty");
+        return res.status(404).json({ message: "No weeks found for the specified class ID" });
+      }
+    } catch (err) {
+    consol
+      console.error(err);
+      return res.status(500).json({ message: "Server error" });
     }
-    else{
-        console.log("error in get class");
-    }
-});
-
-//add week
-router.post('/user/:userId/class/:classId/week', async(request, response)=>{
+  });
+  
+//add week 
+router.post('/t/:userId/class/:classId/week', async(request, response)=>{
     //const classes = client.db("colearnDb").collection("class");
     const weeks = client.db("colearnDb").collection("week");
     //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
@@ -144,6 +177,9 @@ router.post('/user/:userId/class/:classId/week', async(request, response)=>{
         classId: new ObjectId(request.params.classId)
     }
     weeks.insertOne(newWeek);
+    console.log(newWeek);
+    response.json(newWeek);
+
 })
 
 router.post('/assignment', async(request, response)=>{
