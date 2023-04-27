@@ -1,6 +1,9 @@
-// //for this assignment page we will have userid, week id, topic id,
-// //this page will ask for asignment title, description, deadline, total marks, it will also save the timestamp from when we click post
-// //it will also ask for assignment material upload and helping material upload
+//this comonent displays if a teacher wants to upload a simple material
+//simple material can be a post, a reading material etc.
+//All contents will be fully visible to all students
+//for this page we will have userid, week id, topic id,
+//this page will ask for Material title, description, it will also save the timestamp from when we click post
+//it will also ask for material attachments upload 
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -9,8 +12,7 @@ import Stack from "@mui/material/Stack";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Paper } from "@mui/material";
 import '../AssignmentPage/AssignmentPage.css';
-import AssignmentMaterial from "./AssignmentMaterial";
-import FileUploader from "./FileUploader";
+import FileUploader from "../AssignmentPage/FileUploader";
 import { blue } from "@mui/material/colors";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -20,29 +22,35 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
-
-
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-function AssignmentPage() {
-    const { userId, classId, weekId, weekNumber, topicId } = useParams();
 
+//-----------------------------------
+// BACKEND NOTES:
+// When the component is called you should get the name of topic from the backend using the topic id
+// save this to state topicName
+// so we can display in which week and topic 
+// user is adding the Material
+// When user clicks post assignment it should post upload the material to the backend
+//-------------------------------------
+
+
+function TeacherMaterial() {
+    const { userId, classId, weekId, weekNumber, topicId } = useParams();
+    const [topicName, setTopicName]=useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [creationDate, setCreationDate]=useState("");
     const [creationTime, setCreationTime]=useState("");
-
-    const [deadline, setDeadline] = useState(null);
-    const [totalMarks, setTotalMarks] = useState("");
-    const [AssignmentFiles, setAssignmentFiles] = useState("")
-    const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
+    const [MaterialAttachmentFiles, setMaterialAttachmentFiles] = useState("")
+    //const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
     const [CurrentTag, setCurrentTag] = useState("")
     const [HelpingMaterialFiles, setHelpingMaterialFiles] = useState(['chip1', 'chip2'])
     const today = dayjs();
     const yesterday = dayjs().subtract(1, 'day');
 
     const removeFile = (filename) => {
-        setAssignmentFiles(AssignmentFiles.filter(file => file.name !== filename))
+        setMaterialAttachmentFiles(MaterialAttachmentFiles.filter(file => file.name !== filename))
     }
 
 
@@ -55,52 +63,50 @@ function AssignmentPage() {
         event.preventDefault();
         console.log("Assignment details:", {
             title,
-            description,
-            deadline,
-            totalMarks,
+            description
         });
     };
 
-    const handleTotalMarksChange = (event) => {
-        const value = Number(event.target.value);
-        if (value > 1000) {
-            setTotalMarks(1000);
-        }
-        else if (event.key === "Backspace" && value === 0) {
-            setTotalMarks("");
-        }
-        else if (value < 0) {
-            setTotalMarks(0);
-        }
-        else {
-            setTotalMarks(value);
-        }
-    };
-    const handleCurrentTagChange = (event) => {
-        const value = event.target.value;
-        if (value != "") {
-            setCurrentTag(value)
-        }
-    };
-    const handleAssignmentTags = () => {
+    // const handleTotalMarksChange = (event) => {
+    //     const value = Number(event.target.value);
+    //     if (value > 1000) {
+    //         setTotalMarks(1000);
+    //     }
+    //     else if (event.key === "Backspace" && value === 0) {
+    //         setTotalMarks("");
+    //     }
+    //     else if (value < 0) {
+    //         setTotalMarks(0);
+    //     }
+    //     else {
+    //         setTotalMarks(value);
+    //     }
+    // };
+    // const handleCurrentTagChange = (event) => {
+    //     const value = event.target.value;
+    //     if (value != "") {
+    //         setCurrentTag(value)
+    //     }
+    // };
+    // const handleAssignmentTags = () => {
       
-        if (CurrentTag != "") {
-        setAssignmentTags([...AssignmentTags, CurrentTag]);
-        setCurrentTag("")
-        }
+    //     if (CurrentTag != "") {
+    //     setAssignmentTags([...AssignmentTags, CurrentTag]);
+    //     setCurrentTag("")
+    //     }
 
 
-    }
-    const handleDeleteTag = (tagToDelete) => {
-        setAssignmentTags(AssignmentTags => AssignmentTags.filter((AssignmentTag) => AssignmentTag != tagToDelete))
-    }
+    // }
+    // const handleDeleteTag = (tagToDelete) => {
+    //     setAssignmentTags(AssignmentTags => AssignmentTags.filter((AssignmentTag) => AssignmentTag != tagToDelete))
+    // }
 
     return (
         <div>
             <div>
                 <div className="split left" style={{ width: "50%", left: 0 }}>
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
-                        <h1>Assignment</h1>
+                        <h1>{`Material for ${topicName} in week Number ${weekNumber}`}</h1>
                     </div>
                     <Box
                         component="form"
@@ -145,7 +151,7 @@ function AssignmentPage() {
                                     fullWidth
                                 />
                             </LocalizationProvider> */}
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateTimePicker
                                     label="Deadline"
                                     defaultValue={yesterday}
@@ -153,9 +159,9 @@ function AssignmentPage() {
                                     views={['year', 'month', 'day', 'hours', 'minutes']}
                                     onChange={(newValue) => setDeadline(newValue)}
                                 />
-                            </LocalizationProvider>
+                            </LocalizationProvider> */}
 
-                            <TextField
+                            {/* <TextField
                                 required
                                 id="total-marks"
                                 label="Total Marks"
@@ -167,9 +173,9 @@ function AssignmentPage() {
                                 error={totalMarks > 1000}
                                 helperText={totalMarks > 1000 || totalMarks < 0 ? "Maximum 1000 marks allowed" : ""}
                                 sx={{ width: "100%", mt: 2 }}
-                            />
+                            /> */}
 
-                            <div className="Tags-Assignment">
+                            {/* <div className="Tags-Assignment">
                                 <TextField
                                     required
                                     id="AssignmentTags"
@@ -194,7 +200,7 @@ function AssignmentPage() {
                                     ))
                                 }
 
-                            </div>
+                            </div> */}
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -209,7 +215,7 @@ function AssignmentPage() {
                                     },
                                 }}
                             >
-                                Post Assignment
+                                Post Material
                             </Button>
 
                         </Stack>
@@ -220,39 +226,13 @@ function AssignmentPage() {
                 </div>
                 <div className="split right" >
                     <div className="file-uploader-container">
-                        <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
-                    </div>
-                    <div>
-                    <Link to={`/t/user/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
-                        <Button
-
-                            variant="contained"
-                            sx={{
-                                backgroundColor: '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '10px 30px',
-                                fontSize: '1rem',
-                                '&:hover': {
-                                    backgroundColor: '#0c2461',
-                                },
-                            }}
-                        >
-                            Add Helping Material
-                        </Button>
-                    </Link>
-                    </div>
-                    {/* <div>
-                        <HelpingMaterial></HelpingMaterial>
-                    </div> */}
-                    {/* <div className="file-uploader-container" style={{ marginTop: '20px' }}>
-                        <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
-                    </div> */}
+                        <FileUploader files={MaterialAttachmentFiles} setFiles={setMaterialAttachmentFiles} remFile={removeFile}></FileUploader>
+                    </div>                    
                 </div>
             </div>
         </div>
     );
 }
 
-export default AssignmentPage;
+export default TeacherMaterial;
 
