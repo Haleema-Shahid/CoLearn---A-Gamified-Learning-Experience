@@ -202,7 +202,7 @@ function TeacherDashboard() {
           {classes.map((classObj) => (
             // <Link to={`/user/${userId}/class/${classObj._id}`} key={classObj._id}>
             <div className="container_card" key={classObj.name + classObj.description} >
-              <TeacherDashboardCard name={classObj.name} description={classObj.description} id={classObj._id} userId={userId} onDelete={handleDeleteClass} />
+              <TeacherDashboardCard name={classObj.name} description={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
             // </Link>
           ))}

@@ -112,14 +112,15 @@ router.post('/create-class', async(request, response)=>{
     }
 });
 
-//get weeks of specific class
-router.get('/user/:userId/class/:classId/weeks', async(request, response)=>{
+//get weeks of specific class for teacher
+router.get('/t/:userId/class/:classId/weeks', async(request, response)=>{
     const weeks = client.db("colearnDb").collection("week");
     //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
 
     if(weeks){
         const data = await weeks.find({ classId: new ObjectId(request.params.classId) }).toArray(); // get all weeks of the class with the specified ID
-        if(data.length()>0){
+        console.log(data);
+        if(data.length>0){
             response.json(data);
         }
         else{

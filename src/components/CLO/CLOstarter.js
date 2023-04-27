@@ -18,87 +18,90 @@ class Clo extends Component {
     this.state = {
       userId: props.userId,
       classId: props.classId,
-      weekNumber: 1,//this is for dummy change it to 0 after backend is implemented
+      weekNumber: 0,//this is for dummy change it to 0 after backend is implemented
       //week info is a week array 
       //if implementing backend we can get the week id that already exist and if we click the week then on topic board we can get all
       //data related to that week
       //for now weekinfo has almost all the data for ease to show how data is being processes
-      weekInfo: [{id:1, topics:[{id:1, title: "datatypes", description: "something", materials:[{
-        id: 1,
-        title: "Material 1",
-        description: "This is the description of Material 1.",
-        files: ["file1.pdf", "file2.docx"],
-        creationDate: "2022-03-01",
-      },
-      {
-        id: 2,
-        title: "Material 2",
-        description: "This is the description of Material 2.",
-        files: ["file1.pdf"],
-        creationDate: "2022-03-02",
-      },], assignments:[{
-        id: 1,
-        title: "Assignment 1",
-        description: "This is the description of Assignment 1.",
-        files: ["file1.pdf", "file2.docx"],
-        deadline: "2022-03-15",
-        tags: ["tag1", "tag2"],
-      },
-      {
-        id: 2,
-        title: "Assignment 2",
-        description: "This is the description of Assignment 2.",
-        files: ["file1.pdf"],
-        deadline: "2022-03-20",
-        tags: ["tag1"],
-      }]}, 
-      {id:2, title: "arrays", description: "something", 
-      materials:[{
-        id: 1,
-        title: "Material 1",
-        description: "This is the description of Material 1.",
-        files: ["file1.pdf", "file2.docx"],
-        creationDate: "2022-03-01",
-      },
-      {
-        id: 2,
-        title: "Material 2",
-        description: "This is the description of Material 2.",
-        files: ["file1.pdf"],
-        creationDate: "2022-03-02",
-      }], 
-      assignments:[{
-        id: 1,
-        title: "Assignment 1",
-        description: "This is the description of Assignment 1.",
-        files: ["file1.pdf", "file2.docx"],
-        deadline: "2022-03-15",
-        tags: ["tag1", "tag2"],
-      },
-      {
-        id: 2,
-        title: "Assignment 2",
-        description: "This is the description of Assignment 2.",
-        files: ["file1.pdf"],
-        deadline: "2022-03-20",
-        tags: ["tag1"],
-      }, {
-        id: 3,
-        title: "Assignment 3",
-        description: "This is the description of Assignment 3.",
-        files: ["file1.pdf", "file2.docx"],
-        deadline: "2022-03-15",
-        tags: ["tag1", "tag2"],
-      },
-      {
-        id: 4,
-        title: "Assignment 4",
-        description: "This is the description of Assignment 4.",
-        files: ["file1.pdf"],
-        deadline: "2022-03-20",
-        tags: ["tag1"],
-      }]}]
-    }],
+      weekInfo:[],
+      
+      
+    //   weekInfo: [{id:1, topics:[{id:1, title: "datatypes", description: "something", materials:[{
+    //     id: 1,
+    //     title: "Material 1",
+    //     description: "This is the description of Material 1.",
+    //     files: ["file1.pdf", "file2.docx"],
+    //     creationDate: "2022-03-01",
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "Material 2",
+    //     description: "This is the description of Material 2.",
+    //     files: ["file1.pdf"],
+    //     creationDate: "2022-03-02",
+    //   },], assignments:[{
+    //     id: 1,
+    //     title: "Assignment 1",
+    //     description: "This is the description of Assignment 1.",
+    //     files: ["file1.pdf", "file2.docx"],
+    //     deadline: "2022-03-15",
+    //     tags: ["tag1", "tag2"],
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "Assignment 2",
+    //     description: "This is the description of Assignment 2.",
+    //     files: ["file1.pdf"],
+    //     deadline: "2022-03-20",
+    //     tags: ["tag1"],
+    //   }]}, 
+    //   {id:2, title: "arrays", description: "something", 
+    //   materials:[{
+    //     id: 1,
+    //     title: "Material 1",
+    //     description: "This is the description of Material 1.",
+    //     files: ["file1.pdf", "file2.docx"],
+    //     creationDate: "2022-03-01",
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "Material 2",
+    //     description: "This is the description of Material 2.",
+    //     files: ["file1.pdf"],
+    //     creationDate: "2022-03-02",
+    //   }], 
+    //   assignments:[{
+    //     id: 1,
+    //     title: "Assignment 1",
+    //     description: "This is the description of Assignment 1.",
+    //     files: ["file1.pdf", "file2.docx"],
+    //     deadline: "2022-03-15",
+    //     tags: ["tag1", "tag2"],
+    //   },
+    //   {
+    //     id: 2,
+    //     title: "Assignment 2",
+    //     description: "This is the description of Assignment 2.",
+    //     files: ["file1.pdf"],
+    //     deadline: "2022-03-20",
+    //     tags: ["tag1"],
+    //   }, {
+    //     id: 3,
+    //     title: "Assignment 3",
+    //     description: "This is the description of Assignment 3.",
+    //     files: ["file1.pdf", "file2.docx"],
+    //     deadline: "2022-03-15",
+    //     tags: ["tag1", "tag2"],
+    //   },
+    //   {
+    //     id: 4,
+    //     title: "Assignment 4",
+    //     description: "This is the description of Assignment 4.",
+    //     files: ["file1.pdf"],
+    //     deadline: "2022-03-20",
+    //     tags: ["tag1"],
+    //   }]}]
+    // }],
       isWeekSelected: false,
       selectedWeek: null,
       selectedTopic:null,//after opening a week and selecting a topic
@@ -107,11 +110,15 @@ class Clo extends Component {
   }
 
   componentDidMount() {
-    fetch('https://example.com/api/data')
+    const {userId, classId} = this.state;
+    //const classId = this.props.classId;
+    console.log("user id is ",userId);
+    console.log("class id is ",classId);
+    fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`)
       .then(response => response.json())
       .then(data => {
         // Update state with API data
-        this.setState({ apiData: data });
+        this.setState({ weekInfo: data });
       })
       .catch(error => console.error(error));
   }
@@ -120,9 +127,14 @@ class Clo extends Component {
     console.log(weekIndex);
     console.log("selected");
     
-    this.setState({ selectedWeek: weekIndex, isWeekSelected: true }, () => {
-      console.log("selected week number is: ", this.state.selectedWeek);
+    const selectedWeek = this.state.weekInfo[weekIndex];
+    this.setState({
+      isWeekSelected: true,
+      selectedWeek: selectedWeek
     });
+    // this.setState({ selectedWeek: weekIndex, isWeekSelected: true }, () => {
+    //   console.log("selected week number is: ", this.state.selectedWeek);
+    // });
   };
 
   handleWeekNumberInput = (event) => {

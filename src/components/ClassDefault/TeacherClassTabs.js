@@ -20,7 +20,7 @@ export default function TeacherClassTabs(props) {
         case '1':
           return 'Item One';
         case '2':
-          return <CLOstarter userId={userId} classID={classId} />;
+          return <CLOstarter userId={userId} classId={classId} />;
         case '3':
           return 'Item Three';
         default:
