@@ -46,12 +46,12 @@ function CLOCard(props) {
     setAnchorEl(null);
   };
 
-  const handleCardClick = () => {
-    console.log("card clicked for week")
-    console.log(props.weekNumber-1);
-    props.onWeekSelect(props.weekNumber-1);
-    handleMenuClose();
-  };
+  // const handleCardClick = () => {
+  //   console.log("card clicked for week")
+  //   console.log(props.weekNumber-1);
+  //   props.onWeekSelect(props.weekNumber-1);
+  //   handleMenuClose();
+  // };
 
   const handleAddTopic = () => {
     props.showAddTopicForm(weekNumber)
@@ -59,8 +59,10 @@ function CLOCard(props) {
   };
 
   const handleWeekClick=()=>{
-    handleCardClick();
-
+    console.log("card clicked for week")
+    console.log(props.weekNumber-1);
+    props.onWeekSelect(props.weekNumber-1);
+    handleMenuClose();
   }
 
   return (

@@ -114,9 +114,13 @@ class Clo extends Component {
     try {
       const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`);
       const data = await response.json();
-      console.log("weeks");
-      console.log(data);
-      this.setState({ weekNumber: data.length, weekInfo: data });
+      if(data.length>0){
+        console.log("data is ", data);
+        this.setState({ weekNumber: data.length, weekInfo: data });
+      }
+      else{
+        this.setState({ weekNumber: 0, weekInfo: [] });
+      }
     } catch (error) {
       console.error(error);
     }
@@ -169,6 +173,7 @@ class Clo extends Component {
 
   onAddWeekClick = () => {
     const { userId, classId } = this.state;
+    console.log("week number is ", this.state.weekNumber);
     if (this.state.weekNumber < 16) {
       this.setState((prevState) => {
         //const newWeekInfo = prevState.weekInfo.concat({ topics: [] });
@@ -224,7 +229,7 @@ class Clo extends Component {
             <div>
             console.log("in this piece")
             <div>
-              <TopicsBoard userID={this.state.userId} classID={this.state.classId} weekID={this.state.weekInfo[this.state.selectedWeek].id} weekNumber={this.state.weekInfo[this.state.selectedWeek].number} topics={this.state.weekInfo[this.state.selectedWeek].topics} onTopicSelect={this.handleTopicSelect}/>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.weekIndex]._id} weekNumber={this.state.weekInfo[this.state.selectedWeek].number} topics={this.state.weekInfo[this.state.selectedWeek].topics} onTopicSelect={this.handleTopicSelect}/>
               </div>
               </div>
           )

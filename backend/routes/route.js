@@ -157,7 +157,7 @@ router.get('/t/:userId/class/:classId/weeks', async (req, res) => {
         return res.json(weekData);
       } else {
         console.log("weekData is empty");
-        return res.status(404).json({ message: "No weeks found for the specified class ID" });
+        return res.json();
       }
     } catch (err) {
     consol
@@ -169,6 +169,7 @@ router.get('/t/:userId/class/:classId/weeks', async (req, res) => {
 //add week 
 router.post('/t/:userId/class/:classId/week', async(request, response)=>{
     //const classes = client.db("colearnDb").collection("class");
+    console.log("in add wekk api");
     const weeks = client.db("colearnDb").collection("week");
     //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
     const newWeek = {

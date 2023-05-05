@@ -36,7 +36,7 @@ function TopicsBoard(props) {
         props.topics.map((topic,index) => (
           <TopicCard 
           key={index}
-            id={topic.id}
+            id={topic._id}
             topicObject={topic}
             title={topic.title}
             description={topic.description}
