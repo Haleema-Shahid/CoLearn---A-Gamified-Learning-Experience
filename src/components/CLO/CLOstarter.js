@@ -229,9 +229,9 @@ class Clo extends Component {
           }
           {this.state.isWeekSelected && !this.state.showViewTopic && (
             <div>
-            console.log("in this piece")
+            
             <div>
-              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.weekInfo[this.state.selectedWeekIndex].number} topics={this.state.weekInfo[this.state.selectedWeekIndex].topics} onTopicSelect={this.handleTopicSelect}/>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} onTopicSelect={this.handleTopicSelect}/>
               </div>
               </div>
           )
@@ -253,74 +253,3 @@ class Clo extends Component {
         }
       }
 export default Clo;
-// {/*   
-//           <Box
-//       sx={{
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         height: '100vh',
-//       }}
-//     >
-//       <Box
-//           component="form"
-//           action="#"
-//           onSubmit={this.handleSubmit}
-//           sx={{
-//             backgroundImage: `linear-gradient(to right, #1e3c72, #2a5298)`,
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//             backgroundColor: 'white',
-//             padding: '20px',
-//             borderRadius: '10px',
-//             width: '80%',
-//             maxWidth: '400px',
-//           }}
-//         >
-//           <Typography variant="h6" component="h4" mb={3}>
-//             Enter Number of Weeks:
-//           </Typography>
-//           <TextField
-//             id="weekNumber"
-//             name="weekNumber"
-//             select
-//             value={weekNumber || ''}
-//             onChange={this.handleWeekNumberInput}
-//             required={weekNumber === null}
-//             fullWidth
-//             sx={{ backgroundColor: 'white', fontSize: '0.8rem' }}
-//           >
-//             {Array.from(Array(16).keys()).map((num) => (
-//               <MenuItem key={num + 1} value={num + 1}>
-//                 {num + 1}
-//               </MenuItem>
-//             ))}
-//           </TextField>
-//           <br />
-//           <br />
-//           <Button
-//             type="submit"
-//             variant="contained"
-//             sx={{
-//               backgroundColor: '#1e3c72',
-//               color: 'white',
-//               borderRadius: '20px',
-//               padding: '10px 30px',
-//               fontSize: '1.2rem',
-//               '&:hover': {
-//                 backgroundColor: '#0c2461',
-//               },
-//             }}
-//           >
-//             Submit
-//           </Button>
-//         </Box>
-//     </Box> */}
-   
-
-//     );
-//   }
-// }
-
-// export default Clo;
