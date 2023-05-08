@@ -64,7 +64,7 @@ router.get('/t/:userId', async (request, response) => {
     }
 });
 
-//get student for student dashboard
+//get student classes for student dashboard
 router.get('/s/:userId', async (request, response) => {
     //console.log(request.params.userId);
     const collection = client.db("colearnDb").collection("class");
@@ -112,29 +112,55 @@ router.post('/create-class', async(request, response)=>{
     }
 });
 
-//get weeks of specific class for teacher
-// router.get('/t/:userId/class/:classId/weeks', async(request, response)=>{
-//     console.log("INSIDE THE API");
-//     const data = client.db("colearnDb").collection("week");
-//     //const thisClass = classes.findOne({_id: ObjectId(request.params.classId)});
+//join class
+router.get('/s/:userId/join-class/:classCode', async (request, response) => {
+  try {
+    console.log("inside join class api");
+    const classCode = request.params.classCode;
+    const userId = request.params.userId
+    console.log("after params");
+    const classes = client.db("colearnDb").collection("class");
+    //const students = client.db("colearnDb").collection("user");
+    // Check if the class code exists
+    if(classes){
+      console.log("classes is not empty");
+    }
+  
+    const classObj = await classes.findOne({ _id: new ObjectId(classCode) });
+    if (!classObj) {
+      console.log('Class not found');
+      return response.status(404).json({ message: 'Class not found' });
+    }
 
-//     if(weeks){
-//         const data = await weeks.find({ classId: new ObjectId(request.params.classId) }).toArray(); // get all weeks of the class with the specified ID
-//         console.log(data);
-//         if(data.length>0){
-//             response.json(data);
-//         }
-//         else{
-//             console.log("no weeks returned");
-//             response.json();
-//         }        
-//         //response.redirect(`/user/:userId/class/${classId}`)
-//     }
-//     else{
-//         console.log("error in get class");
-//         response.json();
-//     }
-// });
+    // Check if the student ID already exists in the class
+    console.log(userId);
+    console.log(classObj);
+    const studentIndex = classObj.students.findIndex(student => student.id === userId);
+    if (studentIndex != -1) {
+      console.log('Student already joined class');
+      return response.status(400).json({ message: 'Student already joined class' });
+    }
+
+    // Add the student ID to the class
+    classObj.students.push(userId);
+
+    const studentObj = {
+      id: new ObjectId(userId),
+      position: -1,
+      badge: ''
+    }
+
+    await classes.updateOne({_id : classObj._id}, {$push: {students: studentObj}});
+
+    console.log('Student success joined class')
+    response.status(200).json({ message: 'Student joined class successfully' });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+//get weeks of specific class for teacher
 router.get('/t/:userId/class/:classId/weeks', async (req, res) => {
     try {
       const { userId, classId } = req.params;

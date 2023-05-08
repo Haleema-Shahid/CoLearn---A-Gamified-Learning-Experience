@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 function StudentDashboard() {
   const { userId } = useParams();
   const [showJoinClassModal, setShowJoinClassModal] = useState(false);
-  const [ClassCode, setClassCode] = useState('');
+  const [classCode, setClassCode] = useState('');
   const [classes, setClasses] = useState([]);
 
 
@@ -43,21 +43,35 @@ function StudentDashboard() {
   };
 
 
-  const handleJoinClassSubmit = (event) => {
-
-    if (ClassCode === '' ) {
-      // Class name or section is empty, do not create new class
+  const handleJoinClassSubmit = async (event) => {
+    event.preventDefault();
+  
+    if (classCode === '') {
+      // Class code is empty, do not attempt to join class
       setShowJoinClassModal(false);
       return;
     }
-
-    // Create new class
-    //a backend validation to check if this class code exists
-    setClasses([...classes, { name: "Advanced Programming", section: "D", id:"A2563" }]);
-    setShowJoinClassModal(false);
-    setClassCode('')
-
+  
+    try {
+      // Check if class code exists
+      const response = await fetch(`http://localhost:4000/backend/s/${userId}/join-class/${classCode}`);
+      if (response.ok) {
+        // Class exists, add user to class
+        const data = await response.json();
+        setClasses([...classes, data]);
+        setShowJoinClassModal(false);
+        setClassCode('');
+      } else {
+        // Class code does not exist
+        console.error('Class code not found');
+        setShowJoinClassModal(false);
+        setClassCode('');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   const handleCancelClick = () => {
     setShowJoinClassModal(false);
@@ -79,7 +93,7 @@ function StudentDashboard() {
             <input
               id="class-name-input"
               type="text"
-              value={ClassCode}
+              value={classCode}
               onChange={handleClassCodeChange}
             />
             <br />
