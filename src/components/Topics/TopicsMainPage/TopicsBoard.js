@@ -21,6 +21,9 @@ function TopicsBoard(props) {
   //   fetchData();
   // }, [weekID]);
 
+
+
+  //fetch all topics of this week, display them in order of upload time
   const handleViewTopic = (topic) => {
     console.log("in here");
     console.log(topic)

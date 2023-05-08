@@ -18,6 +18,7 @@ class Clo extends Component {
     this.state = {
       userId: props.userId,
       classId: props.classId,
+      slectedWeekIndex: -1,
       weekNumber: 0,//this is for dummy change it to 0 after backend is implemented
       //week info is a week array 
       //if implementing backend we can get the week id that already exist and if we click the week then on topic board we can get all
@@ -148,6 +149,7 @@ class Clo extends Component {
     const selectedWeek = this.state.weekInfo[weekIndex];
     this.setState({
       isWeekSelected: true,
+      selectedWeekIndex: weekIndex,
       selectedWeek: selectedWeek
     });
     // this.setState({ selectedWeek: weekIndex, isWeekSelected: true }, () => {
@@ -229,7 +231,7 @@ class Clo extends Component {
             <div>
             console.log("in this piece")
             <div>
-              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.weekIndex]._id} weekNumber={this.state.weekInfo[this.state.selectedWeek].number} topics={this.state.weekInfo[this.state.selectedWeek].topics} onTopicSelect={this.handleTopicSelect}/>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.weekInfo[this.state.selectedWeekIndex].number} topics={this.state.weekInfo[this.state.selectedWeekIndex].topics} onTopicSelect={this.handleTopicSelect}/>
               </div>
               </div>
           )
