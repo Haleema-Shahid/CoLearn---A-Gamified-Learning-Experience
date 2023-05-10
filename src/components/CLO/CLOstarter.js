@@ -231,7 +231,7 @@ class Clo extends Component {
             <div>
             
             <div>
-              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} onTopicSelect={this.handleTopicSelect}/>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex+1} onTopicSelect={this.handleTopicSelect}/>
               </div>
               </div>
           )
@@ -239,8 +239,8 @@ class Clo extends Component {
           {
             this.state.isWeekSelected  && this.state.showViewTopic &&(
               <ViewTopic 
-              title={this.state.selectedTopic.title}
-              description={this.state.selectedTopic.description}
+              title={this.state.selectedTopic.name}
+              // description={this.state.selectedTopic.description}
               materials={this.state.selectedTopic.materials}
               assignments={this.state.selectedTopic.assignments}
               ></ViewTopic>

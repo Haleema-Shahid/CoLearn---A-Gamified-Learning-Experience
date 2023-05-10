@@ -242,12 +242,12 @@ function AssignmentPage() {
                         </Button>
                     </Link>
                     </div>
-                    {/* <div>
+                    <div>
                         <HelpingMaterial></HelpingMaterial>
-                    </div> */}
-                    {/* <div className="file-uploader-container" style={{ marginTop: '20px' }}>
+                    </div>
+                    <div className="file-uploader-container" style={{ marginTop: '20px' }}>
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>

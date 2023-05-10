@@ -13,21 +13,7 @@ const FileUploader = ({ files, setFiles, remFile }) => {
 
         // upload file
         const formData = new FormData();
-        // formData.append(
-        //     "newFile",
-        //     file,
-        //     file.name
-        // )
-        // axios.post('http://localhost:8080/upload', formData)
-        //     .then((res) => {
-        //         file.isUploading = false;
-        //         setFiles([...files, file])
-        //     })
-        //     .catch((err) => {
-        //         // inform the user
-        //         console.error(err)
-        //         removeFile(file.name)
-        //     });
+        
     }
 
     return (

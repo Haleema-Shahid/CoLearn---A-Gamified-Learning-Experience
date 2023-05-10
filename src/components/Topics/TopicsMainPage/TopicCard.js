@@ -26,7 +26,7 @@ const styles = {
 
 }
 
-function TopicCard({ id, topicObject, title, description, onViewTopic, userID, classID, weekID, weekNumber, cardKey }) {
+function TopicCard({ id, topicObject, title1, onViewTopic, onDeleteTopic, userID, classID, weekID, weekNumber, cardKey }) {
  
             
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,6 +44,13 @@ function TopicCard({ id, topicObject, title, description, onViewTopic, userID, c
    
     console.log("clicked view topic")
     onViewTopic(topicObject);
+    handleMenuClose();
+  };
+
+  const handleTopicDeletion = () => {
+   
+    console.log("clicked delete topic")
+    onDeleteTopic(topicObject);
     handleMenuClose();
   };
 
@@ -87,7 +94,7 @@ function TopicCard({ id, topicObject, title, description, onViewTopic, userID, c
                 onClose={handleMenuClose}
               >
                 
-                <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
+                <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem>
                 <Link to={`/t/${userID}/class/${classID}/week/${weekID}/${weekNumber}/topic/${id}}`}><MenuItem >Add an Assignment</MenuItem></Link>
                 <Link to={"/t/${userId}/class/${classID}/week/${weekID}/${weekNumber}/topic/${id}/TeacherMaterial"}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link>
                 <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
@@ -96,12 +103,12 @@ function TopicCard({ id, topicObject, title, description, onViewTopic, userID, c
             </div>
             </div>
         }
-        title={title}
+        title={title1}
       //subheader={props.section}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {description}
+          
         </Typography>
       </CardContent>
     </Card>
