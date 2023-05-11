@@ -29,8 +29,8 @@ function AssignmentPage() {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [creationDate, setCreationDate]=useState("");
-    const [creationTime, setCreationTime]=useState("");
+    const [creationDate, setCreationDate] = useState("");
+    const [creationTime, setCreationTime] = useState("");
 
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
@@ -83,10 +83,10 @@ function AssignmentPage() {
         }
     };
     const handleAssignmentTags = () => {
-      
+
         if (CurrentTag != "") {
-        setAssignmentTags([...AssignmentTags, CurrentTag]);
-        setCurrentTag("")
+            setAssignmentTags([...AssignmentTags, CurrentTag]);
+            setCurrentTag("")
         }
 
 
@@ -179,15 +179,15 @@ function AssignmentPage() {
                                     sx={{ width: "100%", mt: 2 }}
                                 />
                                 <Button className='HandleTags' onClick={handleAssignmentTags} sx={{
-                                backgroundColor: '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '5px 15px',
-                                fontSize: '0.75rem',
-                                '&:hover': {
-                                    backgroundColor: '#0c2461',
-                                },
-                            }}>Add Tag</Button>
+                                    backgroundColor: '#1e3c72',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    padding: '5px 15px',
+                                    fontSize: '0.75rem',
+                                    '&:hover': {
+                                        backgroundColor: '#0c2461',
+                                    },
+                                }}>Add Tag</Button>
                                 {
                                     AssignmentTags.map((tag) => (
                                         <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
@@ -223,27 +223,27 @@ function AssignmentPage() {
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div>
                     <div>
-                    <Link to={`/t/user/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
-                        <Button
+                        <Link to={`/t/user/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
+                            <Button
 
-                            variant="contained"
-                            sx={{
-                                backgroundColor: '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '10px 30px',
-                                fontSize: '1rem',
-                                '&:hover': {
-                                    backgroundColor: '#0c2461',
-                                },
-                            }}
-                        >
-                            Add Helping Material
-                        </Button>
-                    </Link>
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#1e3c72',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    padding: '10px 30px',
+                                    fontSize: '1rem',
+                                    '&:hover': {
+                                        backgroundColor: '#0c2461',
+                                    },
+                                }}
+                            >
+                                Add Helping Material
+                            </Button>
+                        </Link>
                     </div>
                     <div>
-                        <HelpingMaterial></HelpingMaterial>
+                        {/* <HelpingMaterial></HelpingMaterial> */}
                     </div>
                     <div className="file-uploader-container" style={{ marginTop: '20px' }}>
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>

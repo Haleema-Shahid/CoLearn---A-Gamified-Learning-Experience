@@ -7,7 +7,7 @@ import TeachDashv3 from './TeachDashv3';
 //import NavbarTwo from './NavbarTwo';
 import Navbar from './Navbar';
 import TeacherDashboard from './components/TeacherDashboard/TeacherDashboard';
-import { BrowserRouter, Switch, Route,Routes } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Routes } from 'react-router-dom';
 import ClassHeader from './components/ClassHeader/ClassHeader';
 import ClassDefault from './components/ClassDefault/ClassDefault';
 //import TopicsBoard from './components/Topics/TopicsBoard';
@@ -33,7 +33,7 @@ function App() {
       {/* <HelpingMaterial></HelpingMaterial> */}
       {/* <SignUp/> */}
       {/* <SignIn/> */}
-      
+
       {/* <nav></nav>
       <SignIn></SignIn> */}
       {/* <LoginNav></LoginNav> */}
@@ -42,21 +42,21 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/t/:userId" element={<TeacherDashboard />} />
-        <Route path="/s/:userId" element={<StudentDashboard />} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/t/:userId" element={<TeacherDashboard />} />
+          <Route path="/s/:userId" element={<StudentDashboard />} />
 
-     
 
-        {/* <Route path="/" element={<TeacherDashboard />}/> */}
-        
-        <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
 
-        {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
-        <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
-        <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
-        <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
+          {/* <Route path="/" element={<TeacherDashboard />}/> */}
+
+          <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
+
+          {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
+          <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
         </Routes>
 
 
