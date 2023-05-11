@@ -1,6 +1,6 @@
 //Add topic receives weekID, closeAddTopic as props
 //closeAddTopic will close the addTopic prompt from Topics Board
-//props: weekID={weekID} classID={props.classId} closeAddTopic={handleCloseTopic}
+//props: weekId={weekId} classId={props.classId} closeAddTopic={handleCloseTopic}
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -19,7 +19,9 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 function AddTopic(props) {
   const [topicName, setTopicName] = useState('');
-  const [weekID, setWeekID] = useState(props.weekID);
+  const [weekId, setWeekID] = useState(props.weekId);
+  const userId = props.userId;
+  const classId = props.classId;
   const [prevTopics, setPrevTopics] = useState(null)
   const [open, setOpen] = useState(false);
 
@@ -29,23 +31,47 @@ function AddTopic(props) {
   //get all the previous topics of this week and set in prev topics
 
 
-  const handleAddTopicSubmit = (e) => {
+  const handleAddTopicSubmit = async (e) => {
     e.preventDefault();
     console.log("handleaddtopic clicked");
-    //checking if this topic already exists
+
+    // Checking if this topic already exists
     if (prevTopics != null) {
       if (prevTopics.filter(topic => topic.name === topicName).length > 0) {
-        console.log("entered");
-        return
-
+        console.log("Topic already exists");
+        return;
       }
     }
 
-    //----------------backend task--------------
-    //add the new topic title with empty assignment and material to the week      
+    try {
+      // Create the topic object
+      const newTopic = {
+        name: topicName,
+        materials: [],
+        assignments: [],
+      };
+      //const name = topicName;
+      // Send a POST request to the API endpoint
+      const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: topicName })
+      });
 
-    props.closeAddTopic();
-  }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('New topic added:', data);
+        props.closeAddTopic();
+      } else {
+        throw new Error('Failed to add topic');
+      }
+    } catch (error) {
+      console.error('Error adding topic:', error);
+    }
+  };
+
   const handleTopicNameChange = (event) => {
     setTopicName(event.target.value);
   };

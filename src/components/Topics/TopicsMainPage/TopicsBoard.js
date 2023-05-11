@@ -5,16 +5,19 @@
 
 import { useParams } from 'react-router-dom';
 import TopicCard from './TopicCard';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ViewTopic from '../TopicsView/ViewTopic'
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddTopic from './AddTopic';
 
 function TopicsBoard(props) {
-  const[weekId, setWeekId]=useState(props.weekId);
+  const [weekId, setWeekId] = useState(props.weekId);
+  const [userId, setUserId] = useState(props.userId);
+  const [classId, setClassId] = useState(props.classId);
+
   //dummy data alert
-  const [topics, setThisWeeksTopics] = useState([{_id:"01", name:"Test Topic", materials:[], assignments:[]}]);//this will have all the topics of this week--initial state will be null- for testing dummy data
+  const [topics, setThisWeeksTopics] = useState([]);//this will have all the topics of this week--initial state will be null- for testing dummy data
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [addTopic, setAddTopic] = useState(false);//when we click add topic this is set to true and conditionally add topic componnent is rendered instead of all the topics
 
@@ -32,7 +35,23 @@ function TopicsBoard(props) {
 
   //fetch all topics of this week, display them in order of upload time
 
-  
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topics`);
+        const data = await response.json();
+        // Assuming the API response contains an array of topics with upload time property
+        //const sortedTopics = data.sort((a, b) => a.uploadTime - b.uploadTime);
+        setThisWeeksTopics(data);
+      } catch (error) {
+        console.error('Error fetching topics:', error);
+      }
+    };
+
+    fetchTopics();
+  }, [weekId]);
+
+
   const handleViewTopic = (topic) => {
     console.log("in here");
     console.log(topic)
@@ -41,6 +60,7 @@ function TopicsBoard(props) {
 
   const HandleAddTopic = (topic) => {
     //here we open add topic cell
+
     setAddTopic(true);
 
   };
@@ -51,7 +71,7 @@ function TopicsBoard(props) {
     //background: this function is called by child component Topic card and is sent as a prop in it
     //-----------------------------backend----------------
     //possible algo: access the week ID, access the topic id and delete it
-    
+
 
 
   };
@@ -62,55 +82,55 @@ function TopicsBoard(props) {
 
   };
 
-  const mapTopic=()=>{
-    
+  const mapTopic = () => {
+
   }
 
 
   return (
     <div>
-      
-        {!addTopic && (
+
+      {!addTopic && (
+        <div>
           <div>
-            <div>
-              <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}>
-                Add Topics
-              </Button>
-            </div>
-            <div>
-            {topics && Array.isArray(topics) && topics.map((topic, index) => (
-  <TopicCard
-    key={index}
-    id={topic._id}
-    topicObject={topic}
-    title={topic.name}
-    onViewTopic={handleViewTopic}
-    onDeleteTopic={HandleDeleteTopic}
-    userId={props.userId}
-    classId={props.classId}
-    weekId={props.weekId}
-    weekNumber={props.weekNumber}
-    cardKey={topic.id}
-  />
-))}
-            </div>
+            <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}>
+              Add Topics
+            </Button>
           </div>
+          <div>
+            {topics && Array.isArray(topics) && topics.map((topic, index) => (
+              <TopicCard
+                key={index}
+                id={topic._id}
+                topicObject={topic}
+                title={topic.name}
+                onViewTopic={handleViewTopic}
+                onDeleteTopic={HandleDeleteTopic}
+                userId={props.userId}
+                classId={props.classId}
+                weekId={props.weekId}
+                weekNumber={props.weekNumber}
+                cardKey={topic.id}
+              />
+            ))}
+          </div>
+        </div>
 
+      )
+      }
+
+      {
+        addTopic && (
+          <div>
+            <AddTopic weekId={weekId} classId={props.classId} userId={props.userId} closeAddTopic={handleCloseTopic} ></AddTopic>
+          </div>
         )
-        }
+      }
 
-        {
-          addTopic && (
-            <div>
-              <AddTopic weekId={weekId} classId={props.classId} closeAddTopic={handleCloseTopic} ></AddTopic>
-            </div>
-          )
-        }
-
-      </div>
+    </div>
 
 
-  
+
   );
 }
 
