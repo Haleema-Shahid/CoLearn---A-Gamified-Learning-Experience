@@ -1,7 +1,7 @@
 // //for this assignment page we will have userid, week id, topic id,
 // //this page will ask for asignment title, description, deadline, total marks, it will also save the timestamp from when we click post
 // //it will also ask for assignment material upload and helping material upload
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -20,6 +20,7 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -34,21 +35,65 @@ function AssignmentPage() {
 
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
-    const [AssignmentFiles, setAssignmentFiles] = useState("")
-    const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
-    const [CurrentTag, setCurrentTag] = useState("")
-    const [HelpingMaterialFiles, setHelpingMaterialFiles] = useState(['chip1', 'chip2'])
+    const [assignmentFiles, setAssignmentFiles] = useState([])
+    const [assignmentTags, setAssignmentTags] = useState(['chip1'])
+    const [currentTag, setCurrentTag] = useState("")
+    const [helpingMaterialFiles, setHelpingMaterialFiles] = useState([])
     const today = dayjs();
     const yesterday = dayjs().subtract(1, 'day');
 
+    const location = useLocation();
+    // let formData = {
+    //     topicId: topicId,
+    //     title: title,
+    //     description: description,
+    //     uploadtime: new Date(),
+    //     deadline: deadline,
+    //     totalmarks: totalMarks,
+    //     tags: assignmentTags,
+    //     files: assignmentFiles
+    // }
+
+    useEffect(() => {
+        if (location.state && location.state.helpingMaterial) {
+            const helpingMaterial = location.state.helpingMaterial;
+            //setHelpingMaterialFiles(...helpingMaterialFiles, helpingMaterial);
+            // formData = location.state.formData;
+            // setTitle(formData.title);
+            // setDescription(formData.description);
+            // setDeadline(formData.deadline);
+            // setAssignmentFiles(formData.files);
+            // setAssignmentTags(formData.tags);
+            // setTotalMarks(formData.totalmarks);
+
+            // Do something with the helpingMaterial object
+            console.log('Received helpingMaterial object:', helpingMaterial);
+            // You can update the state or perform other operations with the helpingMaterial object
+        }
+    }, [location.state]);
+
+
+
     const removeFile = (filename) => {
-        setAssignmentFiles(AssignmentFiles.filter(file => file.name !== filename))
+        setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
 
 
     const handleSubmit = (event) => {
         //here goes the backend for uploading the assignment
         //creation date and time setter
+        const newAssn = {
+            topicId: topicId,
+            title: title,
+            description: description,
+            uploadtime: new Date(),
+            deadline: deadline,
+            totalmarks: totalMarks,
+            tags: assignmentTags,
+            files: assignmentFiles
+        };
+
+
         const now = dayjs();
         setCreationDate(now.format('YYYY-MM-DD'));
         setCreationTime(now.format('HH:mm:ss'));
@@ -78,21 +123,21 @@ function AssignmentPage() {
     };
     const handleCurrentTagChange = (event) => {
         const value = event.target.value;
-        if (value != "") {
+        if (value !== "") {
             setCurrentTag(value)
         }
     };
     const handleAssignmentTags = () => {
 
-        if (CurrentTag != "") {
-            setAssignmentTags([...AssignmentTags, CurrentTag]);
+        if (currentTag !== "") {
+            setAssignmentTags([...assignmentTags, currentTag]);
             setCurrentTag("")
         }
 
 
     }
     const handleDeleteTag = (tagToDelete) => {
-        setAssignmentTags(AssignmentTags => AssignmentTags.filter((AssignmentTag) => AssignmentTag != tagToDelete))
+        setAssignmentTags(assignmentTags => assignmentTags.filter((AssignmentTag) => AssignmentTag !== tagToDelete))
     }
 
     return (
@@ -151,7 +196,7 @@ function AssignmentPage() {
                                     defaultValue={yesterday}
                                     disablePast
                                     views={['year', 'month', 'day', 'hours', 'minutes']}
-                                    onChange={(newValue) => setDeadline(newValue)}
+                                    onChange={(newValue) => setDeadline(newValue.toDate())} // Convert newValue to a Date object}
                                 />
                             </LocalizationProvider>
 
@@ -174,7 +219,7 @@ function AssignmentPage() {
                                     required
                                     id="AssignmentTags"
                                     label="Input Tags for Assignment"
-                                    value={CurrentTag}
+                                    value={currentTag}
                                     onChange={handleCurrentTagChange}
                                     sx={{ width: "100%", mt: 2 }}
                                 />
@@ -189,7 +234,7 @@ function AssignmentPage() {
                                     },
                                 }}>Add Tag</Button>
                                 {
-                                    AssignmentTags.map((tag) => (
+                                    assignmentTags.map((tag) => (
                                         <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
                                     ))
                                 }
@@ -220,10 +265,12 @@ function AssignmentPage() {
                 </div>
                 <div className="split right" >
                     <div className="file-uploader-container">
-                        <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
+                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div>
                     <div>
-                        <Link to={`/t/user/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
+                        {/* <Link to={{ pathname: `/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`, state: { formData: formData } }}> */}
+                        <Link to={`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
+
                             <Button
 
                                 variant="contained"
@@ -246,7 +293,7 @@ function AssignmentPage() {
                         {/* <HelpingMaterial></HelpingMaterial> */}
                     </div>
                     <div className="file-uploader-container" style={{ marginTop: '20px' }}>
-                        <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
+                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div>
                 </div>
             </div>

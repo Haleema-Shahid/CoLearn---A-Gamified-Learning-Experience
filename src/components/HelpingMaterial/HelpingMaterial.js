@@ -2,24 +2,32 @@
 //state passing in function in assignment page and add a helping material to the database
 //renders all helping material objects as well
 import React, { useState } from 'react';
+import { useParams } from "react-router-dom";
 import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import FileUploader from './FileUploader'
 import Box from "@mui/material/Box";
 import Chip from '@mui/material/Chip';
 import Stack from "@mui/material/Stack";
+import { useNavigate, useLocation } from 'react-router-dom';
+
 
 
 
 const HelpingMaterial = () => {
-  const [HelpingMaterialFile, setHelpingMaterialFile] = useState(null);
+  const { userId, classId, weekId, weekNumber, topicId } = useParams();
+  const [helpingMaterialFile, setHelpingMaterialFile] = useState(null);
   const [tags, setTags] = useState('');
   const [difficulty, setDifficulty] = useState('');
-  const [HelpingMaterialTags, setHelpingMaterialTags] = useState([])
+  const [helpingMaterialTags, setHelpingMaterialTags] = useState([])
   const [CurrentTag, setCurrentTag] = useState("")
+  const navigate = useNavigate();
+  const location = useLocation();
+
+
 
 
   const removeFile = (filename) => {
-    setHelpingMaterialFile(HelpingMaterialFile.filter(file => file.name !== filename))
+    setHelpingMaterialFile(helpingMaterialFile.filter(file => file.name !== filename))
   }
 
   const handleFileChange = (event) => {
@@ -37,7 +45,35 @@ const HelpingMaterial = () => {
   const handleSubmit = () => {
     // Handle form submission here
     //send back an object
+    const helpingMaterial = {
+      file: helpingMaterialFile,
+      is_recommended: false,
+      level: difficulty,
+      tags: helpingMaterialTags
+    };
+    //   let formData = {};
+
+    //   if (location.state && location.state.formData) {
+    //     formData = {
+    //       topicId: topicId,
+    //       title: location.state.formData.title,
+    //       description: location.state.formData.description,
+    //       uploadtime: new Date(),
+    //       deadline: location.state.formData.deadline,
+    //       totalmarks: location.state.formData.totalmarks,
+    //       tags: location.state.formData.assignmentTags,
+    //       files: location.state.formData.assignmentFiles
+    //     }
+    // }
+
+    //sending object back to assignment page
+    navigate(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { state: { helpingMaterial } });
+    // history.push(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { helpingMaterial });
+
+
   };
+
+
   const handleCurrentTagChange = (event) => {
     const value = event.target.value;
     if (value != "") {
@@ -46,14 +82,14 @@ const HelpingMaterial = () => {
   };
   const handleHelpingMaterialTags = () => {
     if (CurrentTag != "") {
-      setHelpingMaterialTags([...HelpingMaterialTags, CurrentTag]);
+      setHelpingMaterialTags([...helpingMaterialTags, CurrentTag]);
       setCurrentTag("")
     }
 
 
   }
   const handleDeleteTag = (tagToDelete) => {
-    setHelpingMaterialTags(HelpingMaterialTags => HelpingMaterialTags.filter((HelpingMaterialTag) => HelpingMaterialTag != tagToDelete))
+    setHelpingMaterialTags(helpingMaterialTags => helpingMaterialTags.filter((helpingMaterialTag) => helpingMaterialTag != tagToDelete))
   }
 
   return (
@@ -112,7 +148,7 @@ const HelpingMaterial = () => {
                   },
                 }}>Add Tag</Button>
                 {
-                  HelpingMaterialTags.map((tag) => (
+                  helpingMaterialTags.map((tag) => (
                     <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
                   ))
                 }
@@ -143,7 +179,7 @@ const HelpingMaterial = () => {
         </div>
         <div className="split right" >
           <div className="file-uploader-container">
-            <FileUploader files={HelpingMaterialFile} setFiles={setHelpingMaterialFile} remFile={removeFile}></FileUploader>
+            <FileUploader files={helpingMaterialFile} setFiles={setHelpingMaterialFile} remFile={removeFile}></FileUploader>
           </div>
 
         </div>
