@@ -33,6 +33,7 @@ function AssignmentPage() {
     const [creationDate, setCreationDate] = useState("");
     const [creationTime, setCreationTime] = useState("");
 
+    const [helpingMaterialClick, setHelpingMaterialClick ]=useState(false);
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
     const [assignmentFiles, setAssignmentFiles] = useState([])
@@ -74,6 +75,14 @@ function AssignmentPage() {
 
 
 
+
+ 
+    const onAddHelpingMaterial = (fileName) => {
+        //all helping material files from helping material component will be saved here
+        setHelpingMaterialFiles(...helpingMaterialFiles, fileName)
+        //maybe get the tags and set them too
+        setHelpingMaterialClick(false);//this will bring back to the assignment page
+    }
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
@@ -140,9 +149,13 @@ function AssignmentPage() {
         setAssignmentTags(assignmentTags => assignmentTags.filter((AssignmentTag) => AssignmentTag !== tagToDelete))
     }
 
+    const handleHelpingMaterialClick=()=>{
+        setHelpingMaterialClick(true);
+    }
     return (
         <div>
-            <div>
+            {!helpingMaterialClick && (<div>
+                
                 <div className="split left" style={{ width: "50%", left: 0 }}>
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
                         <h1>Assignment</h1>
@@ -268,35 +281,36 @@ function AssignmentPage() {
                         <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div>
                     <div>
-                        {/* <Link to={{ pathname: `/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`, state: { formData: formData } }}> */}
-                        <Link to={`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`}>
+                        <Button onClick={handleHelpingMaterialClick}
 
-                            <Button
-
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px 30px',
-                                    fontSize: '1rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}
-                            >
-                                Add Helping Material
-                            </Button>
-                        </Link>
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#1e3c72',
+                                color: 'white',
+                                borderRadius: '10px',
+                                padding: '10px 30px',
+                                fontSize: '1rem',
+                                '&:hover': {
+                                    backgroundColor: '#0c2461',
+                                },
+                            }}
+                        >
+                            Add Helping Material
+                        </Button>
+                    
                     </div>
-                    <div>
-                        {/* <HelpingMaterial></HelpingMaterial> */}
-                    </div>
-                    <div className="file-uploader-container" style={{ marginTop: '20px' }}>
-                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
-                    </div>
+                    
+                    {/* <div className="file-uploader-container" style={{ marginTop: '20px' }}>
+                        <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
+                    </div> */}
                 </div>
+            </div>)}
+            {
+                helpingMaterialClick && <div>
+                <HelpingMaterial  onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
             </div>
+            }
+            
         </div>
     );
 }
