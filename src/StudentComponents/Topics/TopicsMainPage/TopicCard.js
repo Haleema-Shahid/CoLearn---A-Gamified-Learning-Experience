@@ -97,9 +97,11 @@ function TopicCard({ id, topicObject, title, onViewTopic, onDeleteTopic, userId,
                 >
 
                   {/* <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem> */}
-                  <Link to={`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${id}}`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
-                  <Link to={`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${id}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link>
+                  {/* <Link to={`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${id}}`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link> */}
+                  {/* <Link to={`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${id}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link> */}
                   <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
+                  <MenuItem onClick={handleTopicSelection}>View Assignments</MenuItem>
+                  <MenuItem onClick={handleTopicSelection}>View Material</MenuItem>
                   <MenuItem onClick={handleSomething}>something</MenuItem>
                 </Menu>
               </div>

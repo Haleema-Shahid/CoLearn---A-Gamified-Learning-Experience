@@ -173,33 +173,33 @@ class Clo extends Component {
     onNumberOfWeeksChange(weekNumber);
   };
 
-  onAddWeekClick = () => {
-    const { userId, classId } = this.state;
-    console.log("week number is ", this.state.weekNumber);
-    if (this.state.weekNumber < 16) {
-      this.setState((prevState) => {
-        //const newWeekInfo = prevState.weekInfo.concat({ topics: [] });
-        console.log("prevState.weekinfo is ");
-        console.log(prevState.weekInfo);
-        return {
-          weekNumber: prevState.weekNumber + 1,
-          weekInfo: [...prevState.weekInfo, { topics: [] }],
-        };
-      }, () => {
-        // Make API call to add new week to database
-        fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ weekNumber: this.state.weekNumber, topics: [] }),
-        })
-          .then(response => response.json())
-          .then(data => console.log(data))
-          .catch(error => console.error(error));
-      });
-    }
-  };
+  // onAddWeekClick = () => {
+  //   const { userId, classId } = this.state;
+  //   console.log("week number is ", this.state.weekNumber);
+  //   if (this.state.weekNumber < 16) {
+  //     this.setState((prevState) => {
+  //       //const newWeekInfo = prevState.weekInfo.concat({ topics: [] });
+  //       console.log("prevState.weekinfo is ");
+  //       console.log(prevState.weekInfo);
+  //       return {
+  //         weekNumber: prevState.weekNumber + 1,
+  //         weekInfo: [...prevState.weekInfo, { topics: [] }],
+  //       };
+  //     }, () => {
+  //       // Make API call to add new week to database
+  //       fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({ weekNumber: this.state.weekNumber, topics: [] }),
+  //       })
+  //         .then(response => response.json())
+  //         .then(data => console.log(data))
+  //         .catch(error => console.error(error));
+  //     });
+  //   }
+  // };
   
   
   handleTopicSelect=(topic)=>{
