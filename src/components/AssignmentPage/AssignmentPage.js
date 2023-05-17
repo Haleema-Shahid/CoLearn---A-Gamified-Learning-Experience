@@ -57,7 +57,7 @@ function AssignmentPage() {
     useEffect(() => {
         if (location.state && location.state.helpingMaterial) {
             const helpingMaterial = location.state.helpingMaterial;
-            //setHelpingMaterialFiles(...helpingMaterialFiles, helpingMaterial);
+            setHelpingMaterialFiles(...helpingMaterialFiles, helpingMaterial);
             // formData = location.state.formData;
             // setTitle(formData.title);
             // setDescription(formData.description);
@@ -79,20 +79,43 @@ function AssignmentPage() {
     }
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         //here goes the backend for uploading the assignment
         //creation date and time setter
-        const newAssn = {
-            topicId: topicId,
-            title: title,
-            description: description,
-            uploadtime: new Date(),
-            deadline: deadline,
-            totalmarks: totalMarks,
-            tags: assignmentTags,
-            files: assignmentFiles
-        };
 
+
+        try {
+            // Create the topic object
+            const newAssn = {
+                topicId: topicId,
+                title: title,
+                description: description,
+                uploadtime: new Date(),
+                deadline: deadline,
+                totalmarks: totalMarks,
+                tags: assignmentTags,
+                files: assignmentFiles
+            };
+            //const name = topicName;
+            // Send a POST request to the API endpoint
+            const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ assn: newAssn, helpingMaterials: helpingMaterialFiles })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('New topic added:', data);
+                //props.closeAddTopic();
+            } else {
+                throw new Error('Failed to add topic');
+            }
+        } catch (error) {
+            console.error('Error adding topic:', error);
+        }
 
         const now = dayjs();
         setCreationDate(now.format('YYYY-MM-DD'));

@@ -265,11 +265,39 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic', async (req, res) => 
   }
 });
 
-router.post('/assignment', async (request, response) => {
-  const classes = client.db("colearnDb").collection("class");
+
+router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', async (request, response) => {
+  const { userId, classId, weekId, topicId } = request.params;
+  const { newAssn, helpingMaterial } = request.body;
+  console.log("in assignment api: ", newAssn);
+
+  try {
+    const colearnDb = client.db("colearnDb");
+    const assignmentsCollection = colearnDb.collection("assignment");
+    const helpingMaterialCollection = colearnDb.collection("helpingmaterial");
+
+    // Insert the assignment
+    const assignmentResult = await assignmentsCollection.insertOne(newAssn);
+    console.log("inserted: ", assignmentResult);
+
+    const assignmentId = assignmentResult.insertedId;
+    console.log("assignmentId: ", assignmentId);
+
+    // Insert the helping material
+    helpingMaterial.asnId = assignmentId;
+    const helpingMaterialResult = await helpingMaterialCollection.insertOne(helpingMaterial);
+
+    response.status(200).json({
+      assignmentId: assignmentId.toString(),
+      helpingMaterialId: helpingMaterialResult.insertedId.toString()
+    });
+  } catch (error) {
+    console.error("Error creating assignment:", error);
+    response.status(500).json({ error: "Failed to create assignment" });
+  }
+});
 
 
-})
 
 
 module.exports = router

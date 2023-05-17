@@ -46,6 +46,7 @@ const HelpingMaterial = () => {
     // Handle form submission here
     //send back an object
     const helpingMaterial = {
+      asnId: "",
       file: helpingMaterialFile,
       is_recommended: false,
       level: difficulty,
