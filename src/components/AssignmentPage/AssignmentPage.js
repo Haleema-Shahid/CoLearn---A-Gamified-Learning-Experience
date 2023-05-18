@@ -33,6 +33,7 @@ function AssignmentPage(props) {
     const [creationDate, setCreationDate] = useState("");
     const [creationTime, setCreationTime] = useState("");
 
+
     const [helpingMaterialClick, setHelpingMaterialClick] = useState(false);
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
@@ -175,13 +176,13 @@ function AssignmentPage(props) {
         setAssignmentTags(assignmentTags => assignmentTags.filter((AssignmentTag) => AssignmentTag !== tagToDelete))
     }
 
+
     const handleHelpingMaterialClick = () => {
         setHelpingMaterialClick(true);
     }
     return (
         <div>
             {!helpingMaterialClick && (<div>
-
                 <div className="split left" style={{ width: "50%", left: 0 }}>
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
                         <h1>Assignment</h1>
@@ -324,7 +325,10 @@ function AssignmentPage(props) {
                             Add Helping Material
                         </Button>
 
+
                     </div>
+
+
 
                     {/* <div className="file-uploader-container" style={{ marginTop: '20px' }}>
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
@@ -333,9 +337,11 @@ function AssignmentPage(props) {
             </div>)}
             {
                 helpingMaterialClick && <div>
+
                     <HelpingMaterial onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
                 </div>
             }
+
 
         </div>
     );
