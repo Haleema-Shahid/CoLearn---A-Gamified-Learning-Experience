@@ -13,8 +13,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 
 
-const HelpingMaterial = () => {
-  const { userId, classId, weekId, weekNumber, topicId } = useParams();
+const HelpingMaterial = (props) => {
   const [helpingMaterialFile, setHelpingMaterialFile] = useState(null);
   const [tags, setTags] = useState('');
   const [difficulty, setDifficulty] = useState('');
@@ -26,6 +25,11 @@ const HelpingMaterial = () => {
 
 
 
+  const handleSubmitHelpingMaterial=()=>{
+    props.onAddHelpingMaterial(helpingMaterialFile);
+    //this will send all the helping material back to parent assignment material,
+    //------maybe we need to send tags too--------------
+  }
   const removeFile = (filename) => {
     setHelpingMaterialFile(helpingMaterialFile.filter(file => file.name !== filename))
   }
@@ -52,6 +56,10 @@ const HelpingMaterial = () => {
       level: difficulty,
       tags: helpingMaterialTags
     };
+
+    props.onAddHelpingMaterial(helpingMaterial)
+
+
     //   let formData = {};
 
     //   if (location.state && location.state.formData) {
@@ -68,7 +76,7 @@ const HelpingMaterial = () => {
     // }
 
     //sending object back to assignment page
-    navigate(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { state: { helpingMaterial } });
+    //navigate(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { state: { helpingMaterial } });
     // history.push(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { helpingMaterial });
 
 
@@ -156,6 +164,7 @@ const HelpingMaterial = () => {
 
               </div>
               <Button
+              onClick={handleSubmitHelpingMaterial}
                 type="submit"
                 variant="contained"
                 sx={{

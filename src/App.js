@@ -10,6 +10,7 @@ import TeacherDashboard from './components/TeacherDashboard/TeacherDashboard';
 import { BrowserRouter, Switch, Route, Routes } from 'react-router-dom';
 import ClassHeader from './components/ClassHeader/ClassHeader';
 import ClassDefault from './components/ClassDefault/ClassDefault';
+import ClassDefault2 from './StudentComponents/ClassDefault/ClassDefault';
 //import TopicsBoard from './components/Topics/TopicsBoard';
 import AssignmentPage from './components/AssignmentPage/AssignmentPage'
 import SignUp from './components/LogInSignUp/SignUp'
@@ -52,6 +53,7 @@ function App() {
           {/* <Route path="/" element={<TeacherDashboard />}/> */}
 
           <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
+          <Route path="/s/:userId/class/:classId" element={<ClassDefault2 />} />
 
           {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
           <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />

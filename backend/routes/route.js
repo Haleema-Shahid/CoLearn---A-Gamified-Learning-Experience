@@ -268,8 +268,9 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic', async (req, res) => 
 
 router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', async (request, response) => {
   const { userId, classId, weekId, topicId } = request.params;
-  const { newAssn, helpingMaterial } = request.body;
+  const { newAssn, helpingMaterials } = request.body;
   console.log("in assignment api: ", newAssn);
+  console.log("helping materials: ", helpingMaterials);
 
   try {
     const colearnDb = client.db("colearnDb");
@@ -283,13 +284,18 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', 
     const assignmentId = assignmentResult.insertedId;
     console.log("assignmentId: ", assignmentId);
 
-    // Insert the helping material
-    helpingMaterial.asnId = assignmentId;
-    const helpingMaterialResult = await helpingMaterialCollection.insertOne(helpingMaterial);
+    const helpingMaterialIds = [];
+
+    // Insert the helping materials one by one
+    for (const helpingMaterial of helpingMaterials) {
+      helpingMaterial.asnId = assignmentId;
+      const helpingMaterialResult = await helpingMaterialCollection.insertOne(helpingMaterial);
+      helpingMaterialIds.push(helpingMaterialResult.insertedId);
+    }
 
     response.status(200).json({
       assignmentId: assignmentId.toString(),
-      helpingMaterialId: helpingMaterialResult.insertedId.toString()
+      helpingMaterialIds: helpingMaterialIds.map(id => id.toString())
     });
   } catch (error) {
     console.error("Error creating assignment:", error);
