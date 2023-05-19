@@ -25,7 +25,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-function AssignmentPage() {
+function AssignmentPage(props) {
     const { userId, classId, weekId, weekNumber, topicId } = useParams();
 
     const [title, setTitle] = useState("");
@@ -33,7 +33,8 @@ function AssignmentPage() {
     const [creationDate, setCreationDate] = useState("");
     const [creationTime, setCreationTime] = useState("");
 
-    const [helpingMaterialClick, setHelpingMaterialClick ]=useState(false);
+
+    const [helpingMaterialClick, setHelpingMaterialClick] = useState(false);
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
     const [assignmentFiles, setAssignmentFiles] = useState([])
@@ -55,53 +56,82 @@ function AssignmentPage() {
     //     files: assignmentFiles
     // }
 
-    useEffect(() => {
-        if (location.state && location.state.helpingMaterial) {
-            const helpingMaterial = location.state.helpingMaterial;
-            //setHelpingMaterialFiles(...helpingMaterialFiles, helpingMaterial);
-            // formData = location.state.formData;
-            // setTitle(formData.title);
-            // setDescription(formData.description);
-            // setDeadline(formData.deadline);
-            // setAssignmentFiles(formData.files);
-            // setAssignmentTags(formData.tags);
-            // setTotalMarks(formData.totalmarks);
+    // useEffect(() => {
 
-            // Do something with the helpingMaterial object
-            console.log('Received helpingMaterial object:', helpingMaterial);
-            // You can update the state or perform other operations with the helpingMaterial object
-        }
-    }, [location.state]);
+    //     if (props.helpingMaterial) {
+    //         const helpingMaterial = props.helpingMaterial;
+    //         setHelpingMaterialFiles(...helpingMaterialFiles, helpingMaterial);
+    //         // formData = location.state.formData;
+    //         // setTitle(formData.title);
+    //         // setDescription(formData.description);
+    //         // setDeadline(formData.deadline);
+    //         // setAssignmentFiles(formData.files);
+    //         // setAssignmentTags(formData.tags);
+    //         // setTotalMarks(formData.totalmarks);
+
+    //         // Do something with the helpingMaterial object
+    //         console.log('Received helpingMaterial object:', helpingMaterial);
+    //         // You can update the state or perform other operations with the helpingMaterial object
+
+    //     }
+    // }, [location.state]);
 
 
 
 
- 
+
     const onAddHelpingMaterial = (fileName) => {
         //all helping material files from helping material component will be saved here
+        console.log("fetched helping material: ", fileName);
         setHelpingMaterialFiles(...helpingMaterialFiles, fileName)
+        console.log("list", helpingMaterialFiles);
         //maybe get the tags and set them too
-        setHelpingMaterialClick(false);//this will bring back to the assignment page
+        //setHelpingMaterialClick(false);//this will bring back to the assignment page
     }
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         //here goes the backend for uploading the assignment
         //creation date and time setter
-        const newAssn = {
-            topicId: topicId,
-            title: title,
-            description: description,
-            uploadtime: new Date(),
-            deadline: deadline,
-            totalmarks: totalMarks,
-            tags: assignmentTags,
-            files: assignmentFiles
-        };
+        console.log("handle submit clicked");
+        console.log("before fetching api: helpingMaterials: ", helpingMaterialFiles);
 
+        try {
+            // Create the topic object
+
+            const newAssn = {
+                topicId: topicId,
+                title: title,
+                description: description,
+                uploadtime: new Date(),
+                deadline: deadline,
+                totalmarks: totalMarks,
+                tags: assignmentTags,
+                files: assignmentFiles
+            };
+            //const name = topicName;
+            // Send a POST request to the API endpoint
+            const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newAssn: newAssn, helpingMaterials: helpingMaterialFiles })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('New topic added:', data);
+                //props.closeAddTopic();
+            } else {
+                throw new Error('Failed to add topic');
+            }
+        } catch (error) {
+            console.error('Error adding topic:', error);
+        }
 
         const now = dayjs();
         setCreationDate(now.format('YYYY-MM-DD'));
@@ -149,13 +179,13 @@ function AssignmentPage() {
         setAssignmentTags(assignmentTags => assignmentTags.filter((AssignmentTag) => AssignmentTag !== tagToDelete))
     }
 
-    const handleHelpingMaterialClick=()=>{
+
+    const handleHelpingMaterialClick = () => {
         setHelpingMaterialClick(true);
     }
     return (
         <div>
             {!helpingMaterialClick && (<div>
-                
                 <div className="split left" style={{ width: "50%", left: 0 }}>
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
                         <h1>Assignment</h1>
@@ -297,9 +327,12 @@ function AssignmentPage() {
                         >
                             Add Helping Material
                         </Button>
-                    
+
+
                     </div>
-                    
+
+
+
                     {/* <div className="file-uploader-container" style={{ marginTop: '20px' }}>
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div> */}
@@ -307,10 +340,12 @@ function AssignmentPage() {
             </div>)}
             {
                 helpingMaterialClick && <div>
-                <HelpingMaterial  onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
-            </div>
+
+                    <HelpingMaterial onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
+                </div>
             }
-            
+
+
         </div>
     );
 }

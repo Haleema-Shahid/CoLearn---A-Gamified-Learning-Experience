@@ -12,7 +12,7 @@ import TopicsBoard from '../Topics/TopicsMainPage/TopicsBoard'
 import ViewTopic from '../Topics/TopicsView/ViewTopic';
 
 class Clo extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,107 +26,107 @@ class Clo extends Component {
       //for now weekinfo has almost all the data for ease to show how data is being processes
       //weekInfo:[],
       weekInfo: [],
-      
-    //   weekInfo: [{id:1, topics:[{id:1, title: "datatypes", description: "something", materials:[{
-    //     id: 1,
-    //     title: "Material 1",
-    //     description: "This is the description of Material 1.",
-    //     files: ["file1.pdf", "file2.docx"],
-    //     creationDate: "2022-03-01",
-    //   },
-    //   {
-    //     id: 2,
-    //     title: "Material 2",
-    //     description: "This is the description of Material 2.",
-    //     files: ["file1.pdf"],
-    //     creationDate: "2022-03-02",
-    //   },], assignments:[{
-    //     id: 1,
-    //     title: "Assignment 1",
-    //     description: "This is the description of Assignment 1.",
-    //     files: ["file1.pdf", "file2.docx"],
-    //     deadline: "2022-03-15",
-    //     tags: ["tag1", "tag2"],
-    //   },
-    //   {
-    //     id: 2,
-    //     title: "Assignment 2",
-    //     description: "This is the description of Assignment 2.",
-    //     files: ["file1.pdf"],
-    //     deadline: "2022-03-20",
-    //     tags: ["tag1"],
-    //   }]}, 
-    //   {id:2, title: "arrays", description: "something", 
-    //   materials:[{
-    //     id: 1,
-    //     title: "Material 1",
-    //     description: "This is the description of Material 1.",
-    //     files: ["file1.pdf", "file2.docx"],
-    //     creationDate: "2022-03-01",
-    //   },
-    //   {
-    //     id: 2,
-    //     title: "Material 2",
-    //     description: "This is the description of Material 2.",
-    //     files: ["file1.pdf"],
-    //     creationDate: "2022-03-02",
-    //   }], 
-    //   assignments:[{
-    //     id: 1,
-    //     title: "Assignment 1",
-    //     description: "This is the description of Assignment 1.",
-    //     files: ["file1.pdf", "file2.docx"],
-    //     deadline: "2022-03-15",
-    //     tags: ["tag1", "tag2"],
-    //   },
-    //   {
-    //     id: 2,
-    //     title: "Assignment 2",
-    //     description: "This is the description of Assignment 2.",
-    //     files: ["file1.pdf"],
-    //     deadline: "2022-03-20",
-    //     tags: ["tag1"],
-    //   }, {
-    //     id: 3,
-    //     title: "Assignment 3",
-    //     description: "This is the description of Assignment 3.",
-    //     files: ["file1.pdf", "file2.docx"],
-    //     deadline: "2022-03-15",
-    //     tags: ["tag1", "tag2"],
-    //   },
-    //   {
-    //     id: 4,
-    //     title: "Assignment 4",
-    //     description: "This is the description of Assignment 4.",
-    //     files: ["file1.pdf"],
-    //     deadline: "2022-03-20",
-    //     tags: ["tag1"],
-    //   }]}]
-    // }],
+
+      //   weekInfo: [{id:1, topics:[{id:1, title: "datatypes", description: "something", materials:[{
+      //     id: 1,
+      //     title: "Material 1",
+      //     description: "This is the description of Material 1.",
+      //     files: ["file1.pdf", "file2.docx"],
+      //     creationDate: "2022-03-01",
+      //   },
+      //   {
+      //     id: 2,
+      //     title: "Material 2",
+      //     description: "This is the description of Material 2.",
+      //     files: ["file1.pdf"],
+      //     creationDate: "2022-03-02",
+      //   },], assignments:[{
+      //     id: 1,
+      //     title: "Assignment 1",
+      //     description: "This is the description of Assignment 1.",
+      //     files: ["file1.pdf", "file2.docx"],
+      //     deadline: "2022-03-15",
+      //     tags: ["tag1", "tag2"],
+      //   },
+      //   {
+      //     id: 2,
+      //     title: "Assignment 2",
+      //     description: "This is the description of Assignment 2.",
+      //     files: ["file1.pdf"],
+      //     deadline: "2022-03-20",
+      //     tags: ["tag1"],
+      //   }]}, 
+      //   {id:2, title: "arrays", description: "something", 
+      //   materials:[{
+      //     id: 1,
+      //     title: "Material 1",
+      //     description: "This is the description of Material 1.",
+      //     files: ["file1.pdf", "file2.docx"],
+      //     creationDate: "2022-03-01",
+      //   },
+      //   {
+      //     id: 2,
+      //     title: "Material 2",
+      //     description: "This is the description of Material 2.",
+      //     files: ["file1.pdf"],
+      //     creationDate: "2022-03-02",
+      //   }], 
+      //   assignments:[{
+      //     id: 1,
+      //     title: "Assignment 1",
+      //     description: "This is the description of Assignment 1.",
+      //     files: ["file1.pdf", "file2.docx"],
+      //     deadline: "2022-03-15",
+      //     tags: ["tag1", "tag2"],
+      //   },
+      //   {
+      //     id: 2,
+      //     title: "Assignment 2",
+      //     description: "This is the description of Assignment 2.",
+      //     files: ["file1.pdf"],
+      //     deadline: "2022-03-20",
+      //     tags: ["tag1"],
+      //   }, {
+      //     id: 3,
+      //     title: "Assignment 3",
+      //     description: "This is the description of Assignment 3.",
+      //     files: ["file1.pdf", "file2.docx"],
+      //     deadline: "2022-03-15",
+      //     tags: ["tag1", "tag2"],
+      //   },
+      //   {
+      //     id: 4,
+      //     title: "Assignment 4",
+      //     description: "This is the description of Assignment 4.",
+      //     files: ["file1.pdf"],
+      //     deadline: "2022-03-20",
+      //     tags: ["tag1"],
+      //   }]}]
+      // }],
       isWeekSelected: false,
       selectedWeek: null,
-      selectedTopic:null,//after opening a week and selecting a topic
-      showViewTopic:false
+      selectedTopic: null,//after opening a week and selecting a topic
+      showViewTopic: false
     };
   }
 
   async componentDidMount() {
     const { userId, classId } = this.state;
     try {
-      const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`);
+      const response = await fetch(`http://localhost:4000/backend/s/${userId}/class/${classId}/weeks`);
       const data = await response.json();
-      if(data.length>0){
+      if (data.length > 0) {
         console.log("data is ", data);
         this.setState({ weekNumber: data.length, weekInfo: data });
       }
-      else{
+      else {
         this.setState({ weekNumber: 0, weekInfo: [] });
       }
     } catch (error) {
       console.error(error);
     }
   }
-  
+
   // componentDidMount = () => {
   //   // console.log("ENTERED COMPONENT DID MOUNT");
   //   // const {userId, classId} = this.state;
@@ -145,7 +145,7 @@ class Clo extends Component {
     console.log("weekIndex is:")
     console.log(weekIndex);
     console.log("selected");
-    
+
     const selectedWeek = this.state.weekInfo[weekIndex];
     this.setState({
       isWeekSelected: true,
@@ -200,20 +200,20 @@ class Clo extends Component {
   //     });
   //   }
   // };
-  
-  
-  handleTopicSelect=(topic)=>{
-    
+
+
+  handleTopicSelect = (topic) => {
+
     console.log("topic selected");
-    this.setState({selectedTopic:topic})
-    this.setState({showViewTopic:true})
-    
+    this.setState({ selectedTopic: topic })
+    this.setState({ showViewTopic: true })
+
   }
 
   render() {
     const { classId, weekNumber } = this.state;
     console.log("in clo starter");
-   
+
 
     return (
       <div>
@@ -229,20 +229,20 @@ class Clo extends Component {
           }
           {this.state.isWeekSelected && !this.state.showViewTopic && (
             <div>
-            
-            <div>
-              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex+1} onTopicSelect={this.handleTopicSelect}/>
+
+              <div>
+                <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
               </div>
-              </div>
+            </div>
           )
           }
           {
-            this.state.isWeekSelected  && this.state.showViewTopic &&(
-              <ViewTopic 
-              title={this.state.selectedTopic.name}
-              // description={this.state.selectedTopic.description}
-              materials={this.state.selectedTopic.materials}
-              assignments={this.state.selectedTopic.assignments}
+            this.state.isWeekSelected && this.state.showViewTopic && (
+              <ViewTopic
+                title={this.state.selectedTopic.name}
+                // description={this.state.selectedTopic.description}
+                materials={this.state.selectedTopic.materials}
+                assignments={this.state.selectedTopic.assignments}
               ></ViewTopic>
 
             )
@@ -250,6 +250,6 @@ class Clo extends Component {
         </div>
       </div>
     );
-        }
-      }
+  }
+}
 export default Clo;

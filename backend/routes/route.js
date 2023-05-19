@@ -192,6 +192,38 @@ router.get('/t/:userId/class/:classId/weeks', async (req, res) => {
   }
 });
 
+//get weeks of specific class for student
+router.get('/s/:userId/class/:classId/weeks', async (req, res) => {
+  try {
+    const { userId, classId } = req.params;
+
+    // Check if the userId and classId are valid ObjectId types
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(classId)) {
+      return res.status(400).json({ message: "Invalid user or class ID" });
+    }
+
+    // Get the 'weeks' collection from the database
+    const weeks = client.db("colearnDb").collection("week");
+
+    // Find all weeks of the class with the specified ID
+    const weekData = await weeks.find({ classId: new ObjectId(classId) }).toArray();
+    console.log("weekData");
+    console.log(weekData);
+
+    if (weekData.length > 0) {
+      console.log("weekData is not empty");
+      return res.json(weekData);
+    } else {
+      console.log("weekData is empty");
+      return res.json();
+    }
+  } catch (err) {
+    consol
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 //add week 
 router.post('/t/:userId/class/:classId/week', async (request, response) => {
   //const classes = client.db("colearnDb").collection("class");
@@ -240,6 +272,38 @@ router.get('/t/:userId/class/:classId/week/:weekId/topics', async (req, res) => 
   }
 });
 
+//view topic materials and assignments
+router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, res) => {
+  try {
+    const { userId, classId, weekId, topicId } = req.params;
+
+    // Check if the userId and classId are valid ObjectId types
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(classId) || !ObjectId.isValid(weekId) || !ObjectId.isValid(topicId)) {
+      return res.status(400).json({ message: "Invalid user or class ID" });
+    }
+
+    // Get the 'weeks' collection from the database
+    const topics = client.db("colearnDb").collection("topic");
+
+    // Find all weeks of the class with the specified ID
+    const thisTopic = await topics.findOne({ _id: new ObjectId(topicId) });
+    console.log("This topic: ");
+    console.log(thisTopic);
+
+    if (thisTopic) {
+      console.log("thisTopic is not empty");
+      return res.json(topicsData);
+    } else {
+      console.log("thisTopic is empty");
+      return res.json();
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 //add topic
 router.post('/t/:userId/class/:classId/week/:weekId/topic', async (req, res) => {
   try {
@@ -265,11 +329,45 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic', async (req, res) => 
   }
 });
 
-router.post('/assignment', async (request, response) => {
-  const classes = client.db("colearnDb").collection("class");
+//upload assignment
+router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', async (request, response) => {
+  const { userId, classId, weekId, topicId } = request.params;
+  const { newAssn, helpingMaterials } = request.body;
+  console.log("in assignment api: ", newAssn);
+  console.log("helping materials: ", helpingMaterials);
+
+  try {
+    const colearnDb = client.db("colearnDb");
+    const assignmentsCollection = colearnDb.collection("assignment");
+    const helpingMaterialCollection = colearnDb.collection("helpingmaterial");
+
+    // Insert the assignment
+    const assignmentResult = await assignmentsCollection.insertOne(newAssn);
+    console.log("inserted: ", assignmentResult);
+
+    const assignmentId = assignmentResult.insertedId;
+    console.log("assignmentId: ", assignmentId);
+
+    const helpingMaterialIds = [];
+
+    // Insert the helping materials one by one
+    for (const helpingMaterial of helpingMaterials) {
+      helpingMaterial.asnId = assignmentId;
+      const helpingMaterialResult = await helpingMaterialCollection.insertOne(helpingMaterial);
+      helpingMaterialIds.push(helpingMaterialResult.insertedId);
+    }
+
+    response.status(200).json({
+      assignmentId: assignmentId.toString(),
+      helpingMaterialIds: helpingMaterialIds.map(id => id.toString())
+    });
+  } catch (error) {
+    console.error("Error creating assignment:", error);
+    response.status(500).json({ error: "Failed to create assignment" });
+  }
+});
 
 
-})
 
 
 module.exports = router

@@ -3,7 +3,7 @@ import './StudentDashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import StudentDashboardCard from './StudentDashboardCard';
 import { Link } from 'react-router-dom';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -45,13 +45,13 @@ function StudentDashboard() {
 
   const handleJoinClassSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (classCode === '') {
       // Class code is empty, do not attempt to join class
       setShowJoinClassModal(false);
       return;
     }
-  
+
     try {
       // Check if class code exists
       const response = await fetch(`http://localhost:4000/backend/s/${userId}/join-class/${classCode}`);
@@ -71,7 +71,7 @@ function StudentDashboard() {
       console.error(error);
     }
   };
-  
+
 
   const handleCancelClick = () => {
     setShowJoinClassModal(false);
@@ -84,7 +84,7 @@ function StudentDashboard() {
 
   return (
     <div className='TeacherDashboard'>
-   
+
       <button onClick={handleJoinClassClick} className="create-class-button">Join New Class</button>
       {showJoinClassModal && (
         <div className="create-class-modal">
@@ -109,7 +109,7 @@ function StudentDashboard() {
           {classes.map((classObj) => (
             // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
             <div className="container_card" key={classObj.name + classObj.section} >
-             <StudentDashboardCard name={classObj.name} section={classObj.section} id={classObj.id} userId={userId} onDelete={handleDeleteClass }/>
+              <StudentDashboardCard name={classObj.name} section={classObj.section} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
             // </Link>
           ))}

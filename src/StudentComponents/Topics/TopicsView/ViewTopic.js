@@ -1,9 +1,33 @@
 //this is going to show all the assignment and material posted for a topic
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 function ViewTopic({ title, description, materials, assignments }) {
+  //get userId, weekId, classId, topicId from wherever i dont know. jhn se b ye call hora hai whn se ye Ids le kr ani hain
+  //sari states wghera b ni hain idr wo b krna hai
   console.log(title)
   console.log(assignments)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}`);
+        const data = await response.json();
+        if (data) {
+          //setClasses(data);
+        }
+        else {
+          console.log("no classes found");
+          //setClasses([]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [userId]);
 
   return (
     <div>

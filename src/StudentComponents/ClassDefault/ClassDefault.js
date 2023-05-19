@@ -12,7 +12,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import CLO from '../CLO/CLOstarter';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CloDetails from '../CLO/CLODetails';
 import ClassHeader from '../ClassHeader/ClassHeader';
 import Tabs from '@mui/material/Tabs';
@@ -35,23 +35,23 @@ function ClassDefault() {
   return (
     <div>
       <Box
-       sx={{
-        display: 'flex',
-        flexDirection:'column',
-        justifyContent: 'space-between',
-   
-        bgcolor: 'background.paper',
-        
-      }}
-      >
-      <ClassHeader userID={userId} classID={classId} />
-      <div style={{alignContent:"center", alignItems:"center"}}>
-      <StudentClassTabs userId={userId} classId={classId}></StudentClassTabs>
-      </div>
-     
-     
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
 
-      {/* {numberOfWeeks === 0 && <CLO classID={classId} cloWeeks={numberOfWeeks} onNumberOfWeeksChange={handleNumberOfWeeksChange}/>}
+          bgcolor: 'background.paper',
+
+        }}
+      >
+        <ClassHeader userID={userId} classID={classId} />
+        <div style={{ alignContent: "center", alignItems: "center" }}>
+          <StudentClassTabs userId={userId} classId={classId}></StudentClassTabs>
+        </div>
+
+
+
+        {/* {numberOfWeeks === 0 && <CLO classID={classId} cloWeeks={numberOfWeeks} onNumberOfWeeksChange={handleNumberOfWeeksChange}/>}
       {numberOfWeeks > 0 && <CloDetails userID={userId} classID={classId} cloWeeks={numberOfWeeks} />} */}
       </Box>
 

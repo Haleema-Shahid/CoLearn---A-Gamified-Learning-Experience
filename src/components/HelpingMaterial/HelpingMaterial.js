@@ -25,8 +25,15 @@ const HelpingMaterial = (props) => {
 
 
 
-  const handleSubmitHelpingMaterial=()=>{
-    props.onAddHelpingMaterial(helpingMaterialFile);
+  const handleSubmitHelpingMaterial = () => {
+    const helpingMaterial = {
+      asnId: "",
+      //file: helpingMaterialFile,
+      is_recommended: false,
+      level: difficulty,
+      tags: helpingMaterialTags
+    };
+    //props.onAddHelpingMaterial(helpingMaterial);
     //this will send all the helping material back to parent assignment material,
     //------maybe we need to send tags too--------------
   }
@@ -50,13 +57,15 @@ const HelpingMaterial = (props) => {
     // Handle form submission here
     //send back an object
     const helpingMaterial = {
-      file: helpingMaterialFile,
+      asnId: "",
+      //file: helpingMaterialFile,
       is_recommended: false,
       level: difficulty,
       tags: helpingMaterialTags
     };
 
-    props.onAddHelpingMaterial(helpingMaterial)
+    console.log("in helping material.js: ", helpingMaterial);
+    //props.onAddHelpingMaterial(helpingMaterial)
 
 
     //   let formData = {};
@@ -109,7 +118,7 @@ const HelpingMaterial = (props) => {
           </div>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            //onSubmit={handleSubmit}
             sx={{
               margin: "auto",
               display: "flex",
@@ -163,7 +172,7 @@ const HelpingMaterial = (props) => {
 
               </div>
               <Button
-              onClick={handleSubmitHelpingMaterial}
+                // onClick={handleSubmitHelpingMaterial}
                 type="submit"
                 variant="contained"
                 sx={{
