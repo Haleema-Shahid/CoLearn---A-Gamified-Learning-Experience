@@ -82,9 +82,11 @@ function AssignmentPage(props) {
 
     const onAddHelpingMaterial = (fileName) => {
         //all helping material files from helping material component will be saved here
+        console.log("fetched helping material: ", fileName);
         setHelpingMaterialFiles(...helpingMaterialFiles, fileName)
+        console.log("list", helpingMaterialFiles);
         //maybe get the tags and set them too
-        setHelpingMaterialClick(false);//this will bring back to the assignment page
+        //setHelpingMaterialClick(false);//this will bring back to the assignment page
     }
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
@@ -94,10 +96,12 @@ function AssignmentPage(props) {
     const handleSubmit = async (event) => {
         //here goes the backend for uploading the assignment
         //creation date and time setter
-
+        console.log("handle submit clicked");
+        console.log("before fetching api: helpingMaterials: ", helpingMaterialFiles);
 
         try {
             // Create the topic object
+
             const newAssn = {
                 topicId: topicId,
                 title: title,
@@ -108,7 +112,6 @@ function AssignmentPage(props) {
                 tags: assignmentTags,
                 files: assignmentFiles
             };
-            console.log("before fetching api: helpingMaterials: ", helpingMaterialFiles);
             //const name = topicName;
             // Send a POST request to the API endpoint
             const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`, {
