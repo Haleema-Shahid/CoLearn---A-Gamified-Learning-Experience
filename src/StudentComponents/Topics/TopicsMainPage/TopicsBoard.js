@@ -90,34 +90,34 @@ function TopicsBoard(props) {
   return (
     <div>
 
-      
+
+      <div>
         <div>
-          <div>
-            {/* <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}>
+          {/* <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}>
               Add Topics
             </Button> */}
-          </div>
-          <div>
-            {topics && Array.isArray(topics) && topics.map((topic, index) => (
-              <TopicCard
-                key={index}
-                id={topic._id}
-                topicObject={topic}
-                title={topic.name}
-                onViewTopic={handleViewTopic}
-               // onDeleteTopic={HandleDeleteTopic}
-                userId={props.userId}
-                classId={props.classId}
-                weekId={props.weekId}
-                weekNumber={props.weekNumber}
-                cardKey={topic.id}
-              />
-            ))}
-          </div>
         </div>
+        <div>
+          {topics && Array.isArray(topics) && topics.map((topic, index) => (
+            <TopicCard
+              key={index}
+              topicId={topic._id}
+              topicObject={topic}
+              title={topic.name}
+              onViewTopic={handleViewTopic}
+              // onDeleteTopic={HandleDeleteTopic}
+              userId={props.userId}
+              classId={props.classId}
+              weekId={props.weekId}
+              weekNumber={props.weekNumber}
+              cardKey={topic._id}
+            />
+          ))}
+        </div>
+      </div>
 
-      
-      
+
+
 
       {/* {
         addTopic && (
