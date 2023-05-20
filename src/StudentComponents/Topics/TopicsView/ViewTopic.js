@@ -9,6 +9,9 @@ function ViewTopic({ title, description, materials, assignments }) {
   //sari states wghera b ni hain idr wo b krna hai
   console.log(title)
   console.log(assignments)
+  const { userId, classId, weekId, topicId } = useParams();
+  const [numberOfWeeks, setNumberOfWeeks] = useState(0);
+  const [students, setStudent] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {

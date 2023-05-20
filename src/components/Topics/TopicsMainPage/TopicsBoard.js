@@ -101,7 +101,7 @@ function TopicsBoard(props) {
             {topics && Array.isArray(topics) && topics.map((topic, index) => (
               <TopicCard
                 key={index}
-                id={topic._id}
+                topicId={topic._id}
                 topicObject={topic}
                 title={topic.name}
                 onViewTopic={handleViewTopic}
@@ -110,7 +110,7 @@ function TopicsBoard(props) {
                 classId={props.classId}
                 weekId={props.weekId}
                 weekNumber={props.weekNumber}
-                cardKey={topic.id}
+                cardKey={topic._id}
               />
             ))}
           </div>

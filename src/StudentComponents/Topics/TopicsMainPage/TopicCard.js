@@ -26,7 +26,7 @@ const styles = {
 
 }
 
-function TopicCard({ id, topicObject, title, onViewTopic, onDeleteTopic, userId, classId, weekId, weekNumber, cardKey }) {
+function TopicCard({ topicId, topicObject, title, onViewTopic, onDeleteTopic, userId, classId, weekId, weekNumber, cardKey }) {
 
 
   const [anchorEl, setAnchorEl] = useState(null);
