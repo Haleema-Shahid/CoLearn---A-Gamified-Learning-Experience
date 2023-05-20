@@ -43,7 +43,7 @@ function TopicCard({ topicId, topicObject, title, onViewTopic, onDeleteTopic, us
   const handleTopicSelection = () => {
 
     console.log("clicked view topic")
-    onViewTopic(topicObject);
+    onViewTopic(topicObject, id, userId, classId, weekId);
     handleMenuClose();
   };
 
