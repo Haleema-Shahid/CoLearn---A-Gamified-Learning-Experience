@@ -106,7 +106,8 @@ class Clo extends Component {
       isWeekSelected: false,
       selectedWeek: null,
       selectedTopic: null,//after opening a week and selecting a topic
-      showViewTopic: false
+      showViewTopic: false,
+      selectedTopicsWeekId: null
     };
   }
 
@@ -202,11 +203,13 @@ class Clo extends Component {
   // };
 
 
-  handleTopicSelect = (topic) => {
+  handleTopicSelect = (topicId, userId, classId, weekId) => {
 
     console.log("topic selected");
-    this.setState({ selectedTopic: topic })
+    this.setState({ selectedTopic: topicId })
     this.setState({ showViewTopic: true })
+    this.setState({selectedTopicsWeekId: weekId});
+    
 
   }
 
@@ -239,10 +242,11 @@ class Clo extends Component {
           {
             this.state.isWeekSelected && this.state.showViewTopic && (
               <ViewTopic
-                title={this.state.selectedTopic.name}
-                // description={this.state.selectedTopic.description}
-                materials={this.state.selectedTopic.materials}
-                assignments={this.state.selectedTopic.assignments}
+                userId={this.state.userId} 
+                classId={this.state.classId} 
+                weekId={this.state.selectedTopicsWeekId}
+                topicId={this.state.selectedTopic}
+             
               ></ViewTopic>
 
             )

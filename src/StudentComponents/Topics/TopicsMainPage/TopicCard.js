@@ -26,7 +26,7 @@ const styles = {
 
 }
 
-function TopicCard({ topicId, topicObject, title, onViewTopic, onDeleteTopic, userId, classId, weekId, weekNumber, cardKey }) {
+function TopicCard(props) {
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,7 +43,8 @@ function TopicCard({ topicId, topicObject, title, onViewTopic, onDeleteTopic, us
   const handleTopicSelection = () => {
 
     console.log("clicked view topic")
-    onViewTopic(topicObject, topicId, userId, classId, weekId);
+    //console.log(props.topicId, props.userId, props.classId, props.weekId)
+    props.onViewTopic(props.topicId, props.userId, props.classId, props.weekId);
     handleMenuClose();
   };
 
@@ -107,7 +108,7 @@ function TopicCard({ topicId, topicObject, title, onViewTopic, onDeleteTopic, us
               </div>
             </div>
           }
-          title={title}
+          title={props.title}
         //subheader={props.section}
         />
         <CardContent>
