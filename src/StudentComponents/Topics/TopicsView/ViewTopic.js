@@ -4,15 +4,12 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
-function ViewTopic({ title, description, materials, assignments, topicId,  userId, classId, weekId }) {
+function ViewTopic({ title, description, materials, assignments, topicId, userId, classId, weekId }) {
   //get userId, weekId, classId, topicId from wherever i dont know. jhn se b ye call hora hai whn se ye Ids le kr ani hain
   //sari states wghera b ni hain idr wo b krna hai
-  console.log(topicId)
-  console.log(title)
-  console.log(assignments)
-  const { userId, classId, weekId, topicId } = useParams();
-  const [numberOfWeeks, setNumberOfWeeks] = useState(0);
-  const [students, setStudent] = useState([]);
+  console.log("this is topicId ", topicId)
+  console.log("this is title ", title)
+  console.log("this is assignments ", assignments)
 
   useEffect(() => {
     const fetchData = async () => {
