@@ -14,18 +14,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const HelpingMaterial = (props) => {
-  const [helpingMaterialFile, setHelpingMaterialFile] = useState(null);
+  const [helpingMaterialFile, setHelpingMaterialFile] = useState([]);
   const [tags, setTags] = useState('');
   const [difficulty, setDifficulty] = useState('');
   const [helpingMaterialTags, setHelpingMaterialTags] = useState([])
   const [CurrentTag, setCurrentTag] = useState("")
   const navigate = useNavigate();
   const location = useLocation();
+  console.log(helpingMaterialFile)
 
 
 
 
-  const handleSubmitHelpingMaterial = () => {
+  const handleSubmitHelpingMaterial = (e) => {
+    e.preventDefault();
     const helpingMaterial = {
       asnId: "",
       //file: helpingMaterialFile,
@@ -33,7 +35,8 @@ const HelpingMaterial = (props) => {
       level: difficulty,
       tags: helpingMaterialTags
     };
-    //props.onAddHelpingMaterial(helpingMaterial);
+   
+    props.onAddHelpingMaterial(difficulty, helpingMaterialTags);
     //this will send all the helping material back to parent assignment material,
     //------maybe we need to send tags too--------------
   }
@@ -172,7 +175,7 @@ const HelpingMaterial = (props) => {
 
               </div>
               <Button
-                // onClick={handleSubmitHelpingMaterial}
+                onClick={handleSubmitHelpingMaterial}
                 type="submit"
                 variant="contained"
                 sx={{
