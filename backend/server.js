@@ -5,6 +5,13 @@ const routesUrls = require('./routes/route')
 const dotenv = require('dotenv')
 const cors = require('cors')
 const session = require('express-session');
+// var admin = require("firebase-admin");
+// var serviceAccount = require("C:\Users\Haleema Shahid\Desktop\CoLearn\firebase-admin-sdk\colearn-35de8-firebase-adminsdk-rblxy-3794af0748.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
+
 
 app.use(session({
   secret: 'haleema1073',
@@ -28,7 +35,7 @@ app.use(session({
 
 app.use(express.json())
 app.use(cors())
-app.use('/backend',routesUrls) 
+app.use('/backend', routesUrls)
 
 
-app.listen(4000, ()=> console.log("Server is up and running\n"))
+app.listen(4000, () => console.log("Server is up and running\n"))

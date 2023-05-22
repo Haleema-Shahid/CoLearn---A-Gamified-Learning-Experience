@@ -25,6 +25,21 @@ import AddTopic from './components/Topics/TopicsMainPage/AddTopic'
 import ViewTopic from './components/Topics/TopicsView/ViewTopic'
 import TeacherMaterial from './components/TeacherMaterial/TeacherMaterial';
 
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+const firebaseConfig = {
+  apiKey: "AIzaSyABWov6Geo0jNkb-dExGyBqaOWFob0JeGA",
+  authDomain: "colearn-35de8.firebaseapp.com",
+  projectId: "colearn-35de8",
+  storageBucket: "colearn-35de8.appspot.com",
+  messagingSenderId: "991604203681",
+  appId: "1:991604203681:web:7e804462215e152e5f90e0",
+  measurementId: "G-BBVV5RPBH2"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
 function App() {
   return (
     <div className="App">

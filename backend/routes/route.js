@@ -272,8 +272,9 @@ router.get('/t/:userId/class/:classId/week/:weekId/topics', async (req, res) => 
   }
 });
 
-//view topic materials and assignments
-router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, res) => {
+//view topic materials and assignments -student
+router.get('/s/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, res) => {
+  console.log("in view topic api");
   try {
     const { userId, classId, weekId, topicId } = req.params;
 
@@ -284,6 +285,7 @@ router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, 
 
     // Get the 'weeks' collection from the database
     const topics = client.db("colearnDb").collection("topic");
+    console.log("topics in api: ", topics);
 
     // Find all weeks of the class with the specified ID
     const thisTopic = await topics.findOne({ _id: new ObjectId(topicId) });
@@ -292,7 +294,7 @@ router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, 
 
     if (thisTopic) {
       console.log("thisTopic is not empty");
-      return res.json(topicsData);
+      return res.json(thisTopic);
     } else {
       console.log("thisTopic is empty");
       return res.json();
@@ -303,6 +305,39 @@ router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, 
   }
 });
 
+//view topic materials and assignments -teacher
+router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, res) => {
+  console.log("in view topic api");
+  console.log("topicId: ", topicId);
+  try {
+    const { userId, classId, weekId, topicId } = req.params;
+
+    // Check if the userId and classId are valid ObjectId types
+    if (!ObjectId.isValid(userId) || !ObjectId.isValid(classId) || !ObjectId.isValid(topicId)) {
+      return res.status(400).json({ message: "Invalid user or class ID" });
+    }
+
+    // Get the 'weeks' collection from the database
+    const topics = client.db("colearnDb").collection("topic");
+    //console.log("topics in api: ", topics);
+
+    // Find all weeks of the class with the specified ID
+    const thisTopic = await topics.findOne({ _id: new ObjectId(topicId) });
+    console.log("This topic: ");
+    console.log(thisTopic);
+
+    if (thisTopic) {
+      console.log("thisTopic is not empty");
+      return res.json(thisTopic);
+    } else {
+      console.log("thisTopic is empty");
+      return res.json();
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
 
 //add topic
 router.post('/t/:userId/class/:classId/week/:weekId/topic', async (req, res) => {

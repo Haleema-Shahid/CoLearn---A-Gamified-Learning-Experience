@@ -86,7 +86,7 @@ function AssignmentPage(props) {
         //setHelpingMaterialFiles(...helpingMaterialFiles, fileName)
         //console.log("list", helpingMaterialFiles);
         //maybe get the tags and set them too
-       // setHelpingMaterialClick(false);//this will bring back to the assignment page
+        // setHelpingMaterialClick(false);//this will bring back to the assignment page
     }
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
@@ -112,6 +112,7 @@ function AssignmentPage(props) {
                 tags: assignmentTags,
                 files: assignmentFiles
             };
+            console.log("assignment files: ", assignmentFiles);
             //const name = topicName;
             // Send a POST request to the API endpoint
             const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`, {

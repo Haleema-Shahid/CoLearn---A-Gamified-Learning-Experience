@@ -52,19 +52,23 @@ function ViewTopic(props) {
   console.log("this is classId ", props.classId)
   console.log("this is userId ", props.userId)
 
-  const [topic, setTopic]= useState(null)//Save topic object from db in here first
-  const [userId, setUserId]=useState(props.userId)
-  const [classId, setClassId]=useState(props.classId)
-  const [weekId, setWeekId]=useState(props.weekId)
-  const [topicId, setTopicId]=useState(props.topicId)
+  const [topic, setTopic] = useState(null)//Save topic object from db in here first
+  const [userId, setUserId] = useState(props.userId)
+  const [classId, setClassId] = useState(props.classId)
+  const [weekId, setWeekId] = useState(props.weekId)
+  const [topicId, setTopicId] = useState(props.topicId)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}`);
+        console.log("in useEffect in viewtopic.js");
+        const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}`);
         const data = await response.json();
+        console.log("fetched: ", data);
         if (data) {
           //setClasses(data);
+          console.log("fetched in front end: ", data);
+          setTopic(data);
         }
         else {
           console.log("no classes found");
@@ -75,30 +79,38 @@ function ViewTopic(props) {
       }
     };
     fetchData();
-  }, [userId]);
+  }, [topicId]);
+
+
 
   return (
     <div>
-      {/* <h2>{title}</h2>
-      <p>{description}</p>
-      <h3>Materials</h3>
-      {materials.map((material) => (
-        <Accordion>
-          <AccordionSummary>{material.title}</AccordionSummary>
-          <AccordionDetails>
-            <p>{material.description}</p>
-          </AccordionDetails>
-        </Accordion>
-      ))}
-      <h3>Assignments</h3>
-      {assignments.map((assignment) => (
-        <Accordion>
-          <AccordionSummary>{assignment.title}</AccordionSummary>
-          <AccordionDetails>
-            <p>{assignment.description}</p>
-          </AccordionDetails>
-        </Accordion>
-      ))} */}
+      {!topic ? (
+        <p>Topic not fetched</p>
+      ) : (
+        <div>
+          <h2>{topic.title}</h2>
+          <p>{topic.description}</p>
+          <h3>Materials</h3>
+          {topic.materials.map((material) => (
+            <Accordion>
+              <AccordionSummary>{material.title}</AccordionSummary>
+              <AccordionDetails>
+                <p>{material.description}</p>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+          <h3>Assignments</h3>
+          {topic.assignments.map((assignment) => (
+            <Accordion>
+              <AccordionSummary>{assignment.title}</AccordionSummary>
+              <AccordionDetails>
+                <p>{assignment.description}</p>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
