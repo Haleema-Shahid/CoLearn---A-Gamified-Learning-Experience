@@ -131,12 +131,18 @@ class Clo extends Component {
   handleTopicSelect = (topicId, userId, classId, weekId) => {
 
     console.log("topic selected");
+    console.log("we are in teacher CLO STARTER . js: ")
+  console.log("this is topicId ", topicId)
+  console.log("this is weekId ", weekId)
+  console.log("this is classId ", classId)
+  console.log("this is userId ",userId)
     this.setState({ selectedTopic: topicId })
     this.setState({ showViewTopic: true })
     this.setState({selectedTopicsWeekId: weekId});
+
     
 
-  }
+  };
 
   render() {
     const { classId, weekNumber } = this.state;

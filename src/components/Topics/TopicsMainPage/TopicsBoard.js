@@ -52,10 +52,10 @@ function TopicsBoard(props) {
   }, [weekId]);
 
 
-  const handleViewTopic = (topic) => {
-    console.log("in here");
-    console.log(topic)
-    props.onTopicSelect(topic);
+  const handleViewTopic = (topicId, userId, classId, weekIdfromChild) => {
+    console.log("in Teacher topic board here");
+    console.log(topicId, userId, classId, weekIdfromChild)
+    props.onTopicSelect(topicId, userId, classId, weekIdfromChild);
   };
 
   const HandleAddTopic = (topic) => {

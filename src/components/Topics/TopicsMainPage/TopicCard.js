@@ -43,6 +43,11 @@ function TopicCard(props) {
   const handleTopicSelection = () => {
 
     console.log("clicked view topic in teacher components")
+    console.log("we are in TopicCard.js: ")
+  console.log("this is topicId ", props.topicId)
+  console.log("this is weekId ", props.weekId)
+  console.log("this is classId ", props.classId)
+  console.log("this is userId ", props.userId)
     
     props.onViewTopic(props.topicId, props.userId, props.classId, props.weekId);
     handleMenuClose();
@@ -98,8 +103,8 @@ function TopicCard(props) {
                 >
 
                   <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem>
-                  <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}}`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
-                  <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link>
+                  {/* <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}}`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link> */}
+                  {/* <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link> */}
                   <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
                   <MenuItem onClick={handleSomething}>something</MenuItem>
                 </Menu>

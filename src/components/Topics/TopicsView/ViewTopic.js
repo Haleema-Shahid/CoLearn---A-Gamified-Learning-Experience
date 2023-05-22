@@ -1,43 +1,9 @@
-// //this is going to show all the assignment and material posted for a topic
-// import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 
-// function ViewTopic({ title, description, materials, assignments }) {
-//   console.log(title)
-//   console.log(assignments)
-
-//   return (
-//     <div>
-//       <h2>{title}</h2>
-//       <p>{description}</p>
-//       <h3>Materials</h3>
-//       {materials.map((material) => (
-//         <Accordion>
-//           <AccordionSummary>{material.title}</AccordionSummary>
-//           <AccordionDetails>
-//             <p>{material.description}</p>
-//           </AccordionDetails>
-//         </Accordion>
-//       ))}
-//       <h3>Assignments</h3>
-//       {assignments.map((assignment) => (
-//         <Accordion>
-//           <AccordionSummary>{assignment.title}</AccordionSummary>
-//           <AccordionDetails>
-//             <p>{assignment.description}</p>
-//           </AccordionDetails>
-//         </Accordion>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default ViewTopic;
-
-//this is going to show all the assignment and material posted for a topic
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import ContentCard from './contentCards/ContentCard'
 
 function ViewTopic(props) {
   //get userId, weekId, classId, topicId from wherever i dont know. jhn se b ye call hora hai whn se ye Ids le kr ani hain
@@ -89,27 +55,36 @@ function ViewTopic(props) {
         <p>Topic not fetched</p>
       ) : (
         <div>
-          <h2>{topic.title}</h2>
-          <p>{topic.description}</p>
-          <h3>Materials</h3>
-          {topic.materials.map((material) => (
-            <Accordion>
-              <AccordionSummary>{material.title}</AccordionSummary>
-              <AccordionDetails>
-                <p>{material.description}</p>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-          <h3>Assignments</h3>
-          {topic.assignments.map((assignment) => (
-            <Accordion>
-              <AccordionSummary>{assignment.title}</AccordionSummary>
-              <AccordionDetails>
-                <p>{assignment.description}</p>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </div>
+      
+  <h2 style={{  color: "#2a5298" , textDecoration: 'underline', marginBottom: '20px' }}>Assignments</h2>
+
+      {topic.assignments.map((assignment) => (
+        <ContentCard
+          key={assignment.id}
+          contentType="assignmentContent"
+          userId={userId}
+          classId={classId}
+          weekId={weekId}
+          topicId={topicId}
+          materialId={assignment._id}
+          materialContent={assignment}
+        />
+      ))}
+
+<h2 style={{  color: "#2a5298" , textDecoration: 'underline', marginBottom: '20px', marginTop: '20px' }}>Materials</h2>
+      {topic.materials.map((material) => (
+        <ContentCard
+          key={material.id}
+          contentType="materialContent"
+          userId={userId}
+          classId={classId}
+          weekId={weekId}
+          topicId={topicId}
+          materialId={material._id}
+          materialContent={material}
+        />
+      ))}
+    </div>
       )}
     </div>
   );
