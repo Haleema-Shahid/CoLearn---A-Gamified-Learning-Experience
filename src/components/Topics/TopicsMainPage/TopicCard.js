@@ -26,7 +26,7 @@ const styles = {
 
 }
 
-function TopicCard({ id, topicObject, title, onViewTopic, onDeleteTopic, userId, classId, weekId, weekNumber, cardKey }) {
+function TopicCard(props) {
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,15 +42,16 @@ function TopicCard({ id, topicObject, title, onViewTopic, onDeleteTopic, userId,
   };
   const handleTopicSelection = () => {
 
-    console.log("clicked view topic")
-    onViewTopic(topicObject);
+    console.log("clicked view topic in teacher components")
+    
+    props.onViewTopic(props.topicId, props.userId, props.classId, props.weekId);
     handleMenuClose();
   };
 
   const handleTopicDeletion = () => {
 
     console.log("clicked delete topic")
-    onDeleteTopic(topicObject);
+    props.onDeleteTopic(props.topicId, props.userId, props.classId, props.weekId);
     handleMenuClose();
   };
 
@@ -97,15 +98,15 @@ function TopicCard({ id, topicObject, title, onViewTopic, onDeleteTopic, userId,
                 >
 
                   <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem>
-                  <Link to={`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${id}}`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
-                  <Link to={`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${id}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link>
+                  <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}}`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
+                  <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link>
                   <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
                   <MenuItem onClick={handleSomething}>something</MenuItem>
                 </Menu>
               </div>
             </div>
           }
-          title={title}
+          title={props.title}
         //subheader={props.section}
         />
         <CardContent>
