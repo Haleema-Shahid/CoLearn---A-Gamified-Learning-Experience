@@ -34,9 +34,15 @@ function Assignment() {
     const [totalMarks, setTotalMarks] = useState('');
     const [assignmentFiles, setAssignmentFiles] = useState([]);
     const [submissionFiles, setSubmissionFiles] = useState("");
+    const [obtainedMarks, setObtainedMarks] = useState();
     const [uploadTime, setUploadTime] = useState();
     const [submissionDate, setSubmissionDate] = useState(null);
     const [grade, setGrade] = useState();
+
+
+    const [submitted, setSubmitted] = useState(false);
+    const [marked, setMarked] = useState(false);
+
 
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
@@ -74,26 +80,25 @@ function Assignment() {
         const fetchData = async () => {
             try {
                 console.log("in useEffect in assignment.js");
-                const response = await fetch(`http://localhost:4000/backend/s/topic/${topicId}/assignment/${assignmentId}`);
+                const response = await fetch(`http://localhost:4000/backend/s/${userId}/topic/${topicId}/assignment/${assignmentId}`);
                 const data = await response.json();
                 console.log("fetched: ", data);
                 if (data) {
                     //setClasses(data);
                     console.log("fetched in front end: ", data);
-                    setTitle(data.title);
-                    setDescription(data.description);
-                    //console.log("total marks: ", data.totalmarks);
-                    setTotalMarks(data.totalmarks);
-                    setDeadline(getDateTimeString(data.deadline));
-                    //setUploadTime(new Date(data.uploadtime));
-                    //setAssignmentFiles(data.files);
-                    console.log("data.files: ", data.files);
+                    setSubmitted(data.submitted);
+
+                    setTitle(data.assignment.title);
+                    setDescription(data.assignment.description);
+                    setTotalMarks(data.assignment.totalmarks);
+                    setDeadline(getDateTimeString(data.assignment.deadline));
+
+
+                    console.log("data.assignment.files: ", data.assignment.files);
                     let index = 0;
                     //console.log("assignmentfiles: ", assignmentFiles);
-                    if (assignmentFiles) {
-                        //console.log("in if: ", assignmentFiles)
-                        //console.log("in here");
-                        data.files.forEach((downloadUrl) => {
+                    if (data.assignment.files) {
+                        data.assignment.files.forEach((downloadUrl) => {
                             console.log("looping");
                             const filename = downloadUrl.substring(downloadUrl.lastIndexOf('%2F') + 3, downloadUrl.indexOf('?'));
                             const thisFile = { id: index, name: filename, link: downloadUrl };
@@ -103,13 +108,19 @@ function Assignment() {
                             index = index + 1;
                         });
                     }
-                    else {
-                        console.log("wow nice")
-                    }
+                    console.log("outside marked is ", data.submission.marked)
+                    console.log("submitted is ", submitted);
+
+                    console.log("marked is ", data.submission.marked)
+                    setMarked(data.submission.marked);
+
+                    setObtainedMarks(data.submission.obtainedmarks)
+
+
 
                     //console.log("F: ", fileNames);
                     console.log("A: ", assignmentFiles);
-                    //setMaterials(data.materials);
+                    //setMaterials(data.assignment.materials);
                 }
                 else {
                     console.log("no classes found");
@@ -207,6 +218,8 @@ function Assignment() {
                         <h1>Assignment</h1>
                         <h2>Marks: {totalMarks}</h2>
                         <h2>Deadline: {deadline}</h2>
+                        {console.log(marked)}
+                        {marked ? <h2>Obtained Marks: {obtainedMarks}</h2> : null}
                     </div>
                     <Stack spacing={2}>
                         <TextField
@@ -246,14 +259,45 @@ function Assignment() {
 
 
                         </div>
-
                         <div>
-                            <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
+                            {submitted ? (
+                                <p>Already submitted!</p>
+                            ) : (
+                                <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile} />
+                            )}
                         </div>
 
-
+                        {/* <div>
+                            <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
+                        </div> */}
 
                         <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{
+                                backgroundColor: submitted ? '#999999' : '#1e3c72',
+                                color: 'white',
+                                borderRadius: '10px',
+                                padding: '10px 30px',
+                                fontSize: '1rem',
+                                '&:hover': {
+                                    backgroundColor: submitted ? '#999999' : '#0c2461',
+                                },
+                            }}
+                            onClick={handleSubmit}
+                            disabled={submitted}
+                        >
+                            {submitted ? 'Submitted' : 'Submit'}
+                        </Button>
+
+
+
+
+
+
+
+
+                        {/* <Button
                             type="submit"
                             variant="contained"
                             sx={{
@@ -269,7 +313,7 @@ function Assignment() {
                             onClick={handleSubmit}
                         >
                             Submit
-                        </Button>
+                        </Button> */}
 
                     </Stack>
 

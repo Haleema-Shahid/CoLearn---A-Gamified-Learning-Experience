@@ -478,19 +478,58 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', 
 });
 
 //get assignment -student
-router.get('/s/topic/:topicId/assignment/:assignmentId', async (request, response) => {
+router.get('/s/:userId/topic/:topicId/assignment/:assignmentId', async (request, response) => {
   try {
-    const { topicId, assignmentId } = request.params;
+    const { userId, assignmentId } = request.params;
 
     console.log("assID is ", assignmentId);
     // Assuming you have a database connection and assignment collection
     //const asscollection = await client.db('colearn').collection('assignment');
     //console.log("all asses: ", asscollection);
     const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: new ObjectId(assignmentId) });
-
+    const submission = await client.db('colearnDb').collection('submission').findOne({ studentId: new ObjectId(userId), assignmentId: new ObjectId(assignmentId) });
     console.log(assignment);
     if (!assignment) {
       console.log("here here");
+      return response.status(404).json({ error: 'Assignment not found' });
+    }
+
+    // Send the assignment object as the response
+    if (!submission) {
+      const returnObject = {
+        assignment: assignment,
+        submission,
+        submitted: false
+      }
+      response.json(returnObject);
+    }
+    else {
+      const returnObject = {
+        assignment: assignment,
+        submission: submission,
+        submitted: true
+      }
+      response.json(returnObject);
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+//get assignment -teacher
+router.get('/t/:userId/topic/:topicId/assignment/:assignmentId', async (request, response) => {
+  try {
+    const { userId, assignmentId } = request.params;
+
+    console.log("assID is ", assignmentId);
+    // Assuming you have a database connection and assignment collection
+    //const asscollection = await client.db('colearn').collection('assignment');
+    //console.log("all asses: ", asscollection);
+    const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: new ObjectId(assignmentId) });
+    console.log(assignment);
+    if (!assignment) {
       return response.status(404).json({ error: 'Assignment not found' });
     }
 
@@ -503,7 +542,7 @@ router.get('/s/topic/:topicId/assignment/:assignmentId', async (request, respons
 });
 
 
-//uplaod submission -student
+//upload submission -student
 router.post('/s/:userId/assignment/:assignmentId/submission', async (request, response) => {
 
   if (!request.body.submission.files) {
@@ -538,6 +577,70 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
 
     // Send the assignment object as the response
     response.status(200).json('submitted successfully!');;
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//get submissions -teacher
+router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, response) => {
+  try {
+    const { userId, assignmentId } = request.params;
+
+    const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: new ObjectId(assignmentId) });
+
+    if (!assignment) {
+      return response.status(404).json({ error: 'Assignment does not exist' });
+    }
+
+    const submissions = await client.db('colearnDb').collection('submission').find({ assignmentId: new ObjectId(assignmentId) }).toArray();
+
+    if (submissions.length > 0) {
+      const studentIds = [];//= submissions.map((submission) => submission.studentId).toArray();
+      for (let i = 0; i < submissions.length; i++) {
+        studentIds.push(submissions[i].studentId);
+      }
+
+      const students = await client.db('colearnDb').collection('user').find({ _id: { $in: studentIds } }).toArray();
+
+      const submissionData = submissions.map((submission) => {
+        const student = students.find((student) => student._id.equals(submission.studentId));
+        return {
+          student: student,
+          submission: submission
+        };
+      });
+
+      response.status(200).json(submissionData);
+    } else {
+      return response.status(404).json({ error: 'No submissions yet.' });
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//update obtainedmarks in submissions -teacher
+router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (request, response) => {
+  try {
+    const { userId, assignmentId } = request.params;
+    const { updatedSubmissions } = request.body;
+    console.log("in save api: ", updatedSubmissions);
+    console.log("hehe")
+
+    // Assuming you have a database connection and submission collection
+    const submissionCollection = client.db('colearnDb').collection('submission');
+
+    // Update each submission with the obtained marks
+    for (let i = 0; i < updatedSubmissions.length; i++) {
+      console.log("in looping");
+      const { _id, obtainedmarks } = updatedSubmissions[i];
+      await submissionCollection.updateOne({ _id: new ObjectId(_id), assignmentId: new ObjectId(assignmentId) }, { $set: { obtainedmarks, marked: true } });
+    }
+
+    response.status(200).json({ message: 'Submissions updated successfully' });
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: 'Internal server error' });

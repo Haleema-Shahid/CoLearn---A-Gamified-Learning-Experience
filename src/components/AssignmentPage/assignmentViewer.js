@@ -1,15 +1,13 @@
-// //for this assignment page we will have userid, week id, topic id,
-// //this page will ask for asignment title, description, deadline, total marks, it will also save the timestamp from when we click post
-// //it will also ask for assignment material upload and helping material upload
+//This is a readable assignment
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Paper } from "@mui/material";
-import '../AssignmentPage/AssignmentPage.css';
-import AssignmentMaterial from "./AssignmentMaterial";
+//import '../AssignmentPage/AssignmentPage.css';
+//import AssignmentMaterial from "./AssignmentMaterial";
 import FileUploader from "./FileUploader";
 import { blue } from "@mui/material/colors";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -18,108 +16,193 @@ import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
-import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
+//import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
-import { useLocation, useNavigate } from 'react-router-dom';
-
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Description } from "@mui/icons-material";
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-function AssignmentViewer( ) {
-    const { userId, classId, weekId, weekNumber, topicId, assignmentId } = useParams();
+function AssignmentViewer() {
+    // const { userId, classId, assignmentID } = useParams();
+    //we need to get title,description, deadline, totalmarks, assignment files using the assignment ID
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [assignmentFiles, setAssignmentFiles] = useState([])
+    const navigate = useNavigate();
+    const { userId, classId, weekId, topicId, assignmentId } = useParams();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState(null);
-    const [totalMarks, setTotalMarks] = useState("");
-    const [helpingMaterialFiles, setHelpingMaterialFiles] = useState([])
-
-    const [helpingMaterialClick, setHelpingMaterialClick] = useState(false);
-   
-    
-    const [assignmentTags, setAssignmentTags] = useState(['chip1'])
-    const [currentTag, setCurrentTag] = useState("")
-    
-    const today = dayjs();
-    const yesterday = dayjs().subtract(1, 'day');
-
-    const location = useLocation();
-//--------------------------------backend task---------------------
-//we get userId, classId, topicId, assignmentId
-//get the assignment object in content state
-//using this object: save the title in title state, description, deadline, total marks, AssignmentFiles, helping material files
+    const [totalMarks, setTotalMarks] = useState('');
+    const [assignmentFiles, setAssignmentFiles] = useState([]);
+    const [uploadTime, setUploadTime] = useState(null);
 
 
+    const [submitted, setSubmitted] = useState(false);
 
-//......................................................
+    const removeFile = (filename) => {
+        setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
+    }
+    const getDateTimeString = (datetime) => {
+        console.log(datetime);
+        const date = new Date(datetime);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            timeZone: 'UTC',
+        });
+        const result = `${formattedDate}, ${formattedTime}`;
+        return result;
+    }
+    const getDateFromDateTimeString = (datetimeString) => {
+        const [formattedDate, formattedTime] = datetimeString.split(', ');
+        const [month, day] = formattedDate.split(' ');
+        const [time, period] = formattedTime.split(/(?<=\d)(?=am|pm)/i);
+
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+
+        const formattedDateTime = `${month} ${day}, ${year} ${time} ${period}`;
+
+        return new Date(formattedDateTime);
+    };
 
 
-    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                console.log("in useEffect in assignment.js");
+                const response = await fetch(`http://localhost:4000/backend/t/${userId}/topic/${topicId}/assignment/${assignmentId}`);
+                const data = await response.json();
+                console.log("fetched: ", data);
+                if (data) {
+                    //setClasses(data);
+                    console.log("fetched in front end: ", data);
+                    setTitle(data.title);
+                    setDescription(data.description);
+                    setTotalMarks(data.totalmarks);
+                    setDeadline(getDateTimeString(data.deadline));
+                    setUploadTime(getDateTimeString(data.uploadtime));
+
+                    console.log("data.files: ", data.files);
+                    let index = 0;
+                    //console.log("assignmentfiles: ", assignmentFiles);
+                    if (data.files) {
+                        data.files.forEach((downloadUrl) => {
+                            console.log("looping");
+                            const filename = downloadUrl.substring(downloadUrl.lastIndexOf('%2F') + 3, downloadUrl.indexOf('?'));
+                            const thisFile = { id: index, name: filename, link: downloadUrl };
+                            console.log(thisFile);
+                            setAssignmentFiles([...assignmentFiles, thisFile]);
+                            //console.log(fileNames);
+                            index = index + 1;
+                        });
+                    }
+
+
+                    //console.log("F: ", fileNames);
+                    console.log("A: ", assignmentFiles);
+                    //setMaterials(data.materials);
+                }
+                else {
+                    console.log("no classes found");
+                    //setClasses([]);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [userId, assignmentId]);
+
+    const handleFileClick = (file) => {
+        // event.preventDefault();
+        // console.log("Assignment details:", {
+        //     title,
+        //     description
+        // });
+        window.open(file.link, '_blank');
+        console.log("file clicked: ", file);
+    };
+
+
+    const handleSubmissionsClick = async (event) => {
+
+        navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment/${assignmentId}/submissions`);
+    };
+
+    const handleDeleteTag = (tagToDelete) => {
+
+    }
     return (
         <div>
             <div>
-                <div className="split left" style={{ width: "50%", left: 0 }}>
-                    <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
+
+
+                <Box
+
+
+                    sx={{
+                        border: 2,
+                        borderRadius: "20px",
+                        borderColor: "#4b6cb7",
+                        width: "70%",
+                        padding: "30px",
+                        margin: "auto",
+                        display: "flex",
+                        flexDirection: "column",
+                        "& .MuiTextField-root": { m: 1, width: "50ch" },
+                        paddingLeft: "50px",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+
+                >
+                    <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
                         <h1>Assignment</h1>
+                        <h2>Marks: {totalMarks}</h2>
+                        <h2>Deadline: {deadline}</h2>
+                        <h2>Uploaded on: {uploadTime}</h2>
                     </div>
-                    <Box
-                        component="form"
-                        // onSubmit={handleSubmit}
-                        sx={{
-                            margin: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            "& .MuiTextField-root": { m: 1, width: "50ch" },
-                            paddingLeft: "50px",
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}
-                        noValidate
-                        autoComplete="off"
+                    <Stack spacing={2}>
+                        <TextField
+                            id="standard-read-only-input"
+                            label="Title"
+                            value={title}
+                            defaultValue={title}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            variant="standard"
+                        />
+                        <TextField
+                            id="standard-multiline-static"
+                            label="Description"
+                            multiline
+                            rows={4}
+                            value={description}
+                            defaultValue={description}
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            variant="standard"
+                        />
+                        <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
 
-                    >
-                        <Stack spacing={2}>
-                            <TextField
-                                disabled
-                                id="assignment-title"
-                                label="Assignment Title"
-                                value={title}
-                                
-                                fullWidth
-                            />
-                            <TextField
-                                disabled
-                                id="assignment-description"
-                                label="Description"
-                                value={description}
-                                
-                                multiline
-                                rows={4}
-                                fullWidth
-                            />
-                    
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateTimePicker
-                                    disabled
-                                    label="Deadline"
-                                    defaultValue={deadline}
-                                    disablePast
-                                    views={['year', 'month', 'day', 'hours', 'minutes']}
-                                />
-                            </LocalizationProvider>
+                            {assignmentFiles && assignmentFiles.map((file, index) => (
+                                <div key={file.id} style={{ padding: "3px" }}>
+                                    <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
+                                </div>
+                            ))}
 
-                            <TextField
-                                disabled
-                                id="total-marks"
-                                label="Total Marks"
-                                type="number"
-                                value={totalMarks}
-                                sx={{ width: "100%", mt: 2 }}
-                            />
+                        </div>
 
-                            
-                            {/* <Button
+                        {/* add style to this div */}
+                        <div>
+                            <Button
                                 type="submit"
                                 variant="contained"
                                 sx={{
@@ -132,24 +215,81 @@ function AssignmentViewer( ) {
                                         backgroundColor: '#0c2461',
                                     },
                                 }}
+                                onClick={handleSubmissionsClick}
+                            //disabled={submitted}
                             >
-                                Post Assignment
-                            </Button> */}
+                                Submissions
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#1e3c72',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    padding: '10px 30px',
+                                    fontSize: '1rem',
+                                    '&:hover': {
+                                        backgroundColor: '#0c2461',
+                                    },
+                                }}
+                            //onClick={handleSubmit}
+                            //disabled={submitted}
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#1e3c72',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    padding: '10px 30px',
+                                    fontSize: '1rem',
+                                    '&:hover': {
+                                        backgroundColor: '#0c2461',
+                                    },
+                                }}
+                            //onClick={handleSubmit}
+                            //disabled={submitted}
+                            >
+                                Submit
+                            </Button>
+                        </div>
 
-                        </Stack>
-
-                    </Box>
 
 
-               
-                    
 
 
-                    
 
 
-        </div>
-        </div>
+                        {/* <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#1e3c72',
+                                color: 'white',
+                                borderRadius: '10px',
+                                padding: '10px 30px',
+                                fontSize: '1rem',
+                                '&:hover': {
+                                    backgroundColor: '#0c2461',
+                                },
+                            }}
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button> */}
+
+                    </Stack>
+
+                </Box>
+
+
+
+
+            </div>
         </div>
     );
 }
