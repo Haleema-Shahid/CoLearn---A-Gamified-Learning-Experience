@@ -48,7 +48,7 @@ router.post('/login', async (request, response) => {
 
 //get teacher for teacher dashboard
 router.get('/t/:userId', async (request, response) => {
-  console.log("in reuest");
+  console.log("in get classes -t api");
   console.log(request.params.userId);
   const collection = client.db("colearnDb").collection("class");
   const classes = await collection.find({ teacher: new ObjectId(request.params.userId) }).toArray(); // get all classes made by the teacher with the specified ID
@@ -112,6 +112,65 @@ router.post('/create-class', async (request, response) => {
   }
 });
 
+//class delete
+router.post('/delete-class/:thisClassId', async (request, response) => {
+  const classId = new ObjectId(request.params.thisClassId);
+  console.log("classId: ", classId);
+
+  try {
+    const classesCollection = client.db("colearnDb").collection("class");
+
+    const weeksCollection = client.db("colearnDb").collection("week");
+    const topicsCollection = client.db("colearnDb").collection("topic");
+    const assignmentsCollection = client.db("colearnDb").collection("assignment");
+    const materialsCollection = client.db("colearnDb").collection("material");
+    const submissionsCollection = client.db("colearnDb").collection("submission");
+
+    // Check if the class exists
+    const existingClass = await classesCollection.findOne({ _id: classId });
+    if (!existingClass) {
+      return response.status(404).json({ error: 'Class not found' });
+    }
+
+    // Perform cascading deletions
+    const weeksToBeDeleted = await weeksCollection.find({ classId: classId }).toArray();
+    //const weekIdsToDelete = weeksToBeDeleted.map((week) => week._id).toArray();
+    const weekIdsToDelete = [];
+    for (let i = 0; i < weeksToBeDeleted.length; i++) {
+      weekIdsToDelete.push(weeksToBeDeleted[i]._id);
+    }
+    console.log("weeks to be deleted: ", weekIdsToDelete);
+
+    const topicsToBeDeleted = await topicsCollection.find({ weekId: { $in: weekIdsToDelete } }).toArray();
+    const topicIdsToDelete = [];//topicsToBeDeleted.map((topic) => topic._id).toArray();
+    for (let i = 0; i < topicsToBeDeleted.length; i++) {
+      topicIdsToDelete.push(topicsToBeDeleted[i]._id);
+    }
+    console.log("topics to be deleted: ", topicIdsToDelete);
+
+    const assignmentsToBeDeleted = await assignmentsCollection.find({ topicId: { $in: topicIdsToDelete } }).toArray();
+    const assignmentIdsToDelete = [];//assignmentsToBeDeleted.map((assn) => assn._id).toArray();
+    for (let i = 0; i < assignmentsToBeDeleted.length; i++) {
+      assignmentIdsToDelete.push(assignmentsToBeDeleted[i]._id);
+    }
+    console.log("asses to be deleted: ", assignmentIdsToDelete);
+
+
+    await submissionsCollection.deleteMany({ assignmentId: { $in: assignmentIdsToDelete } });
+    await assignmentsCollection.deleteMany({ _id: { $in: assignmentIdsToDelete } });
+    await materialsCollection.deleteMany({ topicId: { $in: topicIdsToDelete } });
+    await topicsCollection.deleteMany({ _id: { $in: topicIdsToDelete } });
+    await weeksCollection.deleteMany({ _id: { $in: weekIdsToDelete } });
+    await classesCollection.deleteOne({ _id: classId });
+
+
+    return response.status(200).json({ message: 'Class and associated data deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting class and associated data:', error);
+    return response.status(500).json({ error: 'An error occurred while deleting the class and associated data' });
+  }
+});
+
 //join class
 router.get('/s/:userId/join-class/:classCode', async (request, response) => {
   try {
@@ -157,6 +216,24 @@ router.get('/s/:userId/join-class/:classCode', async (request, response) => {
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+//get class info
+router.get('/class/:classId', async (req, res) => {
+  try {
+    const classId = new ObjectId(req.params.classId);
+    // Assuming you have access to the class collection
+    const classObject = await client.db("colearnDb").collection("class").findOne({ _id: classId });
+
+    if (classObject) {
+      res.status(200).json(classObject);
+    } else {
+      res.status(404).json({ message: 'Class not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -274,68 +351,64 @@ router.get('/t/:userId/class/:classId/week/:weekId/topics', async (req, res) => 
 
 //view topic materials and assignments -student
 router.get('/s/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, res) => {
-  console.log("in view topic api");
+  console.log("in view topic -s api");
   try {
-    const { userId, classId, weekId, topicId } = req.params;
+    const { topicId } = req.params;
 
-    // Check if the userId and classId are valid ObjectId types
-    if (!ObjectId.isValid(userId) || !ObjectId.isValid(classId) || !ObjectId.isValid(weekId) || !ObjectId.isValid(topicId)) {
-      return res.status(400).json({ message: "Invalid user or class ID" });
-    }
+    // Fetch the topic
+    const topicObject = await client.db("colearnDb").collection("topic").find({ _id: new ObjectId(topicId) });
 
-    // Get the 'weeks' collection from the database
-    const topics = client.db("colearnDb").collection("topic");
-    console.log("topics in api: ", topics);
+    // Fetch assignments for the topic
+    const assignments = await client.db("colearnDb").collection("assignment").find({ topicId: new ObjectId(topicId) }).toArray();
 
-    // Find all weeks of the class with the specified ID
-    const thisTopic = await topics.findOne({ _id: new ObjectId(topicId) });
-    console.log("This topic: ");
-    console.log(thisTopic);
+    // Fetch materials for the topic
+    const materials = await client.db("colearnDb").collection("material").find({ topicId: new ObjectId(topicId) }).toArray();
 
-    if (thisTopic) {
-      console.log("thisTopic is not empty");
-      return res.json(thisTopic);
-    } else {
-      console.log("thisTopic is empty");
-      return res.json();
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    // Create the response object
+    const responseObject = {
+      topicObject,
+      assignments,
+      materials,
+    };
+
+    res.json(responseObject);
+  } catch (error) {
+    console.error('Error fetching topic:', error);
+    res.status(500).json({ error: 'An error occurred while fetching the topic.' });
   }
 });
 
 //view topic materials and assignments -teacher
 router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, res) => {
   console.log("in view topic api");
-  console.log("topicId: ", topicId);
+  //console.log("topicId: ", topicId);
   try {
-    const { userId, classId, weekId, topicId } = req.params;
+    const { topicId } = req.params;
 
-    // Check if the userId and classId are valid ObjectId types
-    if (!ObjectId.isValid(userId) || !ObjectId.isValid(classId) || !ObjectId.isValid(topicId)) {
-      return res.status(400).json({ message: "Invalid user or class ID" });
-    }
+    // Fetch the topic
+    const topicObject = await client.db("colearnDb").collection("topic").findOne({ _id: new ObjectId(topicId) });
 
-    // Get the 'weeks' collection from the database
-    const topics = client.db("colearnDb").collection("topic");
-    //console.log("topics in api: ", topics);
+    // Fetch assignments for the topic
+    const assignments = await client.db("colearnDb").collection("assignment").find({ topicId: new ObjectId(topicId) }).toArray();
 
-    // Find all weeks of the class with the specified ID
-    const thisTopic = await topics.findOne({ _id: new ObjectId(topicId) });
-    console.log("This topic: ");
-    console.log(thisTopic);
+    // Fetch materials for the topic
+    const materials = await client.db("colearnDb").collection("material").find({ topicId: new ObjectId(topicId) }).toArray();
 
-    if (thisTopic) {
-      console.log("thisTopic is not empty");
-      return res.json(thisTopic);
-    } else {
-      console.log("thisTopic is empty");
-      return res.json();
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    console.log("topic: ", topicObject);
+    console.log("assignments: ", assignments);
+    console.log("assignments: ", materials);
+
+    // Create the response object
+    const responseObject = {
+      topicObject,
+      assignments,
+      materials,
+    };
+
+    res.json(responseObject);
+  } catch (error) {
+    console.error('Error fetching topic:', error);
+    res.status(500).json({ error: 'An error occurred while fetching the topic.' });
   }
 });
 
@@ -369,6 +442,8 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', 
   const { userId, classId, weekId, topicId } = request.params;
   const { newAssn, helpingMaterials } = request.body;
   console.log("in assignment api: ", newAssn);
+  console.log("newASSN topic ID: ", topicId)
+  newAssn.topicId = new ObjectId(topicId);
   console.log("helping materials: ", helpingMaterials);
 
   try {
@@ -402,6 +477,72 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', 
   }
 });
 
+//get assignment -student
+router.get('/s/topic/:topicId/assignment/:assignmentId', async (request, response) => {
+  try {
+    const { topicId, assignmentId } = request.params;
+
+    console.log("assID is ", assignmentId);
+    // Assuming you have a database connection and assignment collection
+    //const asscollection = await client.db('colearn').collection('assignment');
+    //console.log("all asses: ", asscollection);
+    const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: new ObjectId(assignmentId) });
+
+    console.log(assignment);
+    if (!assignment) {
+      console.log("here here");
+      return response.status(404).json({ error: 'Assignment not found' });
+    }
+
+    // Send the assignment object as the response
+    response.json(assignment);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+//uplaod submission -student
+router.post('/s/:userId/assignment/:assignmentId/submission', async (request, response) => {
+
+  if (!request.body.submission.files) {
+
+    return response.status(404).json({ error: 'No submission files' });
+  }
+  try {
+    const { userId, assignmentId } = request.params;
+    const { submission } = request.body;
+
+    console.log("submission for assId: ", assignmentId);
+    // Assuming you have a database connection and assignment collection
+    //const asscollection = await client.db('colearn').collection('assignment');
+    //console.log("all asses: ", asscollection);
+    const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: new ObjectId(assignmentId) });
+
+    if (!assignment) {
+      return response.status(404).json({ error: 'Assignment does not exist' });
+    }
+
+    const submissionObject = {
+      assignmentId: new ObjectId(assignmentId),
+      studentId: new ObjectId(userId),
+      obtainedmarks: -1,
+      marked: submission.marked,
+      late: submission.late,
+      files: submission.files
+    }
+
+    await client.db('colearnDb').collection('submission').insertOne(submissionObject);
+
+
+    // Send the assignment object as the response
+    response.status(200).json('submitted successfully!');;
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 

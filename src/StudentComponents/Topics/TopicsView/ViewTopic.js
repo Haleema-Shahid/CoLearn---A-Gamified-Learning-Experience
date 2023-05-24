@@ -1,7 +1,7 @@
 //this is going to show all the assignment and material posted for a topic
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 function ViewTopic(props) {
@@ -22,9 +22,11 @@ function ViewTopic(props) {
   const [classId, setClassId] = useState(props.classId)
   const [weekId, setWeekId] = useState(props.weekId)
   const [topicId, setTopicId] = useState(props.topicId)
+  const [assignments, setAssignments] = useState([]);
+  const [materials, setMaterials] = useState([]);
 
 
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +37,9 @@ function ViewTopic(props) {
         if (data) {
           //setClasses(data);
           console.log("fetched in front end: ", data);
-          setTopic(data);
+          setTopic(data.topicObject);
+          setAssignments(data.assignments);
+          setMaterials(data.materials);
         }
         else {
           console.log("no classes found");
@@ -48,16 +52,31 @@ function ViewTopic(props) {
     fetchData();
   }, [topicId]);
 
+
+
+  const handleAssignmentClick = (assignmentId) => {
+
+    const url = `/s/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment/${assignmentId}`;
+    console.log("clicked assignment");
+    navigate(url);
+  };
+
+  /*for some reason, it was going to assignment as soon it loaded the week assignments and materials. chatgpt said to make
+  a new function and do this*/
+  const handleClick = (assignmentId) => (event) => {
+    event.stopPropagation();
+    handleAssignmentClick(assignmentId);
+  };
   return (
     <div>
       {!topic ? (
         <p>Topic not fetched</p>
       ) : (
         <div>
-          <h2>{topic.title}</h2>
-          <p>{topic.description}</p>
+          {/* <h2>{topic.title}</h2>
+          <p>{topic.description}</p> */}
           <h3>Materials</h3>
-          {topic.materials.map((material) => (
+          {materials.map((material) => (
             <Accordion>
               <AccordionSummary>{material.title}</AccordionSummary>
               <AccordionDetails>
@@ -66,9 +85,9 @@ function ViewTopic(props) {
             </Accordion>
           ))}
           <h3>Assignments</h3>
-          {topic.assignments.map((assignment) => (
+          {assignments.map((assignment) => (
             <Accordion>
-              <AccordionSummary>{assignment.title}</AccordionSummary>
+              <AccordionSummary onClick={handleClick(assignment._id)}>{assignment.title}</AccordionSummary>
               <AccordionDetails>
                 <p>{assignment.description}</p>
               </AccordionDetails>

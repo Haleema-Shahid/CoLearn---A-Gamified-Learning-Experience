@@ -22,7 +22,7 @@ function TeacherDashboard() {
   const [showCreateClassModal, setShowCreateClassModal] = useState(false);
   const [className, setClassName] = useState('');
   const [description, setdescription] = useState('');
-  const [classes, setClasses] = useState([{classname:"AP",description: "sdsd",userid:"0012"}]);
+  const [classes, setClasses] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
@@ -35,30 +35,25 @@ function TeacherDashboard() {
       try {
         console.log("in try block");
         console.log(userId);
-        const requestOptions = {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId })
-        };
         const response = await fetch(`http://localhost:4000/backend/t/${userId}`);
         const data = await response.json();
         console.log("data is ");
         if (data) {
-          //console.log(data);
+          console.log("data is not empty");
           setClasses(data);
           //setClasses(Object.assign([], data.classes));          
-          //console.log(classes);          
+          //console.log(classes);
         }
         else {
           console.log("no classes found");
-          //setClasses([]);
+          setClasses([]);
         }
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [userId]);
+  }, [userId, classes]);
 
   const handleCreateClassClick = () => {
     setShowCreateClassModal(true);
@@ -124,8 +119,31 @@ function TeacherDashboard() {
     setCreateNewClassButton(false)
   };
 
-  const handleDeleteClass = (name, description) => {
-    setClasses(classes.filter(cls => !(cls.name === name && cls.description === description)));
+  const handleDeleteClass = async (name, description, _id) => {
+    console.log("in delete class");
+    console.log(classes);
+    const thisClass = classes.find(cls => cls.classId === _id);
+    const thisClassId = thisClass._id;
+    try {
+      const response = await fetch(`http://localhost:4000/backend/delete-class/${thisClassId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        console.log('Class deleted successfully');
+        setClasses(classes.filter(cls => !(cls.name === name && cls.description === description)));
+        // Handle any additional logic after successful deletion
+      } else {
+        console.error('Failed to delete class:', response.statusText);
+        // Handle error case appropriately
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting the class:', error);
+      // Handle error case appropriately
+    }
   };
 
   return (

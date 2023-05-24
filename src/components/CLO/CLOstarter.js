@@ -12,7 +12,7 @@ import TopicsBoard from '../Topics/TopicsMainPage/TopicsBoard'
 import ViewTopic from '../Topics/TopicsView/ViewTopic';
 
 class Clo extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +24,7 @@ class Clo extends Component {
       //if implementing backend we can get the week id that already exist and if we click the week then on topic board we can get all
       //data related to that week
       //for now weekinfo has almost all the data for ease to show how data is being processes
-    
+
 
       weekInfo: [],
       isWeekSelected: false,
@@ -40,37 +40,23 @@ class Clo extends Component {
     try {
       const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`);
       const data = await response.json();
-      if(data.length>0){
+      if (data.length > 0) {
         console.log("data is ", data);
         this.setState({ weekNumber: data.length, weekInfo: data });
       }
-      else{
+      else {
         this.setState({ weekNumber: 0, weekInfo: [] });
       }
     } catch (error) {
       console.error(error);
     }
   }
-  
-  // componentDidMount = () => {
-  //   // console.log("ENTERED COMPONENT DID MOUNT");
-  //   // const {userId, classId} = this.state;
-  //   // //const classId = this.props.classId;
-  //   // console.log("user id is ",userId);
-  //   // console.log("class id is ",classId);
-  //   // fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/weeks`)
-  //   //   .then(response => response.json())
-  //   //   .then(data => {
-  //   //     // Update state with API data
-  //   //     this.setState({ weekInfo: data });
-  //   //   })
-  //   //   .catch(error => {console.error(error); console.log("HHAHAHA BITCH")});
-  // }
+
   onWeekSelect = (weekIndex) => {
     console.log("weekIndex is:")
     console.log(weekIndex);
     console.log("selected");
-    
+
     const selectedWeek = this.state.weekInfo[weekIndex];
     this.setState({
       isWeekSelected: true,
@@ -125,29 +111,29 @@ class Clo extends Component {
       });
     }
   };
-  
-  
-  
+
+
+
   handleTopicSelect = (topicId, userId, classId, weekId) => {
 
     console.log("topic selected");
     console.log("we are in teacher CLO STARTER . js: ")
-  console.log("this is topicId ", topicId)
-  console.log("this is weekId ", weekId)
-  console.log("this is classId ", classId)
-  console.log("this is userId ",userId)
+    console.log("this is topicId ", topicId)
+    console.log("this is weekId ", weekId)
+    console.log("this is classId ", classId)
+    console.log("this is userId ", userId)
     this.setState({ selectedTopic: topicId })
     this.setState({ showViewTopic: true })
-    this.setState({selectedTopicsWeekId: weekId});
+    this.setState({ selectedTopicsWeekId: weekId });
 
-    
+
 
   };
 
   render() {
     const { classId, weekNumber } = this.state;
     console.log("in clo starter");
-   
+
 
     return (
       <div>
@@ -163,21 +149,21 @@ class Clo extends Component {
           }
           {this.state.isWeekSelected && !this.state.showViewTopic && (
             <div>
-            
-            <div>
-              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex+1} onTopicSelect={this.handleTopicSelect}/>
+
+              <div>
+                <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
               </div>
-              </div>
+            </div>
           )
           }
           {
-            this.state.isWeekSelected  && this.state.showViewTopic &&(
+            this.state.isWeekSelected && this.state.showViewTopic && (
               <ViewTopic
-                userId={this.state.userId} 
-                classId={this.state.classId} 
+                userId={this.state.userId}
+                classId={this.state.classId}
                 weekId={this.state.selectedTopicsWeekId}
                 topicId={this.state.selectedTopic}
-             
+
               ></ViewTopic>
 
             )
@@ -185,6 +171,6 @@ class Clo extends Component {
         </div>
       </div>
     );
-        }
-      }
+  }
+}
 export default Clo;

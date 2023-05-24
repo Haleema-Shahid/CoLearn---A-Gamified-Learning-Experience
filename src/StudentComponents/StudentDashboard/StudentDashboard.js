@@ -33,7 +33,7 @@ function StudentDashboard() {
       }
     };
     fetchData();
-  }, [userId]);
+  }, [userId, classes]);
   const handleJoinClassClick = () => {
     setShowJoinClassModal(true);
   };

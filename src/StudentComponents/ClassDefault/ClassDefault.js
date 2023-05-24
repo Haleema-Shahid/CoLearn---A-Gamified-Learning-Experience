@@ -44,7 +44,7 @@ function ClassDefault() {
 
         }}
       >
-        <ClassHeader userID={userId} classID={classId} />
+        <ClassHeader userId={userId} classId={classId} />
         <div style={{ alignContent: "center", alignItems: "center" }}>
           <StudentClassTabs userId={userId} classId={classId}></StudentClassTabs>
         </div>

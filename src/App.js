@@ -12,7 +12,8 @@ import ClassHeader from './components/ClassHeader/ClassHeader';
 import ClassDefault from './components/ClassDefault/ClassDefault';
 import ClassDefault2 from './StudentComponents/ClassDefault/ClassDefault';
 //import TopicsBoard from './components/Topics/TopicsBoard';
-import AssignmentPage from './components/AssignmentPage/AssignmentPage'
+import AssignmentPage from './components/AssignmentPage/AssignmentPage';
+import Assignment from './StudentComponents/ClassAssignments/Assignment';
 import SignUp from './components/LogInSignUp/SignUp'
 import SignIn from './components/LogInSignUp/SignIn'
 import LoginNav from './components/Navigations/LoginNav'
@@ -26,21 +27,6 @@ import ViewTopic from './components/Topics/TopicsView/ViewTopic'
 import TeacherMaterial from './components/TeacherMaterial/TeacherMaterial';
 import TeacherAssignmentViewer from './components/AssignmentPage/assignmentViewer';
 import TeacherMaterialViewer from './components/TeacherMaterial/TeacherMaterialViewer';
-
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// const firebaseConfig = {
-//   apiKey: "AIzaSyABWov6Geo0jNkb-dExGyBqaOWFob0JeGA",
-//   authDomain: "colearn-35de8.firebaseapp.com",
-//   projectId: "colearn-35de8",
-//   storageBucket: "colearn-35de8.appspot.com",
-//   messagingSenderId: "991604203681",
-//   appId: "1:991604203681:web:7e804462215e152e5f90e0",
-//   measurementId: "G-BBVV5RPBH2"
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
 function App() {
   return (
@@ -80,6 +66,8 @@ function App() {
 
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/TeacherMaterialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/AssignmentViewer" element={<TeacherAssignmentViewer />} />
+
+          <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId" element={<Assignment />} />
 
 
         </Routes>

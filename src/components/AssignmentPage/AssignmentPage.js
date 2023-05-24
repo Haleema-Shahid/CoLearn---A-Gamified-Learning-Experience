@@ -2,7 +2,8 @@
 // //this page will ask for asignment title, description, deadline, total marks, it will also save the timestamp from when we click post
 // //it will also ask for assignment material upload and helping material upload
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+
+import { Navigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -43,38 +44,6 @@ function AssignmentPage(props) {
     const [helpingMaterialFiles, setHelpingMaterialFiles] = useState([])
     const today = dayjs();
     const yesterday = dayjs().subtract(1, 'day');
-
-    const location = useLocation();
-    // let formData = {
-    //     topicId: topicId,
-    //     title: title,
-    //     description: description,
-    //     uploadtime: new Date(),
-    //     deadline: deadline,
-    //     totalmarks: totalMarks,
-    //     tags: assignmentTags,
-    //     files: assignmentFiles
-    // }
-
-    // useEffect(() => {
-
-    //     if (props.helpingMaterial) {
-    //         const helpingMaterial = props.helpingMaterial;
-    //         setHelpingMaterialFiles(...helpingMaterialFiles, helpingMaterial);
-    //         // formData = location.state.formData;
-    //         // setTitle(formData.title);
-    //         // setDescription(formData.description);
-    //         // setDeadline(formData.deadline);
-    //         // setAssignmentFiles(formData.files);
-    //         // setAssignmentTags(formData.tags);
-    //         // setTotalMarks(formData.totalmarks);
-
-    //         // Do something with the helpingMaterial object
-    //         console.log('Received helpingMaterial object:', helpingMaterial);
-    //         // You can update the state or perform other operations with the helpingMaterial object
-
-    //     }
-    // }, [location.state]);
 
 
 
@@ -126,6 +95,7 @@ function AssignmentPage(props) {
             if (response.ok) {
                 const data = await response.json();
                 console.log('New topic added:', data);
+
                 //props.closeAddTopic();
             } else {
                 throw new Error('Failed to add topic');

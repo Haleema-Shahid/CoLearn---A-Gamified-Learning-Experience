@@ -1,5 +1,5 @@
 //This is a readable assignment
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -18,7 +18,7 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 //import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
-
+import FileViewer from "./FileViewer";
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Description } from "@mui/icons-material";
@@ -27,45 +27,172 @@ function Assignment() {
     // const { userId, classId, assignmentID } = useParams();
     //we need to get title,description, deadline, totalmarks, assignment files using the assignment ID
 
-    const [title, setTitle] = useState("Assignment 1");
-    const [description, setDescription] = useState("Dear Students, this is Assignment 1 for our given course. In this assignment we have to use concept of inheritance");
+    const { userId, classId, weekId, topicId, assignmentId } = useParams();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState(null);
-    const [totalMarks, setTotalMarks] = useState("50");
-    const [AssignmentFiles, setAssignmentFiles] = useState(['Assignment.pdf', 'Another.pdf']);
-    const [SubmissionFiles, setSubmissionFiles] = useState("");
+    const [totalMarks, setTotalMarks] = useState('');
+    const [assignmentFiles, setAssignmentFiles] = useState([]);
+    const [submissionFiles, setSubmissionFiles] = useState("");
+    const [uploadTime, setUploadTime] = useState();
     const [submissionDate, setSubmissionDate] = useState(null);
-    const [grade, setGrade] = useState()
+    const [grade, setGrade] = useState();
 
     const removeFile = (filename) => {
-        setAssignmentFiles(AssignmentFiles.filter(file => file.name !== filename))
+        setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
-
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log("Assignment details:", {
-            title,
-            description
+    const getDateTimeString = (datetime) => {
+        console.log(datetime);
+        const date = new Date(datetime);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
         });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            timeZone: 'UTC',
+        });
+        const result = `${formattedDate}, ${formattedTime}`;
+        return result;
+    }
+    const getDateFromDateTimeString = (datetimeString) => {
+        const [formattedDate, formattedTime] = datetimeString.split(', ');
+        const [month, day] = formattedDate.split(' ');
+        const [time, period] = formattedTime.split(/(?<=\d)(?=am|pm)/i);
+
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+
+        const formattedDateTime = `${month} ${day}, ${year} ${time} ${period}`;
+
+        return new Date(formattedDateTime);
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                console.log("in useEffect in assignment.js");
+                const response = await fetch(`http://localhost:4000/backend/s/topic/${topicId}/assignment/${assignmentId}`);
+                const data = await response.json();
+                console.log("fetched: ", data);
+                if (data) {
+                    //setClasses(data);
+                    console.log("fetched in front end: ", data);
+                    setTitle(data.title);
+                    setDescription(data.description);
+                    //console.log("total marks: ", data.totalmarks);
+                    setTotalMarks(data.totalmarks);
+                    setDeadline(getDateTimeString(data.deadline));
+                    //setUploadTime(new Date(data.uploadtime));
+                    //setAssignmentFiles(data.files);
+                    console.log("data.files: ", data.files);
+                    let index = 0;
+                    //console.log("assignmentfiles: ", assignmentFiles);
+                    if (assignmentFiles) {
+                        //console.log("in if: ", assignmentFiles)
+                        //console.log("in here");
+                        data.files.forEach((downloadUrl) => {
+                            console.log("looping");
+                            const filename = downloadUrl.substring(downloadUrl.lastIndexOf('%2F') + 3, downloadUrl.indexOf('?'));
+                            const thisFile = { id: index, name: filename, link: downloadUrl };
+                            console.log(thisFile);
+                            setAssignmentFiles([...assignmentFiles, thisFile]);
+                            //console.log(fileNames);
+                            index = index + 1;
+                        });
+                    }
+                    else {
+                        console.log("wow nice")
+                    }
+
+                    //console.log("F: ", fileNames);
+                    console.log("A: ", assignmentFiles);
+                    //setMaterials(data.materials);
+                }
+                else {
+                    console.log("no classes found");
+                    //setClasses([]);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, [topicId, assignmentId]);
+
+    const handleFileClick = (file) => {
+        // event.preventDefault();
+        // console.log("Assignment details:", {
+        //     title,
+        //     description
+        // });
+        window.open(file.link, '_blank');
+        console.log("file clicked: ", file);
+    };
+
+    //TODO: API FETCH
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        console.log("submission files: ", submissionFiles);
+        const currentDateTime = new Date();
+        const assignmentDeadline = getDateFromDateTimeString(deadline);
+        let flag = false;
+        if (currentDateTime.getTime() > assignmentDeadline.getTime()) {
+            flag = true;
+        }
+        else {
+            flag = false;
+        }
+        try {
+            const submissionObject = {
+                marked: false,
+                late: flag,
+                files: submissionFiles
+            }
+            const response = await fetch(`http://localhost:4000/backend/s/${userId}/assignment/${assignmentId}/submission`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ submission: submissionObject })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('New submission added:', data);
+
+                //props.closeAddTopic();
+            } else {
+                throw new Error('Failed to submit');
+            }
+        } catch (error) {
+            console.error('Error submitting:', error);
+        }
+
+
+        console.log();
     };
 
     const handleDeleteTag = (tagToDelete) => {
-       
+
     }
     return (
         <div>
             <div>
 
-               
+
                 <Box
-                
+
 
                     sx={{
                         border: 2,
-                        borderRadius:"20px",
-                        borderColor:"#4b6cb7",
-                        width:"70%",
-                        padding:"30px",
+                        borderRadius: "20px",
+                        borderColor: "#4b6cb7",
+                        width: "70%",
+                        padding: "30px",
                         margin: "auto",
                         display: "flex",
                         flexDirection: "column",
@@ -76,14 +203,16 @@ function Assignment() {
                     }}
 
                 >
-                     <div className="assignment header" style={{ color: "#4b6cb7", alignContent:"flex-start"}}>
-                    <h1>Assignment</h1>
-                    <h2>Marks: {totalMarks}</h2>
-                </div>
+                    <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
+                        <h1>Assignment</h1>
+                        <h2>Marks: {totalMarks}</h2>
+                        <h2>Deadline: {deadline}</h2>
+                    </div>
                     <Stack spacing={2}>
                         <TextField
                             id="standard-read-only-input"
                             label="Title"
+                            value={title}
                             defaultValue={title}
                             InputProps={{
                                 readOnly: true,
@@ -95,27 +224,32 @@ function Assignment() {
                             label="Description"
                             multiline
                             rows={4}
+                            value={description}
                             defaultValue={description}
                             InputProps={{
                                 readOnly: true,
                             }}
                             variant="standard"
                         />
-                        <div style={{ display:"flex", flexDirection:"row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
-                        
-                        
-                            {AssignmentFiles && AssignmentFiles.map((file) => (
-                                <div key={file} style={{padding:"3px"}}>
-                                    <Chip key={file} label={file} onDelete={() => handleDeleteTag(file)} />
+                        <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
+
+                            {assignmentFiles && assignmentFiles.map((file, index) => (
+                                <div key={file.id} style={{ padding: "3px" }}>
+                                    <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
                                 </div>
                             ))}
-                          
-              
-                    </div>
-                        
-                    <div>
-                    <FileUploader files={SubmissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
-                </div>
+                            {/* {viewFile && (
+                                <FileViewer
+                                    fileUrl="https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/files%2F6thSEM.pdf?alt=media&token=8c2132d5-fe6e-4f56-8d6c-a7134befdc47"
+                                />
+                            )} */}
+
+
+                        </div>
+
+                        <div>
+                            <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
+                        </div>
 
 
 
@@ -132,14 +266,15 @@ function Assignment() {
                                     backgroundColor: '#0c2461',
                                 },
                             }}
+                            onClick={handleSubmit}
                         >
-                            Post Assignment
+                            Submit
                         </Button>
 
                     </Stack>
 
                 </Box>
-               
+
 
 
 

@@ -36,23 +36,23 @@ function ClassDefault() {
   return (
     <div>
       <Box
-       sx={{
-        display: 'flex',
-        flexDirection:'column',
-        justifyContent: 'space-between',
-   
-        bgcolor: 'background.paper',
-        
-      }}
-      >
-      <ClassHeader userID={userId} classID={classId} />
-      <div style={{alignContent:"center", alignItems:"center"}}>
-      <TeacherClassTabs userId={userId} classId={classId}></TeacherClassTabs>
-      </div>
-     
-     
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
 
-      {/* {numberOfWeeks === 0 && <CLO classID={classId} cloWeeks={numberOfWeeks} onNumberOfWeeksChange={handleNumberOfWeeksChange}/>}
+          bgcolor: 'background.paper',
+
+        }}
+      >
+        <ClassHeader userId={userId} classId={classId} />
+        <div style={{ alignContent: "center", alignItems: "center" }}>
+          <TeacherClassTabs userId={userId} classId={classId}></TeacherClassTabs>
+        </div>
+
+
+
+        {/* {numberOfWeeks === 0 && <CLO classID={classId} cloWeeks={numberOfWeeks} onNumberOfWeeksChange={handleNumberOfWeeksChange}/>}
       {numberOfWeeks > 0 && <CloDetails userID={userId} classID={classId} cloWeeks={numberOfWeeks} />} */}
       </Box>
 

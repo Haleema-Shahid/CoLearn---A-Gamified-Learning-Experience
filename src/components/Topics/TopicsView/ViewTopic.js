@@ -13,12 +13,14 @@ function ViewTopic(props) {
   // weekId
   // topicId
   console.log("we are in viewTopic.js: ")
-  console.log("this is topicId ", props.topicId)
-  console.log("this is weekId ", props.weekId)
-  console.log("this is classId ", props.classId)
-  console.log("this is userId ", props.userId)
+  // console.log("this is topicId ", props.topicId)
+  // console.log("this is weekId ", props.weekId)
+  // console.log("this is classId ", props.classId)
+  // console.log("this is userId ", props.userId)
 
   const [topic, setTopic] = useState(null)//Save topic object from db in here first
+  const [assignments, setAssignments] = useState([]);
+  const [materials, setMaterials] = useState([]);
   const [userId, setUserId] = useState(props.userId)
   const [classId, setClassId] = useState(props.classId)
   const [weekId, setWeekId] = useState(props.weekId)
@@ -33,8 +35,9 @@ function ViewTopic(props) {
         console.log("fetched: ", data);
         if (data) {
           //setClasses(data);
-          console.log("fetched in front end: ", data);
-          setTopic(data);
+          setTopic(data.topicObject);
+          setAssignments(data.assignments);
+          setMaterials(data.materials);
         }
         else {
           console.log("no classes found");
@@ -55,36 +58,36 @@ function ViewTopic(props) {
         <p>Topic not fetched</p>
       ) : (
         <div>
-      
-  <h2 style={{  color: "#2a5298" , textDecoration: 'underline', marginBottom: '20px' }}>Assignments</h2>
 
-      {topic.assignments.map((assignment) => (
-        <ContentCard
-          key={assignment.id}
-          contentType="assignmentContent"
-          userId={userId}
-          classId={classId}
-          weekId={weekId}
-          topicId={topicId}
-          materialId={assignment._id}
-          materialContent={assignment}
-        />
-      ))}
+          <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px' }}>Assignments</h2>
 
-<h2 style={{  color: "#2a5298" , textDecoration: 'underline', marginBottom: '20px', marginTop: '20px' }}>Materials</h2>
-      {topic.materials.map((material) => (
-        <ContentCard
-          key={material.id}
-          contentType="materialContent"
-          userId={userId}
-          classId={classId}
-          weekId={weekId}
-          topicId={topicId}
-          materialId={material._id}
-          materialContent={material}
-        />
-      ))}
-    </div>
+          {assignments.map((assignment) => (
+            <ContentCard
+              key={assignment._id}
+              contentType="assignmentContent"
+              userId={userId}
+              classId={classId}
+              weekId={weekId}
+              topicId={topicId}
+              materialId={assignment._id}
+              materialContent={assignment}
+            />
+          ))}
+
+          <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px', marginTop: '20px' }}>Materials</h2>
+          {materials.map((material) => (
+            <ContentCard
+              key={material._id}
+              contentType="materialContent"
+              userId={userId}
+              classId={classId}
+              weekId={weekId}
+              topicId={topicId}
+              materialId={material._id}
+              materialContent={material}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
