@@ -66,61 +66,56 @@ function TopicCard(props) {
 
 
   return (
-    <div style={{
-      margin: "auto",
-      display: "flex",
-      flexDirection: "column",
-      paddingLeft: "50px",
-      justifyContent: "left",
-      alignItems: "center"
-    }}>
-      <Card onClick={handleTopicSelection} sx={{ height: 20 + "vh", width: "50%", marginBottom: "16px", marginTop: "10px" }}>
-        <CardHeader
-          sx={{
-            height: '50%',
-            background: `linear-gradient(to right, #1e3c72, #2a5298)`,
-            color: 'white',
-            height: '50%',
 
-          }}
-          action={
-            <div>
-              <div onClick={(e) => {
-                e.preventDefault();
+    <Card onClick={handleTopicSelection} sx={{ height: 20 + "vh", width: "40%", marginBottom: "16px", marginTop: "10px" }}>
+      <CardHeader
+        sx={{
+          height: '50%',
+          background: `linear-gradient(to right, #1e3c72, #2a5298)`,
+          color: 'white',
+        }}
+        action={
+          <div>
+            <div onClick={(e) => {
+              e.preventDefault();
+            }}>
+              <IconButton aria-label="settings" onClick={(e) => {
+                handleMenuOpen(e);
               }}>
-                <IconButton aria-label="settings" onClick={(e) => {
-                  handleMenuOpen(e);
-                }}>
-                  <MoreVertIcon />
-                </IconButton>
+                <MoreVertIcon />
+              </IconButton>
 
 
 
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                >
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
 
-                  <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem>
-                  <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/assignment`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
-                  {/* <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link> */}
-                  <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
-                  <MenuItem onClick={handleSomething}>something</MenuItem>
-                </Menu>
-              </div>
+                <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem>
+                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/assignment`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
+                {/* <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link> */}
+                <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
+                <MenuItem onClick={handleSomething}>something</MenuItem>
+              </Menu>
             </div>
-          }
-          title={props.title}
-        //subheader={props.section}
-        />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-
+          </div>
+        }
+        title={
+          <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
+            {props.title}
           </Typography>
-        </CardContent>
-      </Card>
-    </div>
+        }
+      //subheader={props.section}
+      />
+      <CardContent>
+        <Typography variant="body2" color="text.secondary">
+
+        </Typography>
+      </CardContent>
+    </Card>
+
   );
 }
 

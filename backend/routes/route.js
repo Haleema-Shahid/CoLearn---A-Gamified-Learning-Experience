@@ -103,7 +103,7 @@ router.get('/s/:userId', async (request, response) => {
   }
 });
 
-//class create
+//create class
 router.post('/create-class', async (request, response) => {
   const users = client.db("colearnDb").collection("user");
   const classes = client.db("colearnDb").collection("class");
@@ -133,7 +133,7 @@ router.post('/create-class', async (request, response) => {
   }
 });
 
-//class delete
+//delete class
 router.post('/delete-class/:thisClassId', async (request, response) => {
   const classId = new ObjectId(request.params.thisClassId);
   console.log("classId: ", classId);

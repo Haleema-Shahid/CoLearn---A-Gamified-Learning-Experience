@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -32,11 +32,13 @@ const CustomMenuIcon = styled(MenuIcon)({
         width: '20px', // Adjust the width of the icon
     },
 });
-const TeacherDashboardHeader = () => {
+const DashboardHeader = () => {
     const { userId } = useParams();
     const [name, setName] = useState('');
 
     const [anchorEl, setAnchorEl] = useState(null);
+
+    const navigate = useNavigate();
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -52,7 +54,10 @@ const TeacherDashboardHeader = () => {
         // Close the menu
         handleMenuClose();
     };
+    const handleLogout = () => {
+        navigate('/');
 
+    }
     useEffect(() => {
         // Fetch user data using userId
         const fetchUser = async () => {
@@ -106,7 +111,7 @@ const TeacherDashboardHeader = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
             >
-                <MenuItem onClick={() => handleMenuItemClick('Option 1')}>Option 1</MenuItem>
+                <MenuItem onClick={() => handleLogout('Option 1')}>Logout</MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick('Option 2')}>Option 2</MenuItem>
                 <MenuItem onClick={() => handleMenuItemClick('Option 3')}>Option 3</MenuItem>
             </Menu>
@@ -115,4 +120,4 @@ const TeacherDashboardHeader = () => {
     );
 };
 
-export default TeacherDashboardHeader;
+export default DashboardHeader;

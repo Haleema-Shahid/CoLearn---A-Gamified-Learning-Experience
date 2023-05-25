@@ -23,18 +23,18 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
 const styles = {
-    card: {
-      width: 600,
-      height: 300,
-      margin: '0 auto',
-    },
-  };
+  card: {
+    width: 600,
+    height: 300,
+    margin: '0 auto',
+  },
+};
 
 function CLOCard(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [weekNumber, setWeekNumber]=useState(props.weekNumber);
- 
+  const [weekNumber, setWeekNumber] = useState(props.weekNumber);
+
 
   const handleMenuOpen = (event) => {
     event.stopPropagation(); // stop event propagation to the card
@@ -58,33 +58,32 @@ function CLOCard(props) {
     console.log("clicked add topic")
   };
 
-  const handleWeekClick=()=>{
+  const handleWeekClick = () => {
     console.log("card clicked for week")
-    console.log(props.weekNumber-1);
-    props.onWeekSelect(props.weekNumber-1);
+    console.log(props.weekNumber - 1);
+    props.onWeekSelect(props.weekNumber - 1);
     handleMenuClose();
   }
 
   return (
-    <Card  sx={{ height: 20 + "vh", width: "80%", marginBottom: "16px", marginTop: "10px" }}>
+    <Card sx={{ height: 20 + "vh", width: "40%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         sx={{
-         
+
           background: `linear-gradient(to right, #1e3c72, #2a5298)`,
           color: 'white'
-
         }}
         action={
           <div>
-            <div onClick={(e) => 
-              {
-              e.preventDefault();} }>
+            <div onClick={(e) => {
+              e.preventDefault();
+            }}>
               <IconButton aria-label="settings" onClick={(e) => {
                 handleMenuOpen(e);
               }}>
                 <MoreVertIcon />
               </IconButton>
-              
+
 
 
               <Menu
@@ -93,14 +92,19 @@ function CLOCard(props) {
                 onClose={handleMenuClose}
               >
                 <MenuItem onClick={handleWeekClick}>View Week Material</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem> 
+                <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Tester</MenuItem>
               </Menu>
             </div>
-            </div>
+          </div>
         }
-        title={props.weekNumber}
+        title={
+          <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
+            {'Week ' + props.weekNumber}
+          </Typography>
+        }
+
       //subheader={props.section}
       />
       <CardContent>

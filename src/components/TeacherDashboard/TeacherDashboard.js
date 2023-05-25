@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import TeacherDashboardHeader from './TeacherDashboardHeader';
+import TeacherDashboardHeader from './DashboardHeader';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {

@@ -40,15 +40,14 @@ function ClassDefault() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-
           bgcolor: 'background.paper',
 
         }}
       >
         <ClassHeader userId={userId} classId={classId} />
-        <div style={{ alignContent: "center", alignItems: "center" }}>
+        <Box>
           <TeacherClassTabs userId={userId} classId={classId}></TeacherClassTabs>
-        </div>
+        </Box>
 
 
 

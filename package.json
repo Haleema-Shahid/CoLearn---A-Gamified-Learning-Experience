@@ -27,6 +27,7 @@
     "react-scripts": "5.0.1",
     "reactstrap": "^9.1.5",
     "styled-components": "^5.3.6",
+    "typeface-montserrat": "^1.1.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

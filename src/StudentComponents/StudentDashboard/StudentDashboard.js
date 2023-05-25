@@ -5,6 +5,7 @@ import StudentDashboardCard from './StudentDashboardCard';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import DashboardHeader from './DashboardHeader';
 
 
 
@@ -84,7 +85,7 @@ function StudentDashboard() {
 
   return (
     <div className='TeacherDashboard'>
-
+      <DashboardHeader userId={userId} />
       <button onClick={handleJoinClassClick} className="create-class-button">Join New Class</button>
       {showJoinClassModal && (
         <div className="create-class-modal">
@@ -108,8 +109,8 @@ function StudentDashboard() {
         <div className="classes-grid">
           {classes.map((classObj) => (
             // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
-            <div className="container_card" key={classObj.name + classObj.section} >
-              <StudentDashboardCard name={classObj.name} section={classObj.section} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
+            <div className="container_card" key={classObj.name + classObj.discription} >
+              <StudentDashboardCard name={classObj.name} section={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
             // </Link>
           ))}

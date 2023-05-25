@@ -10,6 +10,7 @@ import ViewTopic from '../TopicsView/ViewTopic'
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddTopic from './AddTopic';
+import Box from '@mui/material/Box';
 
 function TopicsBoard(props) {
   const [weekId, setWeekId] = useState(props.weekId);
@@ -91,30 +92,36 @@ function TopicsBoard(props) {
     <div>
 
       {!addTopic && (
-        <div>
-          <div>
-            <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}>
-              Add Topics
-            </Button>
-          </div>
-          <div>
-            {topics && Array.isArray(topics) && topics.map((topic, index) => (
-              <TopicCard
-                key={index}
-                topicId={topic._id}
-                topicObject={topic}
-                title={topic.name}
-                onViewTopic={handleViewTopic}
-                onDeleteTopic={HandleDeleteTopic}
-                userId={props.userId}
-                classId={props.classId}
-                weekId={props.weekId}
-                weekNumber={props.weekNumber}
-                cardKey={topic._id}
-              />
-            ))}
-          </div>
-        </div>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}>
+          <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}
+            sx={{
+              width: '150px',
+              marginBottom: '30px'
+            }}>
+            Add Topics
+          </Button>
+          {topics && Array.isArray(topics) && topics.map((topic, index) => (
+            <TopicCard
+              key={index}
+              topicId={topic._id}
+              topicObject={topic}
+              title={topic.name}
+              onViewTopic={handleViewTopic}
+              onDeleteTopic={HandleDeleteTopic}
+              userId={props.userId}
+              classId={props.classId}
+              weekId={props.weekId}
+              weekNumber={props.weekNumber}
+              cardKey={topic._id}
+            />
+          ))}
+        </Box>
 
       )
       }

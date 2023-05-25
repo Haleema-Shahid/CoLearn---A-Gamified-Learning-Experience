@@ -129,9 +129,9 @@ export default function SignIn() {
           display: 'flex',
           flexDirection: 'column',
           //alignItems: 'center',
-          //justifyContent: 'center',
+          justifyContent: 'center',
           //position: 'relative'
-          marginTop: '352px'
+          //marginTop: '352px'
         }}
       >
         <ThemeProvider theme={theme}>
@@ -229,14 +229,14 @@ export default function SignIn() {
                     Remember me
                   </Typography>}
                   sx={{
-                    marginTop: '10px'
+                    marginTop: '20px'
                   }}
                 />
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ marginTop: '10px', mb: 2 }}
                 >
                   Log In
                 </Button>

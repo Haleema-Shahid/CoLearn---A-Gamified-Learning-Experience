@@ -33,13 +33,28 @@ export default function TeacherClassTabs(props) {
 
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Class" value="1" />
-            <Tab label="Week Outline" value="2" />
-            <Tab label="Students" value="3" />
-          </TabList>
+      <TabContext value={value}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center'
+        }}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
+            <TabList onChange={handleChange} aria-label="lab API tabs example">
+              <Tab label="Class Report" value="1" />
+              <Tab label="Week Outline" value="2" />
+              <Tab label="Students" value="3" />
+            </TabList>
+          </Box>
         </Box>
         <TabPanel value="1">{getTabContent('1')}</TabPanel>
         <TabPanel value="2">{getTabContent('2')}</TabPanel>

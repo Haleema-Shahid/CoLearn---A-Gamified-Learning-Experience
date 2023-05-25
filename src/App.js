@@ -24,6 +24,7 @@ import TeacherMaterial from './components/TeacherMaterial/TeacherMaterial';
 import TeacherAssignmentViewer from './components/AssignmentPage/AssignmentViewer';
 import TeacherMaterialViewer from './components/TeacherMaterial/TeacherMaterialViewer';
 import SubmissionsDisplay from './components/Submission/SubmissionsDisplay'
+import CloDetails from './components/CLO/CLODetails';
 
 function App() {
   return (
@@ -55,8 +56,10 @@ function App() {
           <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
           <Route path="/s/:userId/class/:classId" element={<ClassDefault2 />} />
 
-          {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
-          <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId/assignment" element={<AssignmentPage />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId" element={<CloDetails />} />
+          {/* 
+          <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
+          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment" element={<AssignmentPage />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
 

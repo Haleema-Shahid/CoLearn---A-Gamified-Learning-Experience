@@ -51,20 +51,24 @@ function StudentDashboardCard(props) {
           height: '50%',
           background: `linear-gradient(to right, #1e3c72, #2a5298)`,
           color: 'white',
-          height: '50%',
+          justifyContent: 'center',
+          padding: '20px',
+          '& .MuiCardHeader-title': {
+            fontSize: '1.15rem', // Adjust the font size as needed
+          },
 
         }}
         action={
           <div>
-            <div onClick={(e) => 
-              {
-              e.preventDefault();} }>
+            <div onClick={(e) => {
+              e.preventDefault();
+            }}>
               <IconButton aria-label="settings" onClick={(e) => {
                 handleMenuOpen(e);
               }}>
                 <MoreVertIcon />
               </IconButton>
-              
+
 
 
               <Menu
@@ -77,12 +81,12 @@ function StudentDashboardCard(props) {
                 <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
                 {/* <Link to={`/user/${props.userID}/class/${props.id}`}> */}
                 <Link to={`/s/${props.userId}/class/${props.classId}`}> <MenuItem onClick={handleMenuClose}>View Class</MenuItem></Link>
-                  {/* </Link> */}
+                {/* </Link> */}
                 <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
               </Menu>
             </div>
-            </div>
+          </div>
         }
         title={props.name}
       //subheader={props.section}

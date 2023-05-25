@@ -139,21 +139,34 @@ class Clo extends Component {
       <div>
         <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "20%" }}>
           {!this.state.isWeekSelected && (
-            <div>
-              <Button onClick={this.onAddWeekClick} variant="outlined" startIcon={<AddCircleIcon />}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingLeft: '20%'
+              }}>
+              <Button onClick={this.onAddWeekClick} variant="outlined" startIcon={<AddCircleIcon />}
+                sx={{
+                  width: '150px',
+                  marginBottom: '30px'
+                }}>
                 Add Week
               </Button>
               <CloDetails userId={this.state.userId} classId={this.state.classId} numberWeeks={this.state.weekNumber} weeksInfo={this.state.weekInfo} onWeekSelect={this.onWeekSelect}></CloDetails>
-            </div>
+            </Box>
           )
           }
           {this.state.isWeekSelected && !this.state.showViewTopic && (
-            <div>
-
-              <div>
-                <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
-              </div>
-            </div>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingLeft: '20%'
+              }}>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
+            </Box>
           )
           }
           {

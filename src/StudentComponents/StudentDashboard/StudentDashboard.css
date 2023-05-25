@@ -19,6 +19,7 @@ body {
   padding: 20px;
   margin-left: 30px;
   margin-right: 30px;
+  justify-content: center;
 }
 
 .container_card {

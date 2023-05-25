@@ -9,6 +9,9 @@ import CLO from '../CLO/CLOstarter';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Button from '@mui/material/Button';
+import 'typeface-montserrat';
+import DashboardHeader from '../TeacherDashboard/DashboardHeader';
+import Box from '@mui/material/Box';
 
 const GradientBackground = styled(Paper)(({ theme }) => ({
   background: `linear-gradient(to right, #1e3c72, #2a5298)`,
@@ -66,18 +69,44 @@ function ClassHeader(props) {
 
   return (
     <div>
-      <Container sx={{ paddingBottom: "20px" }}>
-        <GradientBackground>
-          <Typography variant="h2" component="h1" gutterBottom sx={{ fontSize: '2.5rem' }}>
+      <DashboardHeader userId={userId} />
+      <Container
+        sx={{
+          paddingBottom: "20px",
+          marginTop: '20px'
+        }}>
+        <GradientBackground
+          sx={{
+            padding: '90px'
+
+          }}>
+          <Typography variant="h2" component="h1" gutterBottom
+            sx={{
+              fontSize: '2.5rem',
+              fontFamily: 'Montserrat'
+            }}>
             {title}
             {console.log(classId)}
           </Typography>
-          <Typography variant="body1" gutterBottom sx={{ fontSize: '1.25rem' }}>
+          <Typography variant="body1" gutterBottom
+            sx={{
+              fontSize: '1.25rem',
+              fontFamily: 'Montserrat'
+            }}>
             {section}
           </Typography>
-          <div sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="body2" gutterBottom sx={{ fontSize: '1.25rem' }}>
-              Joining Code: {classId}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'row'
+            }}>
+            <Typography variant="body2" gutterBottom
+              sx={{
+                fontSize: '0.75rem',
+                fontFamily: 'Montserrat'
+              }}>
+              Class Code: {classId}
             </Typography>
             <Button
               variant="outlined"
@@ -87,11 +116,14 @@ function ClassHeader(props) {
                 height: '24px',
                 padding: '4px',
                 borderRadius: '4px',
+                color: 'blue',
+                backgroundColor: 'white',
+                marginLeft: '10px'
               }}
             >
               {isCopied ? 'Copied!' : 'Copy'}
             </Button>
-          </div>
+          </Box>
         </GradientBackground>
       </Container>
 

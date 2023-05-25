@@ -16,9 +16,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Radio } from '@mui/material';
-import { useState} from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import logoblue from '../../images/logoblue.png';
 
 function Copyright(props) {
   return (
@@ -48,29 +49,29 @@ export default function SignUp() {
     const email = info.get('email');
     const password = info.get('password');
     const role = e.target['radio-buttons-group'].value;
-    
-  
+
+
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ firstName:firstName, lastName:lastName, email: email, password: password, role: role })
+      body: JSON.stringify({ firstName: firstName, lastName: lastName, email: email, password: password, role: role })
     };
-  
+
     const response = await fetch('http://localhost:4000/api/login', requestOptions);
     const data = await response.json();
-    
+
     if (response.ok) {
       // Do something with the user data
       //console.log(data._id);
-     
+
 
     } else {
       // Handle the error
       console.log('Error:', response.status);
     }
   }
-  
- 
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -85,10 +86,25 @@ export default function SignUp() {
             marginLeft: "auto",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+          <Box
+            component="img"
+            sx={{
+              height: 64,
+              marginLeft: '20px'
+            }}
+            alt="Your logo."
+            src={logoblue}
+          />
+          <Typography component="h1" variant="h5"
+            sx={{
+              fontFamily: 'Montserrat',
+              fontSize: '1.5rem',
+              letterSpacing: '0.05rem',
+              fontWeight: '1',
+              color: 'GrayText',
+              marginTop: '10px'
+
+            }}>
             Sign up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -114,7 +130,7 @@ export default function SignUp() {
                   autoComplete="family-name"
                 />
               </Grid>
-              
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -148,19 +164,19 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-              <FormControl>
-                <FormLabel id="radio-button">Role</FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="radio-button"
-                  name="radio-buttons-group"
-                //  value={value}
-                //  onChange={handleChange}
-                >
-                  <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
-                  <FormControlLabel value="Student" control={<Radio />} label="Student" />
-                </RadioGroup>
-              </FormControl>
+                <FormControl>
+                  <FormLabel id="radio-button">Role</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="radio-button"
+                    name="radio-buttons-group"
+                  //  value={value}
+                  //  onChange={handleChange}
+                  >
+                    <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
+                    <FormControlLabel value="Student" control={<Radio />} label="Student" />
+                  </RadioGroup>
+                </FormControl>
               </Grid>
             </Grid>
             <Button

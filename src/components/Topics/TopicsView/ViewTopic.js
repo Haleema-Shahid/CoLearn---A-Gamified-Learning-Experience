@@ -1,22 +1,16 @@
 
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import ContentCard from './contentCards/ContentCard'
+import ContentCard from './contentCards/ContentCard';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 function ViewTopic(props) {
-  //get userId, weekId, classId, topicId from wherever i dont know. jhn se b ye call hora hai whn se ye Ids le kr ani hain
-  //sari states wghera b ni hain idr wo b krna hai
-  //userId
-  // classId
-  // weekId
-  // topicId
+
   console.log("we are in viewTopic.js: ")
-  // console.log("this is topicId ", props.topicId)
-  // console.log("this is weekId ", props.weekId)
-  // console.log("this is classId ", props.classId)
-  // console.log("this is userId ", props.userId)
 
   const [topic, setTopic] = useState(null)//Save topic object from db in here first
   const [assignments, setAssignments] = useState([]);
@@ -25,6 +19,8 @@ function ViewTopic(props) {
   const [classId, setClassId] = useState(props.classId)
   const [weekId, setWeekId] = useState(props.weekId)
   const [topicId, setTopicId] = useState(props.topicId)
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,8 +32,13 @@ function ViewTopic(props) {
         if (data) {
           //setClasses(data);
           setTopic(data.topicObject);
-          setAssignments(data.assignments);
-          setMaterials(data.materials);
+          if (topic.assignments)
+            setAssignments(data.assignments);
+
+          if (topic.materials)
+            setMaterials(data.materials);
+          console.log('asses: ', assignments);
+          console.log('materials: ', materials);
         }
         else {
           console.log("no classes found");
@@ -50,6 +51,12 @@ function ViewTopic(props) {
     fetchData();
   }, [topicId]);
 
+  const handleAddAssignment = () => {
+    navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`)
+  }
+  const handleAddMaterial = () => {
+
+  }
 
   const handleDelete = (materialId) => {
     // Remove the deleted assignment from the assignments array
@@ -58,42 +65,74 @@ function ViewTopic(props) {
 
   return (
     <div>
-      {!topic ? (
-        <p>Topic not fetched</p>
-      ) : (
-        <div>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          paddingLeft: '20%'
+        }}>
+        <Box
+          sx={{
+          }}>
+          <Button onClick={handleAddAssignment} variant="outlined" startIcon={<AddCircleIcon />}
+            sx={{
+              width: '150px',
+              marginRight: '30px',
+              marginBottom: '30px'
 
-          <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px' }}>Assignments</h2>
+            }}>
+            Assignment
+          </Button>
+          <Button onClick={handleAddMaterial} variant="outlined" startIcon={<AddCircleIcon />}
+            sx={{
+              width: '150px',
+              marginLeft: '30px',
+              marginBottom: '30px'
+            }}>
+            Material
+          </Button>
+        </Box>
 
-          {assignments.map((assignment) => (
-            <ContentCard
-              key={assignment._id}
-              contentType="assignmentContent"
-              userId={userId}
-              classId={classId}
-              weekId={weekId}
-              topicId={topicId}
-              materialId={assignment._id}
-              materialContent={assignment}
-              onDelete={handleDelete}
-            />
-          ))}
+        {!topic ? (
+          <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
+            No assignments or materials yet!
+          </Typography>
+        ) : (
+          <div>
 
-          <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px', marginTop: '20px' }}>Materials</h2>
-          {materials.map((material) => (
-            <ContentCard
-              key={material._id}
-              contentType="materialContent"
-              userId={userId}
-              classId={classId}
-              weekId={weekId}
-              topicId={topicId}
-              materialId={material._id}
-              materialContent={material}
-            />
-          ))}
-        </div>
-      )}
+            <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px' }}>Assignments</h2>
+
+            {assignments.map((assignment) => (
+              <ContentCard
+                key={assignment._id}
+                contentType="assignmentContent"
+                userId={userId}
+                classId={classId}
+                weekId={weekId}
+                topicId={topicId}
+                materialId={assignment._id}
+                materialContent={assignment}
+                onDelete={handleDelete}
+              />
+            ))}
+
+            <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px', marginTop: '20px' }}>Materials</h2>
+            {materials.map((material) => (
+              <ContentCard
+                key={material._id}
+                contentType="materialContent"
+                userId={userId}
+                classId={classId}
+                weekId={weekId}
+                topicId={topicId}
+                materialId={material._id}
+                materialContent={material}
+              />
+            ))}
+          </div>
+        )}
+      </Box>
     </div>
   );
 }

@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Paper } from "@mui/material";
 import '../AssignmentPage/AssignmentPage.css';
-import AssignmentMaterial from "./AssignmentMaterial";
 import FileUploader from "./FileUploader";
 import { blue } from "@mui/material/colors";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -22,6 +21,8 @@ import Button from '@mui/material/Button';
 import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+
 
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -163,16 +164,23 @@ function AssignmentPage(props) {
             {!helpingMaterialClick && (<div>
                 <div className="split left" style={{ width: "50%", left: 0 }}>
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
-                        <h1>Assignment</h1>
+                        <Typography variant="body1" gutterBottom
+                            sx={{
+                                fontSize: '2rem',
+                                fontFamily: 'Montserrat',
+                                fontWeight: '-50'
+                            }}>
+                            Assignment
+                        </Typography>
                     </div>
                     <Box
                         component="form"
                         onSubmit={handleSubmit}
                         sx={{
-                            margin: "auto",
+                            // margin: "auto",
                             display: "flex",
                             flexDirection: "column",
-                            "& .MuiTextField-root": { m: 1, width: "50ch" },
+                            "& .MuiTextField-root": { width: "50ch" },
                             paddingLeft: "50px",
                             justifyContent: "center",
                             alignItems: "center"
@@ -181,7 +189,7 @@ function AssignmentPage(props) {
                         autoComplete="off"
 
                     >
-                        <Stack spacing={2}>
+                        <Stack spacing={1.25}>
                             <TextField
                                 required
                                 id="assignment-title"
@@ -232,7 +240,11 @@ function AssignmentPage(props) {
                                 sx={{ width: "100%", mt: 2 }}
                             />
 
-                            <div className="Tags-Assignment">
+                            <div className="Tags-Assignment"
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}>
                                 <TextField
                                     required
                                     id="AssignmentTags"
@@ -241,21 +253,28 @@ function AssignmentPage(props) {
                                     onChange={handleCurrentTagChange}
                                     sx={{ width: "100%", mt: 2 }}
                                 />
-                                <Button className='HandleTags' onClick={handleAssignmentTags} sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '5px 15px',
-                                    fontSize: '0.75rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}>Add Tag</Button>
-                                {
-                                    assignmentTags.map((tag) => (
-                                        <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
-                                    ))
-                                }
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row'
+                                    }}>
+                                    <Button className='HandleTags' onClick={handleAssignmentTags} sx={{
+                                        backgroundColor: '#1e3c72',
+                                        color: 'white',
+                                        borderRadius: '10px',
+                                        padding: '5px 15px',
+                                        fontSize: '0.75rem',
+                                        marginRight: '5px',
+                                        '&:hover': {
+                                            backgroundColor: '#0c2461',
+                                        },
+                                    }}>Add Tag</Button>
+                                    {
+                                        assignmentTags.map((tag) => (
+                                            <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
+                                        ))
+                                    }
+                                </div>
 
                             </div>
                             <Button
