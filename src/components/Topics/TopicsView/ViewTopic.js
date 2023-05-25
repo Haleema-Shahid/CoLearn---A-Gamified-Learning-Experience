@@ -51,6 +51,10 @@ function ViewTopic(props) {
   }, [topicId]);
 
 
+  const handleDelete = (materialId) => {
+    // Remove the deleted assignment from the assignments array
+    setAssignments(assignments.filter((assignment) => assignment.materialId !== materialId));
+  };
 
   return (
     <div>
@@ -71,6 +75,7 @@ function ViewTopic(props) {
               topicId={topicId}
               materialId={assignment._id}
               materialContent={assignment}
+              onDelete={handleDelete}
             />
           ))}
 

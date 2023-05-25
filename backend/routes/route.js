@@ -41,10 +41,31 @@ router.post('/login', async (request, response) => {
     //response.redirect(`/user/${userId}`); // redirect to the new URL with the user ID in the parameter
   } else {
     console.log("error")
-    response.status(401).send('Invalid email or password');
+    response.json({ error: 'Invalid email or password' });
   }
   //console.log("zawyar")
 });
+
+//get user for header
+router.get('/user/:userId', async (request, response) => {
+  try {
+    console.log("in get user for header api");
+    console.log(request.params.userId);
+    const user = await client.db("colearnDb").collection("user").findOne({ _id: new ObjectId(request.params.userId) });
+
+    if (user) {
+      response.json(user);
+    } else {
+      console.log("No user found.");
+      response.status(404).send('User not found');
+    }
+  } catch (error) {
+    console.log("Error retrieving user:", error);
+    response.status(500).send('An error occurred while retrieving user');
+  }
+});
+
+
 
 //get teacher for teacher dashboard
 router.get('/t/:userId', async (request, response) => {
@@ -170,6 +191,9 @@ router.post('/delete-class/:thisClassId', async (request, response) => {
     return response.status(500).json({ error: 'An error occurred while deleting the class and associated data' });
   }
 });
+
+
+
 
 //join class
 router.get('/s/:userId/join-class/:classCode', async (request, response) => {
@@ -437,7 +461,7 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic', async (req, res) => 
   }
 });
 
-//upload assignment
+//upload assignment -teacher
 router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', async (request, response) => {
   const { userId, classId, weekId, topicId } = request.params;
   const { newAssn, helpingMaterials } = request.body;
@@ -474,6 +498,33 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment', 
   } catch (error) {
     console.error("Error creating assignment:", error);
     response.status(500).json({ error: "Failed to create assignment" });
+  }
+});
+
+//delete assignment -teacher
+router.post('/delete-assignment/:assignmentId', async (request, response) => {
+  const assignmentId = new ObjectId(request.params.assignmentId);
+  console.log("assignmentId: ", assignmentId);
+
+  try {
+    const assignmentsCollection = client.db("colearnDb").collection("assignment");
+    const submissionsCollection = client.db("colearnDb").collection("submission");
+    //const helpingMaterialCollection = client.db("colearnDb").collection('helpingmaterial');
+    // Check if the assignment exists
+    const existingAssignment = await assignmentsCollection.findOne({ _id: assignmentId });
+    if (!existingAssignment) {
+      return response.status(404).json({ error: 'Assignment not found' });
+    }
+
+    // Delete the assignment and associated submissions
+    await submissionsCollection.deleteMany({ assignmentId: assignmentId });
+    //await helpingMaterialCollection.deleteMany({ asnId: assignmentId });
+    await assignmentsCollection.deleteOne({ _id: assignmentId });
+
+    return response.status(200).json({ message: 'Assignment and associated data deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting assignment and associated data:', error);
+    return response.status(500).json({ error: 'An error occurred while deleting the assignment and associated data' });
   }
 });
 

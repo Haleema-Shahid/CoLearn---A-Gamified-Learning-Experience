@@ -1,11 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import SignUpPage from './sign';
 //import TeacherDashboard from './TeacherDashboard';
-import TeacherDashv2 from './TeacherDashvTwo';
-import TeachDashv3 from './TeachDashv3';
 //import NavbarTwo from './NavbarTwo';
-import Navbar from './Navbar';
 import TeacherDashboard from './components/TeacherDashboard/TeacherDashboard';
 import { BrowserRouter, Switch, Route, Routes } from 'react-router-dom';
 import ClassHeader from './components/ClassHeader/ClassHeader';
@@ -60,7 +56,7 @@ function App() {
           <Route path="/s/:userId/class/:classId" element={<ClassDefault2 />} />
 
           {/* <Route path="/user/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
-          <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId" element={<AssignmentPage />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber/topic/:topicId/assignment" element={<AssignmentPage />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
 

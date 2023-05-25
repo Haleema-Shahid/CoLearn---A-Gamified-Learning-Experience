@@ -61,7 +61,7 @@ const FileUploader = ({ files, setFiles, remFile }) => {
             <i>
               <FontAwesomeIcon icon={faPlus} />
             </i>
-            Upload
+            {progressShow ? 'Uploading...' : 'Upload'}
           </button>
         </div>
         {selectedFiles.length > 0 && (

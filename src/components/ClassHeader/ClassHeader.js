@@ -67,7 +67,7 @@ function ClassHeader(props) {
   return (
     <div>
       <Container sx={{ paddingBottom: "20px" }}>
-        <GradientBackground >
+        <GradientBackground>
           <Typography variant="h2" component="h1" gutterBottom sx={{ fontSize: '2.5rem' }}>
             {title}
             {console.log(classId)}
@@ -75,12 +75,23 @@ function ClassHeader(props) {
           <Typography variant="body1" gutterBottom sx={{ fontSize: '1.25rem' }}>
             {section}
           </Typography>
-          <Typography variant="body2" gutterBottom sx={{ fontSize: '1.25rem' }}>
-            Joining Code: {classId}
-          </Typography>
-          <Button variant="outlined" onClick={handleCopy}>
-            {isCopied ? 'Copied!' : 'Copy'}
-          </Button>
+          <div sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body2" gutterBottom sx={{ fontSize: '1.25rem' }}>
+              Joining Code: {classId}
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={handleCopy}
+              sx={{
+                minWidth: '40px',
+                height: '24px',
+                padding: '4px',
+                borderRadius: '4px',
+              }}
+            >
+              {isCopied ? 'Copied!' : 'Copy'}
+            </Button>
+          </div>
         </GradientBackground>
       </Container>
 

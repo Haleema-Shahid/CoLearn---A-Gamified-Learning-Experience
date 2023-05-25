@@ -45,26 +45,30 @@ function TeacherDashboardCard(props) {
   };
 
   return (
-    <Card sx={{ height: 20 + "vh", maxwidth: 300 }}>
+    <Card sx={{ height: 20 + "vh", maxwidth: 100 }}>
       <CardHeader
         sx={{
           height: '50%',
           background: `linear-gradient(to right, #1e3c72, #2a5298)`,
           color: 'white',
-          height: '50%',
+          justifyContent: 'center',
+          padding: '20px',
+          '& .MuiCardHeader-title': {
+            fontSize: '1.15rem', // Adjust the font size as needed
+          },
 
         }}
         action={
           <div>
-            <div onClick={(e) => 
-              {
-              e.preventDefault();} }>
+            <div onClick={(e) => {
+              e.preventDefault();
+            }}>
               <IconButton aria-label="settings" onClick={(e) => {
                 handleMenuOpen(e);
               }}>
                 <MoreVertIcon />
               </IconButton>
-              
+
 
 
               <Menu
@@ -80,7 +84,7 @@ function TeacherDashboardCard(props) {
                 <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
               </Menu>
             </div>
-            </div>
+          </div>
         }
         title={props.name}
       //subheader={props.section}

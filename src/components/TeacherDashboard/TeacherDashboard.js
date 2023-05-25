@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import TeacherDashboardHeader from './TeacherDashboardHeader';
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -53,7 +54,7 @@ function TeacherDashboard() {
       }
     };
     fetchData();
-  }, [userId, classes]);
+  }, [userId]);
 
   const handleCreateClassClick = () => {
     setShowCreateClassModal(true);
@@ -147,8 +148,11 @@ function TeacherDashboard() {
   };
 
   return (
-    <div className='TeacherDashboard'>
+    <div className='TeacherDashboard' sx={{
+      backgroundColor: 'white'
+    }}>
 
+      <TeacherDashboardHeader userId={userId} />
       <button onClick={handleCreateClassClick} className="create-class-button" hidden={createNewClassButton}>Create New Class</button>
       {open && (
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -216,11 +220,13 @@ function TeacherDashboard() {
 
       )}
       {!showCreateClassModal && (
-        <div className="classes-grid">
+        <div className="classes-grid" sx={{
+          backgroundColor: 'white'
+        }}>
           {classes.map((classObj) => (
             // <Link to={`/user/${userId}/class/${classObj._id}`} key={classObj._id}>
             <div className="container_card" key={classObj.name + classObj.description} >
-              <TeacherDashboardCard name={classObj.name} description={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
+              <TeacherDashboardCard name={classObj.name} section={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
             </div>
             // </Link>
           ))}

@@ -1,36 +1,35 @@
 .class-card {
-     
-    position: relative;
-    
 
-    background-color: #eef0f3;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    height: 150px;
-    transition: box-shadow 0.3s;
-    
-  }
+  position: absolute;
 
-  .class-card .class-name-container {
-    /* new styles */
-position: relative;
 
-    padding-top: 16px;
-    background-color: rgb(5, 28, 75);
-    border-top-right-radius:20px;
-    border-top-left-radius:20px;
-    
+  background-color: #eef0f3;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  height: 150px;
+  transition: box-shadow 0.3s;
 
-    height: 50%;
-    color: white;
-    width: 100%;
-    
+}
 
-    background-image: linear-gradient(
-      135deg,
+.class-card .class-name-container {
+  /* new styles */
+  position: relative;
+
+  padding-top: 16px;
+  background-color: rgb(5, 28, 75);
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+
+
+  height: 50%;
+  color: white;
+  width: 100%;
+
+
+  background-image: linear-gradient(135deg,
       #0100ec,
-      #fb36f4 );
+      #fb36f4);
 }
 
 .class-name-container:after {
@@ -38,11 +37,12 @@ position: relative;
   height: 100%;
   width: 100%;
   position: absolute;
-  top:0;
+  top: 0;
   left: 0;
   border-radius: 20px 20px 0 0;
   opacity: 0.7;
 }
+
 /* 
 .class-card>.class-name-container:after{
   background-image: linear-gradient(
@@ -53,39 +53,40 @@ position: relative;
 } */
 
 .class-card .class-name {
-    /* existing styles */
-    font-size: 20px;
-    font-weight: bold;
-    margin: 10px;
-    /* new styles */
-    color: white;
-    width:200px;
-    overflow:hidden;
-    white-space: nowrap;
-    /*wouldn't go to multiple lines and will not overflow*/
-    text-overflow: ellipsis;
-    padding-left: 5%;
+  /* existing styles */
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px;
+  /* new styles */
+  color: white;
+  width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  /*wouldn't go to multiple lines and will not overflow*/
+  text-overflow: ellipsis;
+  padding-left: 5%;
 
-   
+
 }
 
 .class-card .class-section-container {
-    /* new styles */
-    background-color: white;
-    
-    text-align: center;
-    padding-top: 20px;
+  /* new styles */
+  background-color: white;
+
+  text-align: center;
+  padding-top: 20px;
 }
 
 .class-card .class-section {
-    /* existing styles */
-    color: rgb(34, 1, 95);
-    font-size: 20px;
-    margin: 10px;
-    padding-left: 5%;
-    padding-top: 16px;
-   
+  /* existing styles */
+  color: rgb(34, 1, 95);
+  font-size: 20px;
+  margin: 10px;
+  padding-left: 5%;
+  padding-top: 16px;
+
 }
+
 .dropdown {
   position: absolute;
   display: inline-block;
@@ -99,6 +100,7 @@ position: relative;
   border: none;
   cursor: pointer;
 }
+
 /*copied*/
 .dropdown-content-forTeacher-class {
   display: block;
@@ -107,7 +109,7 @@ position: relative;
   background-color: #f9f9f9;
   min-width: 160px;
   overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -118,7 +120,9 @@ position: relative;
   display: block;
 }
 
-.dropdown-content-forTeacher-class a:hover {background-color: #f1f1f1}
+.dropdown-content-forTeacher-class a:hover {
+  background-color: #f1f1f1
+}
 
 
 
@@ -135,12 +139,14 @@ position: relative;
   pointer-events: none;
 
 }
-.showLeft{
+
+.showLeft {
   text-shadow: none !important;
-  color:#fff !important;
+  color: #fff !important;
   align-items: right;
-  padding:10px;
+  padding: 10px;
 }
+
 .btn-left {
   left: 0.4em;
 }
@@ -149,26 +155,27 @@ position: relative;
   right: 0.4em;
 }
 
-.btn-left, .btn-right {
+.btn-left,
+.btn-right {
   position: absolute;
   top: 0.24em;
 }
 
 
 
-  
-  
-  
-  .create-class-modal label {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-    text-align: center;
-    color: rgb(5, 1, 106);
-  }
 
 
- 
-  .class-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+
+.create-class-modal label {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+  color: rgb(5, 1, 106);
+}
+
+
+
+.class-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

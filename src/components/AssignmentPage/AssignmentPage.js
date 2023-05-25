@@ -49,13 +49,17 @@ function AssignmentPage(props) {
 
 
 
-    const onAddHelpingMaterial = (difficultyHelpingMaterial, tags) => {
-        //all helping material files from helping material component will be saved here
-        console.log("fetched helping material tags and title: ", difficultyHelpingMaterial, tags);
-        //setHelpingMaterialFiles(...helpingMaterialFiles, fileName)
-        //console.log("list", helpingMaterialFiles);
-        //maybe get the tags and set them too
-        // setHelpingMaterialClick(false);//this will bring back to the assignment page
+    const onAddHelpingMaterial = (helpingMaterial) => {
+
+        console.log("helping material: ", helpingMaterial);
+        setHelpingMaterialFiles([...helpingMaterialFiles, helpingMaterial]);
+        setHelpingMaterialClick(false);
+        if (!helpingMaterialFiles) {
+            console.log("BITCHASS")
+        }
+        else {
+            console.log("not empty");
+        }
     }
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
@@ -312,7 +316,7 @@ function AssignmentPage(props) {
             {
                 helpingMaterialClick && <div>
 
-                    <HelpingMaterial onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
+                    <HelpingMaterial files={helpingMaterialFiles} setFiles={setHelpingMaterialFiles} onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
                 </div>
             }
 

@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom';
 
 
 //we need userid, classId, topicId, assignmentId 
+//on this page, materialId is assignmentId
 const styles = {
 
 
@@ -62,6 +63,34 @@ function AssignmentCard(props) {
     setAnchorEl(null);
   };
 
+  const handleDeleteAssignment = async () => {
+    try {
+      const assignmentId = materialId;
+      const response = await fetch(`http://localhost:4000/backend/delete-assignment/${assignmentId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        // Assignment deleted successfully
+        console.log('Assignment deleted successfully');
+        props.onDelete(props.materialId);
+        // Handle any additional logic or UI updates here
+      } else {
+        // Error deleting assignment
+        console.error('Error deleting assignment:', response.statusText);
+        // Handle error or display error message to the user
+      }
+    } catch (error) {
+      // Network error or other exceptions
+      console.error('Error deleting assignment:', error);
+      // Handle error or display error message to the user
+    }
+  };
+
+
   //   const handleDeleteClick = () => {
   //     props.onDelete(props.name, props.section);
   //     handleMenuClose();
@@ -92,8 +121,8 @@ function AssignmentCard(props) {
                 {/* <MenuItem onClick={handleDeleteClick}>Delete</MenuItem> */}
 
                 <Link to={`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment/${materialId}/AssignmentViewer`}><MenuItem >View Assignment</MenuItem></Link>
-                {/* <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem> */}
+                <MenuItem onClick={handleDeleteAssignment}>Delete</MenuItem>
+                {/*<MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem> */}
               </Menu>
             </div>
 

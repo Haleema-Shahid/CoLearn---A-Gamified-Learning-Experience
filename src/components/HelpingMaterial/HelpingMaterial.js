@@ -21,7 +21,7 @@ const HelpingMaterial = (props) => {
   const [CurrentTag, setCurrentTag] = useState("")
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(helpingMaterialFile)
+  //console.log("outside everything: ", helpingMaterialFile)
 
 
 
@@ -29,14 +29,15 @@ const HelpingMaterial = (props) => {
   const handleSubmitHelpingMaterial = (e) => {
     e.preventDefault();
     const helpingMaterial = {
-      asnId: "",
-      //file: helpingMaterialFile,
       is_recommended: false,
       level: difficulty,
-      tags: helpingMaterialTags
+      tags: helpingMaterialTags,
+      file: helpingMaterialFile
     };
-   
-    props.onAddHelpingMaterial(difficulty, helpingMaterialTags);
+    console.log("in handle submit: ", helpingMaterial);
+
+    props.setFiles([...props.files, helpingMaterial]);
+    props.onAddHelpingMaterial(helpingMaterial);
     //this will send all the helping material back to parent assignment material,
     //------maybe we need to send tags too--------------
   }
