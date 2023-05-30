@@ -32,11 +32,11 @@ function ViewTopic(props) {
         if (data) {
           //setClasses(data);
           setTopic(data.topicObject);
-          if (topic.assignments)
-            setAssignments(data.assignments);
+          // if (topic.assignments)
+          setAssignments(data.assignments);
 
-          if (topic.materials)
-            setMaterials(data.materials);
+          // if (topic.materials)
+          setMaterials(data.materials);
           console.log('asses: ', assignments);
           console.log('materials: ', materials);
         }
