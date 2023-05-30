@@ -3,6 +3,7 @@ const session = require('express-session')
 const { ObjectId } = require('mongodb');
 const router = express.Router()
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { spawn } = require('child_process');
 const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 client.connect(() => console.log("db connected"))
@@ -699,5 +700,64 @@ router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (reques
 });
 
 
+//run recommender script
+router.put('/t/:userId/assignment/:assignmentId/recommend', async (request, response) => {
+  const assignmentId = new ObjectId(request.params.assignmentId);
+
+  const submissions = await client.db('colearnDb').collection('submission')
+    .find({ assignmentId: assignmentId })
+    .sort({ obtainedMarks: -1 }) // Sort in descending order based on obtainedMarks
+    .toArray();
+
+  const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: assignmentId });
+  const totalMarks = assignment.totalmarks;
+
+  let totalObtainedMarks = 0;
+  submissions.forEach(submission => {
+    totalObtainedMarks += submission.obtainedMarks;
+  });
+
+  const average = totalObtainedMarks / submissions.length;
+
+  const partitionSize = Math.ceil(submissions.length / 3);
+  let count = 0;
+  let index1 = 0;
+  let index2 = 0;
+  let students = [];
+  for (let i = 0; i < submissions.length && index2 == 0; i++) {
+    if (count < partitionSize) {
+      count = count + 1;
+    }
+    else if (count == partitionSize) {
+      if (index1 != 0) {
+        index2 = i + 1;
+      }
+      else {
+        index1 = i + 1;
+      }
+    }
+  }
+
+  for (let i = 0; i < index1; i++) {
+    students.push({ subId: submissions[i]._id, weaknesstags: submissions[i].weaknesstags, level: "difficult" });
+  }
+
+  for (let i = index1; i < index2; i++) {
+    students.push({ subId: submissions[i]._id, weaknesstags: submissions[i].weaknesstags, level: "medium" });
+  }
+
+  for (let i = index2; i < submissions.length; i++) {
+    students.push({ subId: submissions[i]._id, weaknesstags: submissions[i].weaknesstags, level: "easy" });
+  }
+
+  console.log("students: ", students);
+
+  for (let i = 0; i < students.length; i++) {
+    let student_level = students[i].level;
+    let tags = students[i].weaknesstags;
+
+  }
+
+});
 
 module.exports = router
