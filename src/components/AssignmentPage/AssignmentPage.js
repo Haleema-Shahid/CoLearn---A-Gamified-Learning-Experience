@@ -22,6 +22,8 @@ import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import storage from '../../firebase';
+import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 
 
 
@@ -41,12 +43,51 @@ function AssignmentPage(props) {
     const [totalMarks, setTotalMarks] = useState("");
     const [assignmentFiles, setAssignmentFiles] = useState([])
     const [assignmentTags, setAssignmentTags] = useState(['chip1'])
+    const [assignmentFilesData, setAssignmentFilesData] = useState([])
+
+
     const [currentTag, setCurrentTag] = useState("")
     const [helpingMaterialFiles, setHelpingMaterialFiles] = useState([])
     const today = dayjs();
     const yesterday = dayjs().subtract(1, 'day');
 
 
+    const uploadHandler = () => {
+
+        for (const file of assignmentFilesData) {
+       
+        if (!file) return;
+      
+        // Upload file to Firebase Storage
+        const storageRef = ref(storage, `/files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+      
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Track upload progress if needed
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload progress: ${progress}%`);
+          },
+          (error) => {
+            console.error('Error uploading file:', error);
+          },
+          async () => {
+            // File upload completed
+            console.log('File ', file.name, ' uploaded successfully');
+            try {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              console.log('File URL:', url);
+              setAssignmentFiles([...assignmentFiles, url]);
+            } catch (error) {
+              console.error('Error getting file URL:', error);
+            }
+          }
+        );
+      
+        //setSelectedFiles([...selectedFiles, file.name]);
+        }
+      };
 
 
 
@@ -75,6 +116,8 @@ function AssignmentPage(props) {
 
         try {
             // Create the topic object
+            //call file upload function
+            uploadHandler();
 
             const newAssn = {
                 topicId: topicId,
@@ -302,7 +345,7 @@ function AssignmentPage(props) {
                 </div>
                 <div className="split right" >
                     <div className="file-uploader-container">
-                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
+                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}  assignmentData={assignmentFilesData} setData={setAssignmentFilesData}></FileUploader>
                     </div>
                     <div>
                         <Button onClick={handleHelpingMaterialClick}

@@ -25,7 +25,7 @@ import TeacherAssignmentViewer from './components/AssignmentPage/AssignmentViewe
 import TeacherMaterialViewer from './components/TeacherMaterial/TeacherMaterialViewer';
 import SubmissionsDisplay from './components/Submission/SubmissionsDisplay'
 import CloDetails from './components/CLO/CLODetails';
-
+import TeacherAnalytics from './Teacher Analytics/TeacherAnalyticsDashboard'
 function App() {
   return (
     <div className="App">
@@ -51,14 +51,14 @@ function App() {
 
 
 
-          {/* <Route path="/" element={<TeacherDashboard />}/> */}
+          {/*// <Route path="/" element={<TeacherDashboard />}/> */}
 
           <Route path="/t/:userId/class/:classId" element={<ClassDefault />} />
           <Route path="/s/:userId/class/:classId" element={<ClassDefault2 />} />
 
           <Route path="/t/:userId/class/:classId/week/:weekId" element={<CloDetails />} />
-          {/* 
-          <Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
+          {/*// 
+          <//Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment" element={<AssignmentPage />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
@@ -74,10 +74,11 @@ function App() {
         </Routes>
 
 
-      </BrowserRouter>
+      </BrowserRouter> 
       {/*---------------Student work ---------------*/}
       {/* <Assignments></Assignments> */}
       {/* <StudentDashboard></StudentDashboard>*/}
+      {/* <TeacherAnalytics></TeacherAnalytics> */}
 
     </div>
   );
