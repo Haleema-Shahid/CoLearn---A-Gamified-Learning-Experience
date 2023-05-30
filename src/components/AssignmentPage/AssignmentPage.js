@@ -187,7 +187,6 @@ function AssignmentPage(props) {
                         }}
                         noValidate
                         autoComplete="off"
-
                     >
                         <Stack spacing={1.25}>
                             <TextField
