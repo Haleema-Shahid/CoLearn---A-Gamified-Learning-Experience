@@ -109,15 +109,58 @@ function AssignmentPage(props) {
 
 
     const handleSubmit = async (event) => {
+        event.preventDefault();
         //here goes the backend for uploading the assignment
         //creation date and time setter
         console.log("handle submit clicked");
         console.log("before fetching api: helpingMaterials: ", helpingMaterialFiles);
+        console.log(assignmentFilesData)
 
         try {
-            // Create the topic object
-            //call file upload function
-            uploadHandler();
+            const newAssignmentFiles = [];
+
+    for (const file of assignmentFilesData) {
+      if (!file) return;
+
+      // Upload file to Firebase Storage
+      const storageRef = ref(storage, `/files/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Track upload progress if needed
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log(`Upload progress: ${progress}%`);
+          },
+          (error) => {
+            console.error('Error uploading file:', error);
+            reject(error);
+          },
+          async () => {
+            // File upload completed
+            console.log('File', file.name, 'uploaded successfully');
+            try {
+                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                console.log('File URL:', url);
+                
+                newAssignmentFiles.push(url);
+             // setAssignmentFiles([...assignmentFiles, url]);
+              resolve();
+            } catch (error) {
+              console.error('Error getting file URL:', error);
+              reject(error);
+            }
+          }
+        );
+      });
+      console.log(newAssignmentFiles);
+      
+    }
+            //-----------------------------
+
+
 
             const newAssn = {
                 topicId: topicId,
@@ -127,8 +170,9 @@ function AssignmentPage(props) {
                 deadline: deadline,
                 totalmarks: totalMarks,
                 tags: assignmentTags,
-                files: assignmentFiles
+                files: newAssignmentFiles
             };
+            //setAssignmentFiles((prevAssignmentFiles) => [...prevAssignmentFiles, ...newAssignmentFiles]);
             console.log("assignment files: ", assignmentFiles);
             //const name = topicName;
             // Send a POST request to the API endpoint
@@ -161,6 +205,7 @@ function AssignmentPage(props) {
             description,
             deadline,
             totalMarks,
+            assignmentFiles
         });
     };
 
