@@ -39,7 +39,6 @@ function ClassDefault() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-
           bgcolor: 'background.paper',
 
         }}

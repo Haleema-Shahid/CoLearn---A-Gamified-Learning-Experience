@@ -40,7 +40,7 @@ const FileUploader = ({ files, setFiles, remFile }) => {
                     const url = await getDownloadURL(uploadTask.snapshot.ref);
                     console.log('File URL:', url);
                     setFiles([...files, url]);
-                    setUploadDisabled(true); // Disable the upload button
+                    //setUploadDisabled(true); // Disable the upload button
                 } catch (error) {
                     console.error('Error getting file URL:', error);
                 }

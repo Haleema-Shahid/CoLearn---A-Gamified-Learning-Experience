@@ -130,8 +130,8 @@ class Clo extends Component {
     console.log("topic selected");
     this.setState({ selectedTopic: topicId })
     this.setState({ showViewTopic: true })
-    this.setState({selectedTopicsWeekId: weekId});
-    
+    this.setState({ selectedTopicsWeekId: weekId });
+
 
   }
 
@@ -144,31 +144,42 @@ class Clo extends Component {
       <div>
         <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "20%" }}>
           {!this.state.isWeekSelected && (
-            <div>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingLeft: '20%'
+              }}>
+
               {/* <Button onClick={this.onAddWeekClick} variant="outlined" startIcon={<AddCircleIcon />}>
                 Add Week
               </Button> */}
               <CloDetails userId={this.state.userId} classId={this.state.classId} numberWeeks={this.state.weekNumber} weeksInfo={this.state.weekInfo} onWeekSelect={this.onWeekSelect}></CloDetails>
-            </div>
+
+            </Box>
           )
           }
           {this.state.isWeekSelected && !this.state.showViewTopic && (
-            <div>
-
-              <div>
-                <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
-              </div>
-            </div>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingLeft: '20%'
+              }}>
+              <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
+            </Box>
           )
           }
           {
             this.state.isWeekSelected && this.state.showViewTopic && (
               <ViewTopic
-                userId={this.state.userId} 
-                classId={this.state.classId} 
+                userId={this.state.userId}
+                classId={this.state.classId}
                 weekId={this.state.selectedTopicsWeekId}
                 topicId={this.state.selectedTopic}
-             
+
               ></ViewTopic>
 
             )
