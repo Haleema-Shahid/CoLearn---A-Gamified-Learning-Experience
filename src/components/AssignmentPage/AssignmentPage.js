@@ -2,8 +2,7 @@
 // //this page will ask for asignment title, description, deadline, total marks, it will also save the timestamp from when we click post
 // //it will also ask for assignment material upload and helping material upload
 import React, { useState, useEffect } from "react";
-
-import { Navigate, useParams } from "react-router-dom";
+import moment from 'moment';
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
@@ -20,16 +19,19 @@ import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import storage from '../../firebase';
-import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-function AssignmentPage(props) {
+function AssignmentPage() {
+
+    const location = useLocation();
+    const navigate = useNavigate();
     const { userId, classId, weekId, weekNumber, topicId } = useParams();
 
     const [title, setTitle] = useState("");
@@ -55,41 +57,52 @@ function AssignmentPage(props) {
     const uploadHandler = () => {
 
         for (const file of assignmentFilesData) {
-       
-        if (!file) return;
-      
-        // Upload file to Firebase Storage
-        const storageRef = ref(storage, `/files/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-      
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Track upload progress if needed
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload progress: ${progress}%`);
-          },
-          (error) => {
-            console.error('Error uploading file:', error);
-          },
-          async () => {
-            // File upload completed
-            console.log('File ', file.name, ' uploaded successfully');
-            try {
-              const url = await getDownloadURL(uploadTask.snapshot.ref);
-              console.log('File URL:', url);
-              setAssignmentFiles([...assignmentFiles, url]);
-            } catch (error) {
-              console.error('Error getting file URL:', error);
-            }
-          }
-        );
-      
-        //setSelectedFiles([...selectedFiles, file.name]);
+
+            if (!file) return;
+
+            // Upload file to Firebase Storage
+            const storageRef = ref(storage, `/files/${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    // Track upload progress if needed
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log(`Upload progress: ${progress}%`);
+                },
+                (error) => {
+                    console.error('Error uploading file:', error);
+                },
+                async () => {
+                    // File upload completed
+                    console.log('File ', file.name, ' uploaded successfully');
+                    try {
+                        const url = await getDownloadURL(uploadTask.snapshot.ref);
+                        console.log('File URL:', url);
+                        setAssignmentFiles([...assignmentFiles, url]);
+                    } catch (error) {
+                        console.error('Error getting file URL:', error);
+                    }
+                }
+            );
+
+            //setSelectedFiles([...selectedFiles, file.name]);
         }
-      };
+    };
 
+    useEffect(() => {
+        const fetchMaterials = async () => {
+            try {
+                console.log("materials fetched: ", location.state?.helpingMaterials)
 
+            } catch (error) {
+                console.error('Error fetching materials:', error);
+            }
+        };
+
+        fetchMaterials();
+    }, [weekId]);
 
     const onAddHelpingMaterial = (helpingMaterial) => {
 
@@ -112,6 +125,8 @@ function AssignmentPage(props) {
         event.preventDefault();
         //here goes the backend for uploading the assignment
         //creation date and time setter
+        console.log("here: ", location.state?.helpingMaterials);
+        setHelpingMaterialFiles(location.state?.helpingMaterials);
         console.log("handle submit clicked");
         console.log("before fetching api: helpingMaterials: ", helpingMaterialFiles);
         console.log(assignmentFilesData)
@@ -119,45 +134,45 @@ function AssignmentPage(props) {
         try {
             const newAssignmentFiles = [];
 
-    for (const file of assignmentFilesData) {
-      if (!file) return;
+            for (const file of assignmentFilesData) {
+                if (!file) return;
 
-      // Upload file to Firebase Storage
-      const storageRef = ref(storage, `/files/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+                // Upload file to Firebase Storage
+                const storageRef = ref(storage, `/files/${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
 
-      await new Promise((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Track upload progress if needed
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Upload progress: ${progress}%`);
-          },
-          (error) => {
-            console.error('Error uploading file:', error);
-            reject(error);
-          },
-          async () => {
-            // File upload completed
-            console.log('File', file.name, 'uploaded successfully');
-            try {
-                const url = await getDownloadURL(uploadTask.snapshot.ref);
-                console.log('File URL:', url);
-                
-                newAssignmentFiles.push(url);
-             // setAssignmentFiles([...assignmentFiles, url]);
-              resolve();
-            } catch (error) {
-              console.error('Error getting file URL:', error);
-              reject(error);
+                await new Promise((resolve, reject) => {
+                    uploadTask.on(
+                        'state_changed',
+                        (snapshot) => {
+                            // Track upload progress if needed
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log(`Upload progress: ${progress}%`);
+                        },
+                        (error) => {
+                            console.error('Error uploading file:', error);
+                            reject(error);
+                        },
+                        async () => {
+                            // File upload completed
+                            console.log('File', file.name, 'uploaded successfully');
+                            try {
+                                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                                console.log('File URL:', url);
+
+                                newAssignmentFiles.push(url);
+                                // setAssignmentFiles([...assignmentFiles, url]);
+                                resolve();
+                            } catch (error) {
+                                console.error('Error getting file URL:', error);
+                                reject(error);
+                            }
+                        }
+                    );
+                });
+                console.log(newAssignmentFiles);
+
             }
-          }
-        );
-      });
-      console.log(newAssignmentFiles);
-      
-    }
             //-----------------------------
 
 
@@ -166,7 +181,7 @@ function AssignmentPage(props) {
                 topicId: topicId,
                 title: title,
                 description: description,
-                uploadtime: new Date(),
+                uploadtime: moment().toDate(),
                 deadline: deadline,
                 totalmarks: totalMarks,
                 tags: assignmentTags,
@@ -181,24 +196,25 @@ function AssignmentPage(props) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ newAssn: newAssn, helpingMaterials: helpingMaterialFiles })
+                body: JSON.stringify({ newAssn: newAssn, helpingMaterials: location.state?.helpingMaterials })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('New topic added:', data);
+                console.log('New assignment added:', data);
+                navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment/${data.assignmentId}/AssignmentViewer`)
 
                 //props.closeAddTopic();
             } else {
-                throw new Error('Failed to add topic');
+                throw new Error('Failed to add assignment');
             }
         } catch (error) {
-            console.error('Error adding topic:', error);
+            console.error('Error adding assignment:', error);
         }
 
         const now = dayjs();
-        setCreationDate(now.format('YYYY-MM-DD'));
-        setCreationTime(now.format('HH:mm:ss'));
+        // setCreationDate(now.format('YYYY-MM-DD'));
+        // setCreationTime(now.format('HH:mm:ss'));
         event.preventDefault();
         console.log("Assignment details:", {
             title,
@@ -389,9 +405,9 @@ function AssignmentPage(props) {
                 </div>
                 <div className="split right" >
                     <div className="file-uploader-container">
-                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}  assignmentData={assignmentFilesData} setData={setAssignmentFilesData}></FileUploader>
+                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile} assignmentData={assignmentFilesData} setData={setAssignmentFilesData}></FileUploader>
                     </div>
-                    <div>
+                    {/* <div>
                         <Button onClick={handleHelpingMaterialClick}
 
                             variant="contained"
@@ -410,7 +426,7 @@ function AssignmentPage(props) {
                         </Button>
 
 
-                    </div>
+                    </div> */}
 
 
 
@@ -419,12 +435,12 @@ function AssignmentPage(props) {
                     </div> */}
                 </div>
             </div>)}
-            {
+            {/* {
                 helpingMaterialClick && <div>
 
                     <HelpingMaterial files={helpingMaterialFiles} setFiles={setHelpingMaterialFiles} onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
                 </div>
-            }
+            } */}
 
 
         </div>

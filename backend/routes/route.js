@@ -4,6 +4,10 @@ const { ObjectId } = require('mongodb');
 const router = express.Router()
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { spawn } = require('child_process');
+const path = require('path');
+const { RepeatOneSharp } = require('@mui/icons-material');
+
+
 const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 client.connect(() => console.log("db connected"))
@@ -13,10 +17,19 @@ router.post('/user', async (request, response) => { // add async keyword to use 
   const collection = client.db("colearnDb").collection("user");
   const data = await collection.findOne({ email: request.body.email, role: request.body.role }); // use await to wait for the database query to finish
   if (data == null) {
-    const user = { firstname: request.body.firstname, lastname: request.body.lastname, email: request.body.email, password: request.body.password, role: request.body.role };
+    const user = { firstname: request.body.firstName, lastname: request.body.lastName, email: request.body.email, password: request.body.password, role: request.body.role };
     const result = await collection.insertOne(user); // use await to wait for the database operation to finish
     const userId = user._id.toString(); // convert the ObjectId to a string
-    response.redirect(`/user/${userId}`); // redirect to the new URL with the user ID in the parameter
+    console.log("role: ", user.role);
+    response.json(user);
+    // if (user.role == 'student') {
+    //   response.redirect(`/s/${userId}`); // redirect to the new URL with the user ID in the parameter
+
+    // }
+    // else if (user.role == 'teacher') {
+    //   response.redirect(`/t/${userId}`); // redirect to the new URL with the user ID in the parameter
+
+    // }
     //response.send(result.ops[0]); // return the newly created user object in the response
   }
   else {
@@ -97,7 +110,8 @@ router.get('/s/:userId', async (request, response) => {
   if (classes.length > 0) {
     response.json(classes);
   } else {
-    console.log("No classes found for this teacher.")
+    console.log("No classes found for this student")
+    response.json(classes);
     //const only_class = await collection.findOne({ }).toArray(); // get all classes made by the teacher with the specified ID
 
     //response.status(404).send('Classes not found');
@@ -621,7 +635,8 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
       obtainedmarks: -1,
       marked: submission.marked,
       late: submission.late,
-      files: submission.files
+      files: submission.files,
+      weaktags
     }
 
     await client.db('colearnDb').collection('submission').insertOne(submissionObject);
@@ -674,7 +689,7 @@ router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, re
   }
 });
 
-//update obtainedmarks in submissions -teacher
+//update obtainedmarks and weakTags in submissions -teacher
 router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (request, response) => {
   try {
     const { userId, assignmentId } = request.params;
@@ -688,76 +703,142 @@ router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (reques
     // Update each submission with the obtained marks
     for (let i = 0; i < updatedSubmissions.length; i++) {
       console.log("in looping");
-      const { _id, obtainedmarks } = updatedSubmissions[i];
-      await submissionCollection.updateOne({ _id: new ObjectId(_id), assignmentId: new ObjectId(assignmentId) }, { $set: { obtainedmarks, marked: true } });
+      const { _id, obtainedmarks, weaktags } = updatedSubmissions[i];
+      console.log("tags: ", weaktags);
+      console.log("marks: ", obtainedmarks);
+      await submissionCollection.updateOne({ _id: new ObjectId(_id), assignmentId: new ObjectId(assignmentId) }, { $set: { obtainedmarks, marked: true, weaktags } });
     }
 
     response.status(200).json({ message: 'Submissions updated successfully' });
+
+
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: 'Internal server error' });
   }
 });
 
+function recommendMaterial(tags, difficultyLevel, materialData) {
+  // Compute the similarity score between the given topics and the topics of each material
+  let materialScores = []; // This array has tuples (material, score)
+  for (let material of materialData) {
+    let materialTags = material.tags;
+    let materialDifficulty = material.level;
+    // Calculate the score based on similar tags and difficulty level match
+    //console.log("weaknesses: ", tags);
+    //console.log("material tags: ", materialTags);
+    let tagIntersection = new Set(tags.filter(tag => materialTags.includes(tag)));
+    //console.log("intersection ", tagIntersection.size)
+    //console.log("tags ", tags.length)
+    let score = tagIntersection.size / tags.length;
+    materialScores.push({ material, score });
+  }
 
-//run recommender script
-router.put('/t/:userId/assignment/:assignmentId/recommend', async (request, response) => {
-  const assignmentId = new ObjectId(request.params.assignmentId);
+  //console.log("material Scores: ", materialScores);
+  // Sort the materials by descending similarity score
+  let newMaterials = materialScores.filter(({ score }) => score > 0.0);
 
-  const submissions = await client.db('colearnDb').collection('submission')
-    .find({ assignmentId: assignmentId })
-    .sort({ obtainedMarks: -1 }) // Sort in descending order based on obtainedMarks
-    .toArray();
-
-  const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: assignmentId });
-  const totalMarks = assignment.totalmarks;
-
-  let totalObtainedMarks = 0;
-  submissions.forEach(submission => {
-    totalObtainedMarks += submission.obtainedMarks;
+  let newMaterialsUpdated = newMaterials.map(({ material, score }) => {
+    if (material.level === difficultyLevel) {
+      return { material, score: score + 0.25 };
+    }
+    return { material, score };
   });
 
-  const average = totalObtainedMarks / submissions.length;
+  newMaterialsUpdated.sort((a, b) => b.score - a.score);
 
-  const partitionSize = Math.ceil(submissions.length / 3);
-  let count = 0;
-  let index1 = 0;
-  let index2 = 0;
-  let students = [];
-  for (let i = 0; i < submissions.length && index2 == 0; i++) {
-    if (count < partitionSize) {
-      count = count + 1;
-    }
-    else if (count == partitionSize) {
-      if (index1 != 0) {
-        index2 = i + 1;
-      }
-      else {
-        index1 = i + 1;
-      }
+  // Select the material with the highest similarity score that matches the desired difficulty level
+  let recommendedMaterial;
+  for (let { material, score } of newMaterialsUpdated) {
+    if (material.level === difficultyLevel) {
+      recommendedMaterial = { material, score };
+      break;
     }
   }
-
-  for (let i = 0; i < index1; i++) {
-    students.push({ subId: submissions[i]._id, weaknesstags: submissions[i].weaknesstags, level: "difficult" });
+  if (!recommendedMaterial) {
+    // If there is no material with the desired difficulty level, select the one with the highest score
+    recommendedMaterial = newMaterialsUpdated[0];
   }
 
-  for (let i = index1; i < index2; i++) {
-    students.push({ subId: submissions[i]._id, weaknesstags: submissions[i].weaknesstags, level: "medium" });
+  return recommendedMaterial;
+}
+
+//run recommender script
+router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, response) => {
+  try {
+    const assignmentId = new ObjectId(request.params.assignmentId);
+
+    const submissions = await client.db('colearnDb').collection('submission')
+      .find({ assignmentId: assignmentId })
+      .sort({ obtainedMarks: -1 }) // Sort in descending order based on obtainedMarks
+      .toArray();
+
+    const helpingMaterials = await client.db('colearnDb').collection('helpingmaterial').find().toArray();
+    let materials = [];
+    for (let i = 0; i < helpingMaterials.length; i++) {
+      materials.push({ _id: helpingMaterials[i]._id, tags: helpingMaterials[i].tags, level: helpingMaterials[i].level })
+    }
+
+    //console.log("materials: ", materials);
+    const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: assignmentId });
+    const totalMarks = assignment.totalmarks;
+
+    let totalObtainedMarks = 0;
+    submissions.forEach(submission => {
+      totalObtainedMarks += submission.obtainedMarks;
+    });
+
+    const average = totalObtainedMarks / submissions.length;
+
+    const partitionSize = Math.ceil(submissions.length / 3);
+    let count = 0;
+    let index1 = 0;
+    let index2 = 0;
+    let students = [];
+    for (let i = 0; i < submissions.length && index2 == 0; i++) {
+      if (count < partitionSize) {
+        count = count + 1;
+      }
+      else if (count == partitionSize) {
+        if (index1 != 0) {
+          index2 = i + 1;
+        }
+        else {
+          index1 = i + 1;
+        }
+      }
+    }
+
+    for (let i = 0; i < index1; i++) {
+      students.push({ subId: submissions[i]._id, weaktags: submissions[i].weaktags, level: "difficult" });
+    }
+
+    for (let i = index1; i < index2; i++) {
+      students.push({ subId: submissions[i]._id, weaktags: submissions[i].weaktags, level: "medium" });
+    }
+
+    for (let i = index2; i < submissions.length; i++) {
+      students.push({ subId: submissions[i]._id, weaktags: submissions[i].weaktags, level: "easy" });
+    }
+
+    //console.log("students: ", students);
+
+    let results = {};
+    for (let i = 0; i < students.length; i++) {
+      let studentLevel = students[i].level;
+      let tags = students[i].weaktags;
+      //materials is array of helping material {_id, tags, level}
+      //run pyhton script here
+      //const pythonProcess = spawn('python', ['main.py', student_level, tags.join(','), JSON.stringify(helpingMaterials)]);
+      results[students[i].subId] = recommendMaterial(tags, studentLevel, helpingMaterials);
+    }
+    console.log('Results:', results);
+    response.json(results);
   }
-
-  for (let i = index2; i < submissions.length; i++) {
-    students.push({ subId: submissions[i]._id, weaknesstags: submissions[i].weaknesstags, level: "easy" });
+  catch (error) {
+    console.log("ERROR: ", error);
+    response.status(500).json({ message: "internal sever error" });
   }
-
-  console.log("students: ", students);
-
-  for (let i = 0; i < students.length; i++) {
-    let student_level = students[i].level;
-    let tags = students[i].weaknesstags;
-
-  }
-
 });
 
 module.exports = router

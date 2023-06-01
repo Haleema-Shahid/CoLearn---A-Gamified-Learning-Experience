@@ -32,11 +32,16 @@ function ViewTopic(props) {
         if (data) {
           //setClasses(data);
           setTopic(data.topicObject);
-          // if (topic.assignments)
-          setAssignments(data.assignments);
-
-          // if (topic.materials)
-          setMaterials(data.materials);
+          // Sort assignments by uploadtime in descending order
+          if (data.assignments.length > 0) {
+            const sortedAssignments = data.assignments.sort((a, b) => new Date(b.uploadtime) - new Date(a.uploadtime));
+            setAssignments(sortedAssignments);
+          }
+          // Sort materials by uploadtime in descending order
+          if (data.materials.length > 0) {
+            const sortedMaterials = data.materials.sort((a, b) => new Date(b.uploadtime) - new Date(a.uploadtime));
+            setMaterials(sortedMaterials);
+          }
           console.log('asses: ', assignments);
           console.log('materials: ', materials);
         }
@@ -94,7 +99,7 @@ function ViewTopic(props) {
           </Button>
         </Box>
 
-        {!topic ? (
+        {!(assignments.length > 0) ? (
           <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
             No assignments or materials yet!
           </Typography>

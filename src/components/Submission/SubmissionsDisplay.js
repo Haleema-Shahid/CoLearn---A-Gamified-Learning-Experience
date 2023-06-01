@@ -9,9 +9,10 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import { Typography } from '@mui/material';
 
 
-    
+
 
 
 
@@ -47,10 +48,30 @@ const SubmissionsDisplay = () => {
         fetchSubmissions();
     }, [assignmentId]);
 
+    const recommendMaterial = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/submissions`);
+            const data = await response.json();
+            console.log(data);
+
+            // Check if all submissions are marked as true
+            const allMarked = data.every(submission => submission.submission.marked === true);
+
+            if (allMarked) {
+                console.log("All submissions are marked as true");
+                const recommenderResponse = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/recommend`);
+
+            } else {
+                console.log("Not all submissions are marked as true");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleSave = () => {
         console.log("save clicked");
         console.log(submissions);
-
         const updatedSubmissions = [];
 
         for (let i = 0; i < submissions.length; i++) {
@@ -58,7 +79,7 @@ const SubmissionsDisplay = () => {
             const updatedSubmission = {
                 _id: submission.submission._id,
                 obtainedmarks: submission.submission.obtainedmarks,
-                weakTags: submission.submission.weakTags
+                weaktags: submission.submission.weaktags
             };
             updatedSubmissions.push(updatedSubmission);
         }
@@ -80,6 +101,11 @@ const SubmissionsDisplay = () => {
                 console.error("Error updating submissions:", error);
                 // Handle error scenarios if needed
             });
+
+
+        //TRIGGER RECOMMENDER
+        recommendMaterial();
+
     };
     //---------------------
 
@@ -89,10 +115,10 @@ const SubmissionsDisplay = () => {
         const { value } = event.target;
         setWeakTags(value);
 
-        
+
     };
 
-    
+
 
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -118,115 +144,131 @@ const SubmissionsDisplay = () => {
         'Kelly Snyder',
     ];
 
-   
-        //..........................................
 
-        return (
-            <div>
-                <h2>Submissions</h2>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                        <tr>
-                            <th style={styles.tableHeader}>Student Name</th>
-                            <th style={styles.tableHeader}>Submission</th>
-                            <th style={styles.tableHeader}>Marks</th>
-                            <th style={styles.tableHeader}>Select Weakness</th> {/* New column */}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {submissions.map((submission) => (
-                            <tr key={submission.submission._id}>
-                                <td style={styles.tableCell}>
-                                    {submission.student.firstname} {submission.student.lastname}
-                                </td>
-                                <td style={styles.tableCell}>files</td>
-                                <td style={styles.tableCell}>
-                                    <input
-                                        type="number"
-                                        value={submission.submission.obtainedmarks || ''}
-                                        onChange={(e) => {
-                                            const updatedSubmissions = [...submissions];
-                                            const index = updatedSubmissions.findIndex((s) => s._id === submission._id);
-                                            updatedSubmissions[index].submission.obtainedmarks = e.target.value;
-                                            setSubmissions(updatedSubmissions);
-                                        }}
-                                        style={styles.input}
-                                    />
-                                </td>
-                                <td style={styles.tableCell}>
+    //..........................................
+
+    return (
+        <div>
+            <h2>Submissions</h2>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                    <tr>
+                        <th style={styles.tableHeader}>Student Name</th>
+                        <th style={styles.tableHeader}>Submission</th>
+                        <th style={styles.tableHeader}>Marks</th>
+                        <th style={styles.tableHeader}>Select Weakness</th> {/* New column */}
+                    </tr>
+                </thead>
+                <tbody>
+                    {submissions.map((submission) => (
+                        <tr key={submission.submission._id}>
+                            {console.log(submission.submission._id)}
+                            <td style={styles.tableCell}>
+                                {submission.student.firstname} {submission.student.lastname}
+                            </td>
+                            <td style={styles.tableCell}>files</td>
+                            <td style={styles.tableCell}>
+                                <input
+                                    type="number"
+                                    value={submission.submission.obtainedmarks || ''}
+                                    onChange={(e) => {
+                                        const updatedSubmissions = [...submissions];
+                                        const index = updatedSubmissions.findIndex((s) => s.submission._id === submission.submission._id);
+                                        console.log("index is ", index);
+                                        updatedSubmissions[index].submission.obtainedmarks = e.target.value;
+                                        setSubmissions(updatedSubmissions);
+                                    }}
+                                    style={styles.input}
+                                />
+                            </td>
+                            <td style={styles.tableCell}>
                                 <div>
-      <FormControl style={{ margin: '1em', width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
-        <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
-          multiple
-          value={weakTags}
-          onChange={(e) => {
-            const updatedSubmissions = [...submissions];
-            const index = updatedSubmissions.findIndex((s) => s._id === submission._id);
-            const { value } = e.target;
-            setWeakTags(value);
-            setSubmissions((prevSubmissions) => {
-                const updatedSubmission = { ...prevSubmissions[index] };
-                updatedSubmission.submission.weakTags = value;
-                const updatedSubmissions = [...prevSubmissions];
-                updatedSubmissions[index] = updatedSubmission;
-                return updatedSubmissions;
-              });
-        }}
-          input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => {
-            if (Array.isArray(selected)) {
-              return selected.join(', ');
-            }
-            return '';
-          }}
-        >
-          {tags.map((tag) => (
-            <MenuItem key={tag} value={tag}>
-              <Checkbox checked={weakTags.indexOf(tag) > -1} />
-              <ListItemText primary={tag} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <Button variant="contained" onClick={handleSave} style={styles.saveButton}>
-                    Save
-                </Button>
-            </div>
-        );
+                                    <FormControl style={{ width: '100px' }}>
 
-    };
+                                        <Select
+                                            labelId="demo-multiple-checkbox-label"
+                                            id="demo-multiple-checkbox"
+                                            multiple
+                                            value={submission.submission.weaktags || []}
+                                            onChange={(e) => {
+                                                const updatedSubmissions = [...submissions];
+                                                const index = updatedSubmissions.findIndex((s) => s.submission._id === submission.submission._id);
+                                                const { value } = e.target;
+                                                updatedSubmissions[index].submission.weaktags = e.target.value;
+                                                setWeakTags(e.target.value);
+                                                setSubmissions(updatedSubmissions);
+                                            }}
+                                            sx={{
+                                                height: '35px',
+                                                width: '100px'
+                                            }}
+                                            input={<OutlinedInput label="Tag" />}
+                                            renderValue={(selected) => {
+                                                if (Array.isArray(selected)) {
+                                                    return selected.join(', ');
+                                                }
+                                                return '';
+                                            }}
+                                        >
+                                            {tags.map((tag) => (
+                                                <MenuItem key={tag} value={tag}
+                                                    sx={{
+                                                        width: 'auto',
+                                                        padding: '5px',
+                                                        fontSize: '0.85rem'
+                                                    }}>
+                                                    <Checkbox checked={weakTags.indexOf(tag) > -1}
+                                                        sx={{
+                                                            margin: '0px',
+                                                            padding: '0px'
+                                                        }} />
+                                                    <ListItemText primary={tag}
+                                                        sx={{
 
-    const styles = {
-        tableHeader: {
-            background: '#1e3c72',
-            color: 'white',
-            padding: '10px',
-            textAlign: 'left',
-        },
-        tableCell: {
-            padding: '10px',
-            borderBottom: '1px solid #ddd',
-        },
-        input: {
-            width: '60px',
-        },
-        saveButton: {
-            backgroundColor: '#1e3c72',
-            color: 'white',
-            borderRadius: '10px',
-            padding: '10px 30px',
-            fontSize: '1rem',
-            marginTop: '20px',
-        },
-    };
+                                                            margin: '0px',
+                                                            padding: '1px'
+                                                        }} />
+                                                </MenuItem>
+                                            ))}
 
-    export default SubmissionsDisplay;
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <Button variant="contained" onClick={handleSave} style={styles.saveButton}>
+                Save
+            </Button>
+        </div>
+    );
+
+};
+
+const styles = {
+    tableHeader: {
+        background: '#1e3c72',
+        color: 'white',
+        padding: '10px',
+        textAlign: 'left',
+    },
+    tableCell: {
+        padding: '5px',
+        borderBottom: '1px solid #ddd',
+    },
+    input: {
+        width: '60px',
+    },
+    saveButton: {
+        backgroundColor: '#1e3c72',
+        color: 'white',
+        borderRadius: '10px',
+        padding: '10px 30px',
+        fontSize: '1rem',
+        marginTop: '20px',
+    },
+};
+
+export default SubmissionsDisplay;

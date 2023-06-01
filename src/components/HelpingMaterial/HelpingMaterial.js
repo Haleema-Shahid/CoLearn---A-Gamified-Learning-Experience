@@ -13,11 +13,13 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 
 
-const HelpingMaterial = (props) => {
+const HelpingMaterial = () => {
+  const { userId, classId, weekId, topicId } = useParams();
   const [helpingMaterialFile, setHelpingMaterialFile] = useState([]);
   const [tags, setTags] = useState('');
   const [difficulty, setDifficulty] = useState('');
-  const [helpingMaterialTags, setHelpingMaterialTags] = useState([])
+  const [helpingMaterialTags, setHelpingMaterialTags] = useState([]);
+  const [helpingMaterials, setHelpingMaterials] = useState([]);
   const [CurrentTag, setCurrentTag] = useState("")
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,9 +37,13 @@ const HelpingMaterial = (props) => {
       file: helpingMaterialFile
     };
     console.log("in handle submit: ", helpingMaterial);
+    setHelpingMaterials([...helpingMaterials, helpingMaterial]);
+    setHelpingMaterialFile('');
+    setHelpingMaterialTags([]);
+    setDifficulty('');
 
-    props.setFiles([...props.files, helpingMaterial]);
-    props.onAddHelpingMaterial(helpingMaterial);
+    // props.setFiles([...props.files, helpingMaterial]);
+    // props.onAddHelpingMaterial(helpingMaterial);
     //this will send all the helping material back to parent assignment material,
     //------maybe we need to send tags too--------------
   }
@@ -57,43 +63,13 @@ const HelpingMaterial = (props) => {
     setDifficulty(event.target.value);
   };
 
-  const handleSubmit = () => {
-    // Handle form submission here
-    //send back an object
-    const helpingMaterial = {
-      asnId: "",
-      //file: helpingMaterialFile,
-      is_recommended: false,
-      level: difficulty,
-      tags: helpingMaterialTags
-    };
 
-    console.log("in helping material.js: ", helpingMaterial);
-    //props.onAddHelpingMaterial(helpingMaterial)
+  const handleNextClick = () => {
 
-
-    //   let formData = {};
-
-    //   if (location.state && location.state.formData) {
-    //     formData = {
-    //       topicId: topicId,
-    //       title: location.state.formData.title,
-    //       description: location.state.formData.description,
-    //       uploadtime: new Date(),
-    //       deadline: location.state.formData.deadline,
-    //       totalmarks: location.state.formData.totalmarks,
-    //       tags: location.state.formData.assignmentTags,
-    //       files: location.state.formData.assignmentFiles
-    //     }
-    // }
-
-    //sending object back to assignment page
-    //navigate(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { state: { helpingMaterial } });
-    // history.push(`/t/${userId}/class/${classId}/week/${weekId}/${weekNumber}/topic/${topicId}}`, { helpingMaterial });
-
-
+    const link = `/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`;
+    // Navigating to the link using react-router-dom's useNavigate hook
+    navigate(link, { state: { helpingMaterials: helpingMaterials } }); // Sending the helpingMaterials array as a prop
   };
-
 
   const handleCurrentTagChange = (event) => {
     const value = event.target.value;
@@ -116,7 +92,7 @@ const HelpingMaterial = (props) => {
   return (
     <div className='Helping material left'>
       <div>
-        <div className="split left" style={{ width: "50%", left: 0 }}>
+        <div className="split left" style={{ width: "50%", left: 0, marginTop: '9%' }}>
           <div className="HelpingMaterial header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
             <h1>Helping Material</h1>
           </div>
@@ -137,53 +113,71 @@ const HelpingMaterial = (props) => {
 
           >
             <Stack spacing={2}>
-              <FormControl fullWidth>
-                <InputLabel>Difficulty</InputLabel>
-                <Select
-                  value={difficulty}
-                  onChange={handleDifficultyChange}
-                >
-                  <MenuItem value="easy">Easy</MenuItem>
-                  <MenuItem value="medium">Medium</MenuItem>
-                  <MenuItem value="hard">Hard</MenuItem>
-                </Select>
-              </FormControl>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'left'
+              }}>
+                <FormControl fullWidth
+                  sx={{
+                    width: '96%',
+                    marginLeft: '8px'
+                  }}>
+                  <InputLabel>Difficulty</InputLabel>
+                  <Select
+                    value={difficulty}
+                    onChange={handleDifficultyChange}
+                  >
+                    <MenuItem value="easy">Easy</MenuItem>
+                    <MenuItem value="medium">Medium</MenuItem>
+                    <MenuItem value="hard">Hard</MenuItem>
+                  </Select>
+                </FormControl>
 
-              <div className="Tags-HelpingMaterial">
-                <TextField
-                  required
-                  id="HelpingMaterialTags"
-                  label="Input Tags for Helping Material"
-                  value={CurrentTag}
-                  onChange={handleCurrentTagChange}
-                  sx={{ width: "100%", mt: 2 }}
-                />
-                <Button className='HandleTags' onClick={handleHelpingMaterialTags} sx={{
-                  backgroundColor: '#1e3c72',
-                  color: 'white',
-                  borderRadius: '10px',
-                  padding: '5px 15px',
-                  fontSize: '0.75rem',
-                  '&:hover': {
-                    backgroundColor: '#0c2461',
-                  },
-                }}>Add Tag</Button>
-                {
-                  helpingMaterialTags.map((tag) => (
-                    <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
-                  ))
-                }
+                <div className="Tags-HelpingMaterial"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'left'
+                  }}>
+                  <TextField
+                    required
+                    id="HelpingMaterialTags"
+                    label="Input Tags for Helping Material"
+                    value={CurrentTag}
+                    onChange={handleCurrentTagChange}
+                    sx={{ width: "100%", mt: 2 }}
+                  />
+                  <Button className='HandleTags' onClick={handleHelpingMaterialTags} sx={{
+                    backgroundColor: '#1e3c72',
+                    color: 'white',
+                    borderRadius: '10px',
+                    padding: '5px 15px',
+                    fontSize: '0.75rem',
+                    width: '19%',
+                    marginLeft: '8px',
+                    '&:hover': {
+                      backgroundColor: '#0c2461',
+                    },
+                  }}>Add Tag</Button>
+                  {
+                    helpingMaterialTags.map((tag) => (
+                      <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
+                    ))
+                  }
 
+                </div>
               </div>
               <Button
                 onClick={handleSubmitHelpingMaterial}
                 type="submit"
                 variant="contained"
-                sx={{
+                style={{
                   backgroundColor: '#1e3c72',
                   color: 'white',
                   borderRadius: '10px',
                   padding: '10px 30px',
+                  marginLeft: '8px',
                   fontSize: '1rem',
                   '&:hover': {
                     backgroundColor: '#0c2461',
@@ -192,6 +186,7 @@ const HelpingMaterial = (props) => {
               >
                 Upload Helping Material
               </Button>
+
 
             </Stack>
 
@@ -203,7 +198,25 @@ const HelpingMaterial = (props) => {
           <div className="file-uploader-container">
             <FileUploader files={helpingMaterialFile} setFiles={setHelpingMaterialFile} remFile={removeFile}></FileUploader>
           </div>
-
+          <Button
+            onClick={handleNextClick}
+            type="submit"
+            variant="contained"
+            style={{
+              backgroundColor: '#1e3c72',
+              color: 'white',
+              width: 'fit-content',
+              marginLeft: '8px',
+              borderRadius: '10px',
+              padding: '10px 30px',
+              fontSize: '1rem',
+              '&:hover': {
+                backgroundColor: '#0c2461',
+              },
+            }}
+          >
+            Next
+          </Button>
         </div>
       </div>
 

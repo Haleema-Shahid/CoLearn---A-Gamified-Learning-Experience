@@ -63,7 +63,6 @@ function App() {
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
 
-
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/TeacherMaterialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<TeacherAssignmentViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/submissions" element={<SubmissionsDisplay />} />
@@ -74,7 +73,7 @@ function App() {
         </Routes>
 
 
-      </BrowserRouter> 
+      </BrowserRouter>
       {/*---------------Student work ---------------*/}
       {/* <Assignments></Assignments> */}
       {/* <StudentDashboard></StudentDashboard>*/}

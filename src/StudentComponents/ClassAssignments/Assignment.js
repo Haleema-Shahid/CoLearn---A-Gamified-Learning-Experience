@@ -151,7 +151,7 @@ function Assignment() {
         const currentDateTime = new Date();
         const assignmentDeadline = getDateFromDateTimeString(deadline);
         let flag = false;
-        if (currentDateTime.getTime() > assignmentDeadline.getTime()) {
+        if (currentDateTime > assignmentDeadline) {
             flag = true;
         }
         else {

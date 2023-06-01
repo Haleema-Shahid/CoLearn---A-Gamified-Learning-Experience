@@ -37,18 +37,17 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const info = new FormData(e.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    const firstName = info.get(firstName);
-    const lastName = info.get(lastName);
+
+    const firstName = info.get('firstName');
+    const lastName = info.get('lastName');
     const email = info.get('email');
     const password = info.get('password');
     const role = e.target['radio-buttons-group'].value;
+
 
 
     const requestOptions = {
@@ -57,12 +56,18 @@ export default function SignUp() {
       body: JSON.stringify({ firstName: firstName, lastName: lastName, email: email, password: password, role: role })
     };
 
-    const response = await fetch('http://localhost:4000/api/login', requestOptions);
+    const response = await fetch('http://localhost:4000/backend/user', requestOptions);
     const data = await response.json();
 
     if (response.ok) {
       // Do something with the user data
       //console.log(data._id);
+      if (data.role === 'student') {
+        navigate(`/s/${data._id}`);
+      }
+      else if (data.role === 'teacher') {
+        navigate(`/t/${data._id}`);
+      }
 
 
     } else {
@@ -173,8 +178,8 @@ export default function SignUp() {
                   //  value={value}
                   //  onChange={handleChange}
                   >
-                    <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
-                    <FormControlLabel value="Student" control={<Radio />} label="Student" />
+                    <FormControlLabel value="teacher" control={<Radio />} label="Teacher" />
+                    <FormControlLabel value="student" control={<Radio />} label="Student" />
                   </RadioGroup>
                 </FormControl>
               </Grid>
