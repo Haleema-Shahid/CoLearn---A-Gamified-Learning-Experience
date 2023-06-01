@@ -23,6 +23,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import FileItem from "./FileItem";
 
 
 
@@ -259,6 +260,9 @@ function AssignmentPage() {
         setAssignmentTags(assignmentTags => assignmentTags.filter((AssignmentTag) => AssignmentTag !== tagToDelete))
     }
 
+    const deleteAssignmentFileItem = (name) => {
+        setAssignmentFilesData(Files => Files.filter((File) => File.name !== name))
+    }
 
     const handleHelpingMaterialClick = () => {
         setHelpingMaterialClick(true);
@@ -403,10 +407,33 @@ function AssignmentPage() {
 
 
                 </div>
-                <div className="split right" >
-                    <div className="file-uploader-container">
-                        <FileUploader files={assignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile} assignmentData={assignmentFilesData} setData={setAssignmentFilesData}></FileUploader>
-                    </div>
+                {/* //----------------- */}
+                <div
+  style={{
+    display: 'flex',
+    justifyContent: 'flex-end',
+    height: '100vh',
+    paddingRight: '20px',
+  }}
+>
+  <div style={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ marginBottom: '30px', marginTop: '30px' }}>
+      <FileUploader
+        files={assignmentFiles}
+        setFiles={setAssignmentFiles}
+        remFile={removeFile}
+        assignmentData={assignmentFilesData}
+        setData={setAssignmentFilesData}
+      ></FileUploader>
+    </div>
+
+    <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
+      {assignmentFilesData.map((file, index) => (
+        <div key={index} style={{ marginBottom: '10px' }}>
+          <FileItem file={file} deleteFile={deleteAssignmentFileItem} />
+        </div>
+      ))}
+    </div>
                     {/* <div>
                         <Button onClick={handleHelpingMaterialClick}
 
@@ -434,6 +461,7 @@ function AssignmentPage() {
                         <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
                     </div> */}
                 </div>
+            </div>
             </div>)}
             {/* {
                 helpingMaterialClick && <div>
