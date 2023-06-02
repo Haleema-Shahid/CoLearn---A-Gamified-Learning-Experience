@@ -20,6 +20,7 @@ import { Typography } from '@mui/material';
 const SubmissionsDisplay = () => {
     const { userId, topicId, assignmentId } = useParams();
     const [submissions, setSubmissions] = useState([]);
+    const [updated, setUpdated] = useState([]);
     const [tags, setTags] = useState([]);
     const [weakTags, setWeakTags] = useState([]);
 
@@ -60,7 +61,9 @@ const SubmissionsDisplay = () => {
             if (allMarked) {
                 console.log("All submissions are marked as true");
                 const recommenderResponse = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/recommend`);
-
+                const recommended = await recommenderResponse.json();
+                console.log("recommender response", recommended);
+                //recommended[submissionId]: [{material:{tags, id, level, isrecommended}, score: number},...]
             } else {
                 console.log("Not all submissions are marked as true");
             }
@@ -71,11 +74,11 @@ const SubmissionsDisplay = () => {
 
     const handleSave = () => {
         console.log("save clicked");
-        console.log(submissions);
+        console.log(updated);
         const updatedSubmissions = [];
 
-        for (let i = 0; i < submissions.length; i++) {
-            const submission = submissions[i];
+        for (let i = 0; i < updated.length; i++) {
+            const submission = updated[i];
             const updatedSubmission = {
                 _id: submission.submission._id,
                 obtainedmarks: submission.submission.obtainedmarks,
@@ -176,6 +179,7 @@ const SubmissionsDisplay = () => {
                                         const index = updatedSubmissions.findIndex((s) => s.submission._id === submission.submission._id);
                                         console.log("index is ", index);
                                         updatedSubmissions[index].submission.obtainedmarks = e.target.value;
+                                        setUpdated([...updated, updatedSubmissions[index]])
                                         setSubmissions(updatedSubmissions);
                                     }}
                                     style={styles.input}
@@ -196,6 +200,7 @@ const SubmissionsDisplay = () => {
                                                 const { value } = e.target;
                                                 updatedSubmissions[index].submission.weaktags = e.target.value;
                                                 setWeakTags(e.target.value);
+                                                setUpdated([...updated, updatedSubmissions[index]])
                                                 setSubmissions(updatedSubmissions);
                                             }}
                                             sx={{
