@@ -1,5 +1,8 @@
 //This is a readable assignment
 import React, { useState, useEffect } from "react";
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -193,9 +196,12 @@ function Assignment() {
     const handleDeleteTag = (tagToDelete) => {
 
     }
+    const defaultTheme = createTheme();
+
     return (
         <div>
             <div>
+            <ThemeProvider theme={defaultTheme}>
 
 
                 <Box
@@ -273,12 +279,8 @@ function Assignment() {
                         {/* <div>
                             <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
                         </div> */}
-                        <div >
-                            <CircleProgress percentage={0} circleWidth="200" marked={false} ></CircleProgress>
-                        </div>
-                        <div>
-                        <RecomMaterialUI recomFiles={["https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/helping-material%2FinsertionSort.pdf?alt=media&token=891f13d1-d011-47d7-8eba-bb2c92918013"]} />
-                        </div>
+                        
+                        
                         
 
                         <Button
@@ -299,6 +301,40 @@ function Assignment() {
                         >
                             {submitted ? 'Submitted' : 'Submit'}
                         </Button>
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+  <Grid container spacing={3}>
+    {/* Chart */}
+    <Grid item xs={12} md={8} lg={9}>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          height: 240,
+        }}
+      >
+        <CircleProgress percentage={0} circleWidth="200" marked={false} />
+      </Paper>
+    </Grid>
+    {/* Recommended Material */}
+    <Grid item xs={12} md={12} lg={12}>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          height: 240,
+        }}
+      >
+        <RecomMaterialUI
+          recomFiles={["https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/helping-material%2FinsertionSort.pdf?alt=media&token=891f13d1-d011-47d7-8eba-bb2c92918013"]}
+        />
+      </Paper>
+    </Grid>
+  </Grid>
+</Container>
+
+
                         
 
 
@@ -333,6 +369,7 @@ function Assignment() {
 
 
 
+                </ThemeProvider>
             </div>
         </div>
     );
