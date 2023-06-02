@@ -84,7 +84,8 @@ function ViewTopic(props) {
             sx={{
               width: '150px',
               marginRight: '30px',
-              marginBottom: '30px'
+              marginBottom: '30px',
+              fontFamily: 'Montserrat'
 
             }}>
             Assignment
@@ -93,7 +94,8 @@ function ViewTopic(props) {
             sx={{
               width: '150px',
               marginLeft: '30px',
-              marginBottom: '30px'
+              marginBottom: '30px',
+              fontFamily: 'Montserrat'
             }}>
             Material
           </Button>
@@ -106,8 +108,7 @@ function ViewTopic(props) {
         ) : (
           <div>
 
-            <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px' }}>Assignments</h2>
-
+            <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Assignments</h2>
             {assignments.map((assignment) => (
               <ContentCard
                 key={assignment._id}

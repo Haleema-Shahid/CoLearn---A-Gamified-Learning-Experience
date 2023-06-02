@@ -6,6 +6,12 @@ import React, { useState, useEffect } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import ContentCard from './contentCards/ContentCard';
+import Typography from '@mui/material/Typography';
+// import SplitPane from 'react-split-pane';
+// import Pane from 'react-split-pane/lib/Pane';
+
+
 
 function ViewTopic(props) {
   //get userId, weekId, classId, topicId from wherever i dont know. jhn se b ye call hora hai whn se ye Ids le kr ani hain
@@ -79,63 +85,81 @@ function ViewTopic(props) {
   };
   return (
     <div>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          paddingLeft: '20%'
+        }}>
+        <Box
+          sx={{
 
-      {!(assignments.length > 0) ? (
+          }}>
+          <Button onClick={handleAddAssignment} variant="outlined" startIcon={<AddCircleIcon />}
+            sx={{
+              width: '150px',
+              marginRight: '30px',
+              marginBottom: '30px',
+              fontFamily: 'Montserrat'
 
-        <p>Topic not fetched</p>
+            }}>
+            Assignment
+          </Button>
+          <Button onClick={handleAddMaterial} variant="outlined" startIcon={<AddCircleIcon />}
+            sx={{
+              width: '150px',
+              marginLeft: '30px',
+              marginBottom: '30px',
+              fontFamily: 'Montserrat'
+            }}>
+            Material
+          </Button>
+        </Box>
 
-      ) : (
-        <div>
+        {!(assignments.length > 0) ? (
+          <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
+            No assignments or materials yet!
+          </Typography>
+        ) : (
+          <div>
+            <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Assignments</h2>
 
-          {/* <h2>{topic.title}</h2>
-          <p>{topic.description}</p> */}
-          <h3>Materials</h3>
-          {materials.map((material) => (
-            <Accordion>
-              <AccordionSummary>{material.title}</AccordionSummary>
-              <AccordionDetails>
-                <p>{material.description}</p>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-          <h3>Assignments</h3>
-          {assignments.map((assignment) => (
-            <Accordion>
-              <AccordionSummary onClick={handleClick(assignment._id)}>{assignment.title}</AccordionSummary>
-              <AccordionDetails>
-                <p>{assignment.description}</p>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </div>
-      )}
+            {assignments.map((assignment) => (
+              <ContentCard
+                key={assignment._id}
+                contentType="assignmentContent"
+                userId={userId}
+                classId={classId}
+                weekId={weekId}
+                topicId={topicId}
+                materialId={assignment._id}
+                materialContent={assignment}
+              //onDelete={handleDelete}
+              />
+            ))}
+            <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Materials</h2>
+            {materials.map((material) => (
+              <ContentCard
+                key={material._id}
+                contentType="materialContent"
+                userId={userId}
+                classId={classId}
+                weekId={weekId}
+                topicId={topicId}
+                materialId={material._id}
+                materialContent={material}
+              />
+            ))}
+          </div>
+        )}
+      </Box>
     </div>
+
+
   );
 
-  //   return (
-  //     <div>
-  //       <h2>{title}</h2>
-  //       <p>{description}</p>
-  //       <h3>Materials</h3>
-  //       {materials.map((material) => (
-  //         <Accordion>
-  //           <AccordionSummary>{material.title}</AccordionSummary>
-  //           <AccordionDetails>
-  //             <p>{material.description}</p>
-  //           </AccordionDetails>
-  //         </Accordion>
-  //       ))}
-  //       <h3>Assignments</h3>
-  //       {assignments.map((assignment) => (
-  //         <Accordion>
-  //           <AccordionSummary>{assignment.title}</AccordionSummary>
-  //           <AccordionDetails>
-  //             <p>{assignment.description}</p>
-  //           </AccordionDetails>
-  //         </Accordion>
-  //       ))}
-  //     </div>
-  //   );
+
 }
 
 export default ViewTopic;

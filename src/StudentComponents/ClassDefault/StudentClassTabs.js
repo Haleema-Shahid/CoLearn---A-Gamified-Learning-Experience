@@ -41,9 +41,9 @@ export default function TeacherClassTabs(props) {
               justifyContent: 'center',
             }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Class" value="1" />
-              <Tab label="Week Outline" value="2" />
-              <Tab label="Students" value="3" />
+              <Tab label="Class Report" value="1" sx={{ fontFamily: 'Montserrat' }} />
+              <Tab label="Week Outline" value="2" sx={{ fontFamily: 'Montserrat' }} />
+              <Tab label="Students" value="3" sx={{ fontFamily: 'Montserrat' }} />
             </TabList>
           </Box>
         </Box>

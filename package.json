@@ -30,6 +30,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
+    "react-split": "^2.0.14",
     "reactstrap": "^9.1.5",
     "styled-components": "^5.3.6",
     "typeface-montserrat": "^1.1.13",
