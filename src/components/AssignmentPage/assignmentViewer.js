@@ -16,8 +16,7 @@ import dayjs from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
-//import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
-import { Link } from 'react-router-dom';
+import { Typography } from "@mui/material";
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Description } from "@mui/icons-material";
@@ -138,125 +137,110 @@ function AssignmentViewer() {
 
     }
     return (
-        <div>
-            <div>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '50px'
+        }}>
 
 
-                <Box
+            <Box
+                sx={{
+                    margin: 'auto',
+                    border: 2,
+                    borderRadius: "20px",
+                    borderColor: "#4b6cb7",
+                    width: "70%",
+                    padding: "30px",
+                    display: "flex",
+                    flexDirection: "column",
+                    "& .MuiTextField-root": { m: 1, width: "50ch" },
+                    paddingLeft: "50px",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
 
+            >
+                <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
+                    <Typography variant="h4" component="h1" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                    }}>
+                        Assignment
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                    }}>
+                        Marks: {totalMarks}
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                    }}>
+                        Deadline: {deadline}
+                    </Typography>
+                    <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                    }}>
+                        Uploaded on: {uploadTime}
+                    </Typography>
 
-                    sx={{
-                        border: 2,
-                        borderRadius: "20px",
-                        borderColor: "#4b6cb7",
-                        width: "70%",
-                        padding: "30px",
-                        margin: "auto",
-                        display: "flex",
-                        flexDirection: "column",
-                        "& .MuiTextField-root": { m: 1, width: "50ch" },
-                        paddingLeft: "50px",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}
+                </div>
+                <Stack spacing={2}>
+                    <TextField
+                        id="standard-read-only-input"
+                        label="Title"
+                        value={title}
+                        defaultValue={title}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        variant="standard"
+                    />
+                    <TextField
+                        id="standard-multiline-static"
+                        label="Description"
+                        multiline
+                        rows={4}
+                        value={description}
+                        defaultValue={description}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        variant="standard"
+                    />
+                    <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
 
-                >
-                    <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
-                        <h1>Assignment</h1>
-                        <h2>Marks: {totalMarks}</h2>
-                        <h2>Deadline: {deadline}</h2>
-                        <h2>Uploaded on: {uploadTime}</h2>
+                        {assignmentFiles && assignmentFiles.map((file, index) => (
+                            <div key={file.id} style={{ padding: "3px" }}>
+                                <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
+                            </div>
+                        ))}
+
                     </div>
-                    <Stack spacing={2}>
-                        <TextField
-                            id="standard-read-only-input"
-                            label="Title"
-                            value={title}
-                            defaultValue={title}
-                            InputProps={{
-                                readOnly: true,
+
+                    {/* add style to this div */}
+                    <div>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#1e3c72',
+                                color: 'white',
+                                borderRadius: '10px',
+                                padding: '10px 30px',
+                                fontSize: '1rem',
+                                '&:hover': {
+                                    backgroundColor: '#0c2461',
+                                },
                             }}
-                            variant="standard"
-                        />
-                        <TextField
-                            id="standard-multiline-static"
-                            label="Description"
-                            multiline
-                            rows={4}
-                            value={description}
-                            defaultValue={description}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            variant="standard"
-                        />
-                        <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
+                            onClick={handleSubmissionsClick}
+                        //disabled={submitted}
+                        >
+                            Submissions
+                        </Button>
 
-                            {assignmentFiles && assignmentFiles.map((file, index) => (
-                                <div key={file.id} style={{ padding: "3px" }}>
-                                    <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
-                                </div>
-                            ))}
-
-                        </div>
-
-                        {/* add style to this div */}
-                        <div>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px 30px',
-                                    fontSize: '1rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}
-                                onClick={handleSubmissionsClick}
-                            //disabled={submitted}
-                            >
-                                Submissions
-                            </Button>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px 30px',
-                                    fontSize: '1rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}
-                            //onClick={handleSubmit}
-                            //disabled={submitted}
-                            >
-                                Submit
-                            </Button>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px 30px',
-                                    fontSize: '1rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}
-                            //onClick={handleSubmit}
-                            //disabled={submitted}
-                            >
-                                Submit
-                            </Button>
-                        </div>
+                    </div>
 
 
 
@@ -264,7 +248,7 @@ function AssignmentViewer() {
 
 
 
-                        {/* <Button
+                    {/* <Button
                             type="submit"
                             variant="contained"
                             sx={{
@@ -282,14 +266,13 @@ function AssignmentViewer() {
                             Submit
                         </Button> */}
 
-                    </Stack>
+                </Stack>
 
-                </Box>
-
-
+            </Box>
 
 
-            </div>
+
+
         </div>
     );
 }
