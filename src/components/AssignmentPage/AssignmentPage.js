@@ -270,7 +270,7 @@ function AssignmentPage() {
     return (
         <div>
             {!helpingMaterialClick && (<div>
-                <div className="split left" style={{ width: "50%", left: 0 }}>
+                <div className="split left" >
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
                         <Typography variant="body1" gutterBottom
                             sx={{
@@ -417,7 +417,7 @@ function AssignmentPage() {
   }}
 >
   <div style={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-    <div style={{ marginBottom: '30px', marginTop: '30px' }}>
+    <div style={{ marginBottom: '30px', marginTop: '20px' }}>
       <FileUploader
         files={assignmentFiles}
         setFiles={setAssignmentFiles}

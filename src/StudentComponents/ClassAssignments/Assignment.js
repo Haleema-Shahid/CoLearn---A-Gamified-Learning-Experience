@@ -1,5 +1,8 @@
 //This is a readable assignment
 import React, { useState, useEffect } from "react";
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -23,10 +26,11 @@ import FileViewer from "./FileViewer";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Description } from "@mui/icons-material";
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-function Assignment() {
-    // const { userId, classId, assignmentID } = useParams();
-    //we need to get title,description, deadline, totalmarks, assignment files using the assignment ID
 
+import CircleProgress from "./CircleProgress";
+import RecomMaterialUI from "./RecomMaterialUI";
+
+function Assignment() {
     const { userId, classId, weekId, topicId, assignmentId } = useParams();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -39,14 +43,16 @@ function Assignment() {
     const [submissionDate, setSubmissionDate] = useState(null);
     const [grade, setGrade] = useState();
 
-
     const [submitted, setSubmitted] = useState(false);
     const [marked, setMarked] = useState(false);
 
+    //To-Do: I want helping material ID in submission and want to save helping material objects in a state
+    const [helpingMaterials, setHelpingMaterials]=useState([]);
 
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
+    
     const getDateTimeString = (datetime) => {
         console.log(datetime);
         const date = new Date(datetime);
@@ -190,9 +196,12 @@ function Assignment() {
     const handleDeleteTag = (tagToDelete) => {
 
     }
+    const defaultTheme = createTheme();
+
     return (
         <div>
             <div>
+            <ThemeProvider theme={defaultTheme}>
 
 
                 <Box
@@ -270,6 +279,9 @@ function Assignment() {
                         {/* <div>
                             <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
                         </div> */}
+                        
+                        
+                        
 
                         <Button
                             type="submit"
@@ -289,6 +301,41 @@ function Assignment() {
                         >
                             {submitted ? 'Submitted' : 'Submit'}
                         </Button>
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+  <Grid container spacing={3}>
+    {/* Chart */}
+    <Grid item xs={12} md={8} lg={9}>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          height: 240,
+        }}
+      >
+        <CircleProgress percentage={0} circleWidth="200" marked={false} />
+      </Paper>
+    </Grid>
+    {/* Recommended Material */}
+    <Grid item xs={12} md={12} lg={12}>
+      <Paper
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          height: 240,
+        }}
+      >
+        <RecomMaterialUI
+          recomFiles={["https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/helping-material%2FinsertionSort.pdf?alt=media&token=891f13d1-d011-47d7-8eba-bb2c92918013"]}
+        />
+      </Paper>
+    </Grid>
+  </Grid>
+</Container>
+
+
+                        
 
 
 
@@ -322,6 +369,7 @@ function Assignment() {
 
 
 
+                </ThemeProvider>
             </div>
         </div>
     );
