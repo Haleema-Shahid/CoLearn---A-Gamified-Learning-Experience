@@ -23,10 +23,11 @@ import FileViewer from "./FileViewer";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Description } from "@mui/icons-material";
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-function Assignment() {
-    // const { userId, classId, assignmentID } = useParams();
-    //we need to get title,description, deadline, totalmarks, assignment files using the assignment ID
 
+import CircleProgress from "./CircleProgress";
+import RecomMaterialUI from "./RecomMaterialUI";
+
+function Assignment() {
     const { userId, classId, weekId, topicId, assignmentId } = useParams();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -39,14 +40,16 @@ function Assignment() {
     const [submissionDate, setSubmissionDate] = useState(null);
     const [grade, setGrade] = useState();
 
-
     const [submitted, setSubmitted] = useState(false);
     const [marked, setMarked] = useState(false);
 
+    //To-Do: I want helping material ID in submission and want to save helping material objects in a state
+    const [helpingMaterials, setHelpingMaterials]=useState([]);
 
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
+    
     const getDateTimeString = (datetime) => {
         console.log(datetime);
         const date = new Date(datetime);
@@ -270,6 +273,13 @@ function Assignment() {
                         {/* <div>
                             <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
                         </div> */}
+                        <div >
+                            <CircleProgress percentage={0} circleWidth="200" marked={false} ></CircleProgress>
+                        </div>
+                        <div>
+                        <RecomMaterialUI recomFiles={["https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/helping-material%2FinsertionSort.pdf?alt=media&token=891f13d1-d011-47d7-8eba-bb2c92918013"]} />
+                        </div>
+                        
 
                         <Button
                             type="submit"
@@ -289,6 +299,7 @@ function Assignment() {
                         >
                             {submitted ? 'Submitted' : 'Submit'}
                         </Button>
+                        
 
 
 
