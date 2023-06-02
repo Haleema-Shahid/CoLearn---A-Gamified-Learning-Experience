@@ -79,27 +79,8 @@ function ViewTopic(props) {
   };
   return (
     <div>
-      <Box
-        sx={{
-          backgroundColor: 'pink'
-        }}>
-        <Button onClick={handleAddAssignment} variant="outlined" startIcon={<AddCircleIcon />}
-          sx={{
-            width: '150px',
-            marginBottom: '30px'
-          }}>
-          Assignment
-        </Button>
-        <Button onClick={handleAddMaterial} variant="outlined" startIcon={<AddCircleIcon />}
-          sx={{
-            width: '150px',
-            marginBottom: '30px'
-          }}>
-          Material
-        </Button>
-      </Box>
 
-      {!(assignments && materials) ? (
+      {!(assignments.length > 0) ? (
 
         <p>Topic not fetched</p>
 

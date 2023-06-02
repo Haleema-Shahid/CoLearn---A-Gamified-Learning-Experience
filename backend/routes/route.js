@@ -216,7 +216,7 @@ router.get('/s/:userId/join-class/:classCode', async (request, response) => {
     console.log("inside join class api");
     const classCode = request.params.classCode;
     const userId = request.params.userId
-    console.log("after params");
+    console.log("class code: ", classCode);
     const classes = client.db("colearnDb").collection("class");
     //const students = client.db("colearnDb").collection("user");
     // Check if the class code exists

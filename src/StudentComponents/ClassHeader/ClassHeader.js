@@ -1,9 +1,17 @@
+//need some backend here
+//get the class object and save it in class state
+
 import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import CLO from '../CLO/CLOstarter';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import 'typeface-montserrat';
+import DashboardHeader from '../StudentDashboard/DashboardHeader';
+import Box from '@mui/material/Box';
 
 const GradientBackground = styled(Paper)(({ theme }) => ({
   background: `linear-gradient(to right, #1e3c72, #2a5298)`,
@@ -28,9 +36,15 @@ const Container = styled('div')(({ theme }) => ({
 function ClassHeader(props) {
   const [userId, setuserId] = useState(props.userId)
   const [classId, setclassId] = useState(props.classId)
-  console.log(classId)
   const [title, setTitle] = useState('');
   const [section, setSection] = useState('');
+  const [clickedClass, setClickedClass] = useState(null)
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(classId);
+    setIsCopied(true);
+  };
 
   useEffect(() => {
     console.log("in header's use effect");
@@ -49,21 +63,49 @@ function ClassHeader(props) {
     fetchData();
   });
 
+
+  console.log(classId)
+
+
   return (
     <div>
-      <Container sx={{ paddingBottom: "20px" }}>
-        <GradientBackground >
-          <Typography variant="h2" component="h1" gutterBottom sx={{ fontSize: '2.5rem' }}>
+      <DashboardHeader userId={userId} />
+      <Container
+        sx={{
+          paddingBottom: "20px",
+          marginTop: '20px'
+        }}>
+        <GradientBackground
+          sx={{
+            padding: '90px'
+
+          }}>
+          <Typography variant="h2" component="h1" gutterBottom
+            sx={{
+              fontSize: '2.5rem',
+              fontFamily: 'Montserrat'
+            }}>
             {title}
             {console.log(classId)}
           </Typography>
-          <Typography variant="body1" gutterBottom sx={{ fontSize: '1.25rem' }}>
+          <Typography variant="body1" gutterBottom
+            sx={{
+              fontSize: '1.25rem',
+              fontFamily: 'Montserrat'
+            }}>
             {section}
           </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'row'
+            }}>
+          </Box>
         </GradientBackground>
       </Container>
 
-    </div>
+    </div >
   );
 }
 

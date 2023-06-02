@@ -10,7 +10,7 @@ import ViewTopic from '../TopicsView/ViewTopic'
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddTopic from './AddTopic';
-
+import Box from '@mui/material/Box';
 function TopicsBoard(props) {
   const [weekId, setWeekId] = useState(props.weekId);
   const [userId, setUserId] = useState(props.userId);
@@ -92,30 +92,29 @@ function TopicsBoard(props) {
     <div>
 
 
-      <div>
-        <div>
-          {/* <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}>
-              Add Topics
-            </Button> */}
-        </div>
-        <div>
-          {topics && Array.isArray(topics) && topics.map((topic, index) => (
-            <TopicCard
-              key={index}
-              topicId={topic._id}
-              topicObject={topic}
-              title={topic.name}
-              onViewTopic={handleViewTopic}
-              // onDeleteTopic={HandleDeleteTopic}
-              userId={props.userId}
-              classId={props.classId}
-              weekId={props.weekId}
-              weekNumber={props.weekNumber}
-              cardKey={topic._id}
-            />
-          ))}
-        </div>
-      </div>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center'
+        }}>
+        {topics && Array.isArray(topics) && topics.map((topic, index) => (
+          <TopicCard
+            key={index}
+            topicId={topic._id}
+            topicObject={topic}
+            title={topic.name}
+            onViewTopic={handleViewTopic}
+            // onDeleteTopic={HandleDeleteTopic}
+            userId={props.userId}
+            classId={props.classId}
+            weekId={props.weekId}
+            weekNumber={props.weekNumber}
+            cardKey={topic._id}
+          />
+        ))}
+      </Box>
+
 
 
 
