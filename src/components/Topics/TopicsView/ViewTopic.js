@@ -60,7 +60,7 @@ function ViewTopic(props) {
     navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`)
   }
   const handleAddMaterial = () => {
-
+    navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/material`)
   }
 
   const handleDelete = (materialId) => {
@@ -72,13 +72,14 @@ function ViewTopic(props) {
     <div>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          paddingLeft: '20%'
+          // display: 'flex',
+          // flexDirection: 'column',
+          // justifyContent: 'center',
+          //paddingLeft: '20%'
         }}>
         <Box
           sx={{
+            paddingLeft: '15%'
           }}>
           <Button onClick={handleAddAssignment} variant="outlined" startIcon={<AddCircleIcon />}
             sx={{
@@ -93,7 +94,7 @@ function ViewTopic(props) {
           <Button onClick={handleAddMaterial} variant="outlined" startIcon={<AddCircleIcon />}
             sx={{
               width: '150px',
-              marginLeft: '30px',
+              marginLeft: '35%',
               marginBottom: '30px',
               fontFamily: 'Montserrat'
             }}>
@@ -106,40 +107,64 @@ function ViewTopic(props) {
             No assignments or materials yet!
           </Typography>
         ) : (
-          <div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            //marginLeft: '197px'
+            paddingLeft: '15%'
+          }}>
+            <div
+              style={{
 
-            <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Assignments</h2>
-            {assignments.map((assignment) => (
-              <ContentCard
-                key={assignment._id}
-                contentType="assignmentContent"
-                userId={userId}
-                classId={classId}
-                weekId={weekId}
-                topicId={topicId}
-                materialId={assignment._id}
-                materialContent={assignment}
-                onDelete={handleDelete}
-              />
-            ))}
+                left: 0,
+                position: 'relative',
+                overflowX: 'hidden',
+                overflowY: 'auto',
+                width: '50%',
+              }}>
+              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Assignments</h2>
+              {assignments.map((assignment) => (
+                <ContentCard
+                  key={assignment._id}
+                  contentType="assignmentContent"
+                  userId={userId}
+                  classId={classId}
+                  weekId={weekId}
+                  topicId={topicId}
+                  materialId={assignment._id}
+                  materialContent={assignment}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+            <div style={{
+              left: 0,
 
-            <h2 style={{ color: "#2a5298", textDecoration: 'underline', marginBottom: '20px', marginTop: '20px' }}>Materials</h2>
-            {materials.map((material) => (
-              <ContentCard
-                key={material._id}
-                contentType="materialContent"
-                userId={userId}
-                classId={classId}
-                weekId={weekId}
-                topicId={topicId}
-                materialId={material._id}
-                materialContent={material}
-              />
-            ))}
+              position: 'relative',
+              overflowX: 'hidden',
+              overflowY: 'auto',
+              width: '50%'
+            }}>
+              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', }}>Materials</h2>
+              {materials.map((material) => (
+                <ContentCard
+                  key={material._id}
+                  contentType="materialContent"
+                  userId={userId}
+                  classId={classId}
+                  weekId={weekId}
+                  topicId={topicId}
+                  materialId={material._id}
+                  materialContent={material}
+                />
+              ))}
+            </div>
           </div>
-        )}
-      </Box>
-    </div>
+        )
+        }
+      </Box >
+    </div >
   );
 }
 

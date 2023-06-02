@@ -650,8 +650,56 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
   }
 });
 
+//upload material -teacher
+router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', async (request, response) => {
+  try {
+    const { topicId } = request.params;
+    const { material } = request.body;
+
+    console.log("material to be added ", material);
+
+    const materialObject = {
+      topicId: new ObjectId(topicId),
+      title: material.title,
+      description: material.description,
+      uploadtime: new Date(),
+      files: material.files
+    }
+
+    await client.db('colearnDb').collection('material').insertOne(materialObject);
 
 
+    // Send the assignment object as the response
+    response.status(200).json('material added successfully!');;
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//delete material -teacher
+router.delete('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', async (request, response) => {
+  try {
+    const { topicId, materialId } = request.params;
+
+    // Delete the material from the database
+    const result = await client.db('colearnDb').collection('material').deleteOne({
+      _id: new ObjectId(materialId),
+      topicId: new ObjectId(topicId)
+    });
+
+    if (result.deletedCount === 0) {
+      // If no material was deleted, return an error response
+      response.status(404).json({ error: 'Material not found' });
+    } else {
+      // If material was deleted successfully, return a success response
+      response.status(200).json('Material deleted successfully');
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
 //get submissions -teacher
 router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, response) => {
   try {
@@ -789,7 +837,7 @@ function recommendMaterial(weaknessTags, studentLevel, materialData) {
   return []; // Return an empty array if no materials found
 }
 
-
+//store recommendations
 async function storeRecommendations(results, students) {
   try {
     const submissions = client.db("colearnDb").collection('submission');
@@ -825,7 +873,7 @@ async function storeRecommendations(results, students) {
   }
 }
 
-//run recommender script
+//save marks and weaknesses and prompt recommender
 router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, response) => {
   try {
     const assignmentId = new ObjectId(request.params.assignmentId);

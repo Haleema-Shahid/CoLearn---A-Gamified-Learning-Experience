@@ -142,7 +142,7 @@ class Clo extends Component {
 
     return (
       <div>
-        <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "20%" }}>
+        <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "0%" }}>
           {!this.state.isWeekSelected && (
             <Box
               sx={{

@@ -97,7 +97,7 @@ function AssignmentCard(props) {
   //   };
 
   return (
-    <Card sx={{ height: 20 + "vh", width: "40%", marginBottom: "16px", marginTop: "10px", fontFamily: 'Montserrat' }}>
+    <Card sx={{ height: 20 + "vh", width: "70%", marginBottom: "16px", marginTop: "10px", fontFamily: 'Montserrat' }}>
       <CardHeader
 
         action={

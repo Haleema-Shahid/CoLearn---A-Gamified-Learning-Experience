@@ -97,12 +97,14 @@ function TopicsBoard(props) {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            marginLeft: '20%'
           }}>
           <Button onClick={HandleAddTopic} variant="outlined" startIcon={<AddCircleIcon />}
             sx={{
               width: '150px',
-              marginBottom: '30px'
+              marginBottom: '30px',
+
             }}>
             Add Topics
           </Button>

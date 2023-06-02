@@ -61,9 +61,8 @@ function App() {
           <//Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment" element={<AssignmentPage />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
-          <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
-
-          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/TeacherMaterialViewer" element={<TeacherMaterialViewer />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/material" element={<TeacherMaterial />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/materialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<TeacherAssignmentViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/submissions" element={<SubmissionsDisplay />} />
 
