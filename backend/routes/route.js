@@ -650,6 +650,8 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
   }
 });
 
+
+
 //get submissions -teacher
 router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, response) => {
   try {
@@ -791,6 +793,7 @@ function recommendMaterial(weaknessTags, studentLevel, materialData) {
 async function storeRecommendations(results, students) {
   try {
     const submissions = client.db("colearnDb").collection('submission');
+    const helpingmaterials = client.db("colearnDb").collection('helpingmaterial');
 
     for (let i = 0; i < students.length; i++) {
       const student = students[i];
@@ -804,7 +807,10 @@ async function storeRecommendations(results, students) {
         // Update the recommended attribute with the recommended materials
         let recommendations = []
         for (let j = 0; j < recommendation.length; j++) {
-          recommendations = [...recommendations, recommendation[j].material]
+          console.log("finding: ", recommendation[j].material._id)
+          const material = await helpingmaterials.findOne({ _id: new ObjectId(recommendation[j].material._id) })
+          console.log(material);
+          recommendations = [...recommendations, material.file]
           console.log("recommended ", recommendation[j].material)
         }
         await submissions.updateOne(
