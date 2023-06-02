@@ -57,7 +57,7 @@ function ViewTopic(props) {
   }, [topicId]);
 
   const handleAddAssignment = () => {
-    navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`)
+    navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`)
   }
   const handleAddMaterial = () => {
     navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/material`)

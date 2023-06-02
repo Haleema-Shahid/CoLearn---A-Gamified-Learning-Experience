@@ -739,6 +739,25 @@ router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, re
   }
 });
 
+//get specific submission -teacher
+router.get('/t/:userId/assignment/:assignmentId/submission/:submissionId/files', async (request, response) => {
+  try {
+    const { submissionId } = request.params;
+
+    const submission = await client.db('colearnDb').collection('submission').findOne({ _id: new ObjectId(submissionId) });
+
+    if (submission) {
+      response.status(200).json(submission);
+    } else {
+      return response.status(404).json({ error: 'No submission found.' });
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 //update obtainedmarks and weakTags in submissions -teacher
 router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (request, response) => {
   try {
