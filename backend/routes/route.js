@@ -233,7 +233,7 @@ router.get('/s/:userId/join-class/:classCode', async (request, response) => {
     // Check if the student ID already exists in the class
     console.log(userId);
     console.log(classObj);
-    const studentIndex = classObj.students.findIndex(student => student.id === userId);
+    const studentIndex = classObj.students.findIndex(student => student.id === new ObjectId(userId));
     if (studentIndex != -1) {
       console.log('Student already joined class');
       return response.status(400).json({ message: 'Student already joined class' });
@@ -259,6 +259,26 @@ router.get('/s/:userId/join-class/:classCode', async (request, response) => {
 });
 
 
+//get students of a class 
+router.get('/class/:classId/students', async (request, response) => {
+  try {
+    const classId = new ObjectId(request.params.classId);
+    // Assuming you have access to the class collection
+    const classObject = await client.db("colearnDb").collection("class").findOne({ _id: classId });
+
+    if (classObject) {
+      let students = [];
+      for (let i = 0; i < classObject.students.length; i++) {
+        students[i] = await client.db("colearnDb").collection("user").findOne({ _id: new ObjectId(classObject.students[i].id) });
+      }
+      response.json(students);
+    } else {
+      response.status(404).json({ message: 'class not found' });
+    }
+  } catch (error) {
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
 //get class info
 router.get('/class/:classId', async (req, res) => {
   try {
