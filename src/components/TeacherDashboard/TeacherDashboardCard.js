@@ -80,8 +80,8 @@ function TeacherDashboardCard(props) {
                 <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
                 <Link to={`/t/${props.userId}/class/${props.classId}`}><MenuItem >View Class</MenuItem></Link>
 
-                <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
+                <Link to={`/t/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
+                <Link to={`/t/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link>
               </Menu>
             </div>
           </div>

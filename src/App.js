@@ -26,6 +26,8 @@ import TeacherMaterialViewer from './components/TeacherMaterial/TeacherMaterialV
 import SubmissionsDisplay from './components/Submission/SubmissionsDisplay'
 import CloDetails from './components/CLO/CLODetails';
 import TeacherAnalytics from './Teacher Analytics/TeacherAnalyticsDashboard'
+import BoilerClassLeaderboard from './Leaderboard/BoilerClassLeaderboard';
+
 function App() {
   return (
     <div className="App">
@@ -62,6 +64,9 @@ function App() {
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment" element={<AssignmentPage />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
+          <Route path="/t/:userId/class/:classId/classAnalytics" element={<TeacherAnalytics />} />
+          <Route path="/t/:userId/class/:classId/classLeaderboard" element={<BoilerClassLeaderboard />} />
+
 
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/TeacherMaterialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<TeacherAssignmentViewer />} />

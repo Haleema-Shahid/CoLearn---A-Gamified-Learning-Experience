@@ -2,6 +2,7 @@ import React from 'react';
 import { Chart, BarController, BarElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
 import AllAssignmentsAnalyticsChart from '../Charts/AllAssignmentsAnalyticsChart';
 import SingleAssignmentAnalyticsChart from '../Charts/SingleAssignmentAnalyticsChart';
+import LineChart01 from '../Charts/LineChart01';
 
 Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip);
 
@@ -40,6 +41,12 @@ function TeacherAnalyticsDashboard() {
     ],
   };
 
+  //sample data for line chart
+  const lineChartData = {
+    labels: ['Assignment 1', 'Assignment 2', 'Assignment 3'],
+    scores: [80, 65, 90],
+  };
+
   return (
     <div className="flex flex-col">
       <header className="px-5 py-4 border-b border-slate-100">
@@ -53,6 +60,13 @@ function TeacherAnalyticsDashboard() {
           title={assignmentData2.title}
           totalMarks={assignmentData2.totalMarks}
           studentData={assignmentData2.studentData}
+          width={595}
+          height={248}
+        />
+      </div>
+      <div className="chart-container">
+        <LineChart01
+          data={lineChartData}
           width={595}
           height={248}
         />
