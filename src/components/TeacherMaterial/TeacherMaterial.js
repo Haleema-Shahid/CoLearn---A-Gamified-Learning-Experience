@@ -5,24 +5,14 @@
 //this page will ask for Material title, description, it will also save the timestamp from when we click post
 //it will also ask for material attachments upload 
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { Paper } from "@mui/material";
 import '../AssignmentPage/AssignmentPage.css';
 import FileUploader from "../AssignmentPage/FileUploader";
-import { blue } from "@mui/material/colors";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
-import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
-import { Link } from 'react-router-dom';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 //-----------------------------------
@@ -37,76 +27,61 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function TeacherMaterial() {
     const { userId, classId, weekId, weekNumber, topicId } = useParams();
-    const [topicName, setTopicName]=useState("");
+    const [topicName, setTopicName] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [creationDate, setCreationDate]=useState("");
-    const [creationTime, setCreationTime]=useState("");
+    const [creationDate, setCreationDate] = useState("");
+    const [creationTime, setCreationTime] = useState("");
     const [MaterialAttachmentFiles, setMaterialAttachmentFiles] = useState("")
     //const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
-    const [CurrentTag, setCurrentTag] = useState("")
-    const [HelpingMaterialFiles, setHelpingMaterialFiles] = useState(['chip1', 'chip2'])
-    const today = dayjs();
-    const yesterday = dayjs().subtract(1, 'day');
+
+    const navigate = useNavigate();
 
     const removeFile = (filename) => {
         setMaterialAttachmentFiles(MaterialAttachmentFiles.filter(file => file.name !== filename))
     }
 
 
-    const handleSubmit = (event) => {
-        //here goes the backend for uploading the assignment
-        //creation date and time setter
-        const now = dayjs();
-        setCreationDate(now.format('YYYY-MM-DD'));
-        setCreationTime(now.format('HH:mm:ss'));
+    const handleSubmit = async (event) => {
+        //here goes the backend for uploading the material
+
+        try {
+            const newMaterial = {
+                topicId: topicId,
+                title: title,
+                description: description,
+                files: MaterialAttachmentFiles,
+                uploadtime: new Date()
+            }
+
+            const response = await fetch(`http://localhost:4000/backend/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/material`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ material: newMaterial })
+            });
+            if (response.ok) {
+                const data = response.json();
+                navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment/${data.materialId}/MaterialViewer`)
+
+            }
+            else {
+                throw new Error("failed to add material");
+            }
+        }
+        catch (error) {
+        }
         event.preventDefault();
-        console.log("Assignment details:", {
-            title,
-            description
-        });
+
     };
-
-    // const handleTotalMarksChange = (event) => {
-    //     const value = Number(event.target.value);
-    //     if (value > 1000) {
-    //         setTotalMarks(1000);
-    //     }
-    //     else if (event.key === "Backspace" && value === 0) {
-    //         setTotalMarks("");
-    //     }
-    //     else if (value < 0) {
-    //         setTotalMarks(0);
-    //     }
-    //     else {
-    //         setTotalMarks(value);
-    //     }
-    // };
-    // const handleCurrentTagChange = (event) => {
-    //     const value = event.target.value;
-    //     if (value != "") {
-    //         setCurrentTag(value)
-    //     }
-    // };
-    // const handleAssignmentTags = () => {
-      
-    //     if (CurrentTag != "") {
-    //     setAssignmentTags([...AssignmentTags, CurrentTag]);
-    //     setCurrentTag("")
-    //     }
-
-
-    // }
-    // const handleDeleteTag = (tagToDelete) => {
-    //     setAssignmentTags(AssignmentTags => AssignmentTags.filter((AssignmentTag) => AssignmentTag != tagToDelete))
-    // }
 
     return (
         <div>
             <div>
                 <div className="split left" style={{ width: "50%", left: 0 }}>
                     <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
-                        <h1>{`Material for ${topicName} in week Number ${weekNumber}`}</h1>
+                        <h1>{`Material`}</h1>
                     </div>
                     <Box
                         component="form"
@@ -128,7 +103,7 @@ function TeacherMaterial() {
                             <TextField
                                 required
                                 id="assignment-title"
-                                label="Assignment Title"
+                                label="Title"
                                 value={title}
                                 onChange={(event) => setTitle(event.target.value)}
                                 fullWidth
@@ -227,7 +202,7 @@ function TeacherMaterial() {
                 <div className="split right" >
                     <div className="file-uploader-container">
                         <FileUploader files={MaterialAttachmentFiles} setFiles={setMaterialAttachmentFiles} remFile={removeFile}></FileUploader>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>

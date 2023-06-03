@@ -47,12 +47,12 @@ function Assignment() {
     const [marked, setMarked] = useState(false);
 
     //To-Do: I want helping material ID in submission and want to save helping material objects in a state
-    const [helpingMaterials, setHelpingMaterials]=useState([]);
+    const [helpingMaterials, setHelpingMaterials] = useState([]);
 
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
     }
-    
+
     const getDateTimeString = (datetime) => {
         console.log(datetime);
         const date = new Date(datetime);
@@ -83,8 +83,12 @@ function Assignment() {
     };
 
     useEffect(() => {
+        console.log("ahmads use effect: ", helpingMaterials)
+    }, [helpingMaterials])
+    useEffect(() => {
         const fetchData = async () => {
             try {
+
                 console.log("in useEffect in assignment.js");
                 const response = await fetch(`http://localhost:4000/backend/s/${userId}/topic/${topicId}/assignment/${assignmentId}`);
                 const data = await response.json();
@@ -127,17 +131,26 @@ function Assignment() {
                     //console.log("F: ", fileNames);
                     console.log("A: ", assignmentFiles);
                     //setMaterials(data.assignment.materials);
+                    setHelpingMaterials(data.submission.recommended);
+                    console.log("data.recommended: ", data.submission.recommended);
+                    console.log("helping material: ", helpingMaterials);
+
+
+
+                    //
                 }
                 else {
                     console.log("no classes found");
                     //setClasses([]);
                 }
+
+
             } catch (error) {
                 console.log(error);
             }
         };
         fetchData();
-    }, [topicId, assignmentId]);
+    }, [topicId]);
 
     const handleFileClick = (file) => {
         // event.preventDefault();
@@ -149,7 +162,7 @@ function Assignment() {
         console.log("file clicked: ", file);
     };
 
-    //TODO: API FETCH
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -201,142 +214,140 @@ function Assignment() {
     return (
         <div>
             <div>
-            <ThemeProvider theme={defaultTheme}>
+                <ThemeProvider theme={defaultTheme}>
 
 
-                <Box
+                    <Box
 
 
-                    sx={{
-                        border: 2,
-                        borderRadius: "20px",
-                        borderColor: "#4b6cb7",
-                        width: "70%",
-                        padding: "30px",
-                        margin: "auto",
-                        display: "flex",
-                        flexDirection: "column",
-                        "& .MuiTextField-root": { m: 1, width: "50ch" },
-                        paddingLeft: "50px",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}
+                        sx={{
+                            border: 2,
+                            borderRadius: "20px",
+                            borderColor: "#4b6cb7",
+                            width: "70%",
+                            padding: "30px",
+                            margin: "auto",
+                            display: "flex",
+                            flexDirection: "column",
+                            "& .MuiTextField-root": { m: 1, width: "50ch" },
+                            paddingLeft: "50px",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}
 
-                >
-                    <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
-                        <h1>Assignment</h1>
-                        <h2>Marks: {totalMarks}</h2>
-                        <h2>Deadline: {deadline}</h2>
-                        {console.log(marked)}
-                        {marked ? <h2>Obtained Marks: {obtainedMarks}</h2> : null}
-                    </div>
-                    <Stack spacing={2}>
-                        <TextField
-                            id="standard-read-only-input"
-                            label="Title"
-                            value={title}
-                            defaultValue={title}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            variant="standard"
-                        />
-                        <TextField
-                            id="standard-multiline-static"
-                            label="Description"
-                            multiline
-                            rows={4}
-                            value={description}
-                            defaultValue={description}
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            variant="standard"
-                        />
-                        <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
+                    >
+                        <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
+                            <h1>Assignment</h1>
+                            <h2>Marks: {totalMarks}</h2>
+                            <h2>Deadline: {deadline}</h2>
+                            {console.log(marked)}
+                            {marked ? <h2>Obtained Marks: {obtainedMarks}</h2> : null}
+                        </div>
+                        <Stack spacing={2}>
+                            <TextField
+                                id="standard-read-only-input"
+                                label="Title"
+                                value={title}
+                                defaultValue={title}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                variant="standard"
+                            />
+                            <TextField
+                                id="standard-multiline-static"
+                                label="Description"
+                                multiline
+                                rows={4}
+                                value={description}
+                                defaultValue={description}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                variant="standard"
+                            />
+                            <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
 
-                            {assignmentFiles && assignmentFiles.map((file, index) => (
-                                <div key={file.id} style={{ padding: "3px" }}>
-                                    <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
-                                </div>
-                            ))}
-                            {/* {viewFile && (
+                                {assignmentFiles && assignmentFiles.map((file, index) => (
+                                    <div key={file.id} style={{ padding: "3px" }}>
+                                        <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
+                                    </div>
+                                ))}
+                                {/* {viewFile && (
                                 <FileViewer
                                     fileUrl="https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/files%2F6thSEM.pdf?alt=media&token=8c2132d5-fe6e-4f56-8d6c-a7134befdc47"
                                 />
                             )} */}
 
 
-                        </div>
-                        <div>
-                            {submitted ? (
-                                <p>Already submitted!</p>
-                            ) : (
-                                <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile} />
-                            )}
-                        </div>
+                            </div>
+                            <div>
+                                {submitted ? (
+                                    <p>Already submitted!</p>
+                                ) : (
+                                    <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile} />
+                                )}
+                            </div>
 
-                        {/* <div>
+                            {/* <div>
                             <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile}></FileUploader>
                         </div> */}
-                        
-                        
-                        
-
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: submitted ? '#999999' : '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '10px 30px',
-                                fontSize: '1rem',
-                                '&:hover': {
-                                    backgroundColor: submitted ? '#999999' : '#0c2461',
-                                },
-                            }}
-                            onClick={handleSubmit}
-                            disabled={submitted}
-                        >
-                            {submitted ? 'Submitted' : 'Submit'}
-                        </Button>
-                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-  <Grid container spacing={3}>
-    {/* Chart */}
-    <Grid item xs={12} md={8} lg={9}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          height: 240,
-        }}
-      >
-        <CircleProgress percentage={0} circleWidth="200" marked={false} />
-      </Paper>
-    </Grid>
-    {/* Recommended Material */}
-    <Grid item xs={12} md={12} lg={12}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          height: 240,
-        }}
-      >
-        <RecomMaterialUI
-          recomFiles={["https://firebasestorage.googleapis.com/v0/b/colearn-35de8.appspot.com/o/helping-material%2FinsertionSort.pdf?alt=media&token=891f13d1-d011-47d7-8eba-bb2c92918013"]}
-        />
-      </Paper>
-    </Grid>
-  </Grid>
-</Container>
 
 
-                        
 
+
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: submitted ? '#999999' : '#1e3c72',
+                                    color: 'white',
+                                    borderRadius: '10px',
+                                    padding: '10px 30px',
+                                    fontSize: '1rem',
+                                    '&:hover': {
+                                        backgroundColor: submitted ? '#999999' : '#0c2461',
+                                    },
+                                }}
+                                onClick={handleSubmit}
+                                disabled={submitted}
+                            >
+                                {submitted ? 'Submitted' : 'Submit'}
+                            </Button>
+                            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                                <Grid container spacing={3}>
+                                    {/* Chart */}
+                                    <Grid item xs={12} md={8} lg={9}>
+                                        <Paper
+                                            sx={{
+                                                p: 2,
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                height: 240,
+                                            }}
+                                        >
+                                            <CircleProgress percentage={(obtainedMarks / totalMarks) * 100} circleWidth="200" marked={marked} />
+                                        </Paper>
+                                    </Grid>
+                                    {/* Recommended Material */}
+                                    {helpingMaterials.length > 0 && (
+                                        <Grid item xs={12} md={12} lg={12}>
+                                            <Paper
+                                                sx={{
+                                                    p: 2,
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    height: 240,
+                                                }}
+                                            >
+                                                <RecomMaterialUI
+                                                    recomFiles={helpingMaterials}
+                                                />
+                                            </Paper>
+                                        </Grid>)
+                                    }
+                                </Grid>
+                            </Container>
 
 
 
@@ -344,7 +355,11 @@ function Assignment() {
 
 
 
-                        {/* <Button
+
+
+
+
+                            {/* <Button
                             type="submit"
                             variant="contained"
                             sx={{
@@ -362,9 +377,9 @@ function Assignment() {
                             Submit
                         </Button> */}
 
-                    </Stack>
+                        </Stack>
 
-                </Box>
+                    </Box>
 
 
 

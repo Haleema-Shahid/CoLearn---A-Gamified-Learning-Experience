@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import Button from '@mui/material/Button';
-
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { Typography } from '@mui/material';
-
+import { Snackbar } from '@mui/material';
 
 
 
@@ -20,8 +19,11 @@ import { Typography } from '@mui/material';
 const SubmissionsDisplay = () => {
     const { userId, topicId, assignmentId } = useParams();
     const [submissions, setSubmissions] = useState([]);
+    const [updated, setUpdated] = useState([]);
     const [tags, setTags] = useState([]);
     const [weakTags, setWeakTags] = useState([]);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+
 
     useEffect(() => {
         const fetchSubmissions = async () => {
@@ -60,7 +62,9 @@ const SubmissionsDisplay = () => {
             if (allMarked) {
                 console.log("All submissions are marked as true");
                 const recommenderResponse = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/recommend`);
-
+                const recommended = await recommenderResponse.json();
+                console.log("recommender response", recommended);
+                //recommended[submissionId]: [{material:{tags, id, level, isrecommended}, score: number},...]
             } else {
                 console.log("Not all submissions are marked as true");
             }
@@ -71,11 +75,11 @@ const SubmissionsDisplay = () => {
 
     const handleSave = () => {
         console.log("save clicked");
-        console.log(submissions);
+        console.log(updated);
         const updatedSubmissions = [];
 
-        for (let i = 0; i < submissions.length; i++) {
-            const submission = submissions[i];
+        for (let i = 0; i < updated.length; i++) {
+            const submission = updated[i];
             const updatedSubmission = {
                 _id: submission.submission._id,
                 obtainedmarks: submission.submission.obtainedmarks,
@@ -117,6 +121,23 @@ const SubmissionsDisplay = () => {
 
 
     };
+    const handleSubmissionClick = async (submissionId) => {
+        try {
+            const response = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/submission/${submissionId}/files`);
+            const data = await response.json();
+            if (data && data.files.length > 0) {
+                data.files.forEach((url) => {
+                    window.open(url, '_blank');
+                });
+            }
+            else {
+
+                setOpenSnackbar(true)
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 
 
@@ -131,30 +152,43 @@ const SubmissionsDisplay = () => {
         },
     };
 
-    const names = [
-        'Oliver Hansen',
-        'Van Henry',
-        'April Tucker',
-        'Ralph Hubbard',
-        'Omar Alexander',
-        'Carlos Abbott',
-        'Miriam Wagner',
-        'Bradley Wilkerson',
-        'Virginia Andrews',
-        'Kelly Snyder',
-    ];
 
 
     //..........................................
 
     return (
-        <div>
-            <h2>Submissions</h2>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '30px'
+        }}>
+
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={() => setOpenSnackbar(false)}
+                message="No files submitted."
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+            />
+
+            <Typography variant="h4" component="h2" sx={{
+                fontFamily: 'Montserrat',
+                marginLeft: '40%',
+                marginBottom: '2%'
+            }}>
+                Submissions
+            </Typography>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr>
                         <th style={styles.tableHeader}>Student Name</th>
+                        <th style={styles.tableHeader}>Late</th>
                         <th style={styles.tableHeader}>Submission</th>
+
                         <th style={styles.tableHeader}>Marks</th>
                         <th style={styles.tableHeader}>Select Weakness</th> {/* New column */}
                     </tr>
@@ -166,7 +200,15 @@ const SubmissionsDisplay = () => {
                             <td style={styles.tableCell}>
                                 {submission.student.firstname} {submission.student.lastname}
                             </td>
-                            <td style={styles.tableCell}>files</td>
+                            <td style={styles.tableCell}>
+                                {submission.submission.late ? '✔' : '-'}
+                            </td>
+                            <td style={styles.tableCell}>
+                                <span onClick={() => handleSubmissionClick(submission.submission._id)} style={{ cursor: 'pointer', color: 'blue' }}>
+                                    View Submission
+                                </span>
+                            </td>
+
                             <td style={styles.tableCell}>
                                 <input
                                     type="number"
@@ -176,6 +218,7 @@ const SubmissionsDisplay = () => {
                                         const index = updatedSubmissions.findIndex((s) => s.submission._id === submission.submission._id);
                                         console.log("index is ", index);
                                         updatedSubmissions[index].submission.obtainedmarks = e.target.value;
+                                        setUpdated([...updated, updatedSubmissions[index]])
                                         setSubmissions(updatedSubmissions);
                                     }}
                                     style={styles.input}
@@ -196,6 +239,7 @@ const SubmissionsDisplay = () => {
                                                 const { value } = e.target;
                                                 updatedSubmissions[index].submission.weaktags = e.target.value;
                                                 setWeakTags(e.target.value);
+                                                setUpdated([...updated, updatedSubmissions[index]])
                                                 setSubmissions(updatedSubmissions);
                                             }}
                                             sx={{
@@ -253,10 +297,13 @@ const styles = {
         color: 'white',
         padding: '10px',
         textAlign: 'left',
+        fontFamily: 'Montserrat',
+        width: '20%'
     },
     tableCell: {
-        padding: '5px',
+        padding: '10px',
         borderBottom: '1px solid #ddd',
+        width: '20%'
     },
     input: {
         width: '60px',
@@ -268,6 +315,7 @@ const styles = {
         padding: '10px 30px',
         fontSize: '1rem',
         marginTop: '20px',
+        width: '10%'
     },
 };
 

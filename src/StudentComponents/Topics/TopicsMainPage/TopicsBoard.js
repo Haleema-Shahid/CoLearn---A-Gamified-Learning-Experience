@@ -96,7 +96,8 @@ function TopicsBoard(props) {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          marginLeft: '20%'
         }}>
         {topics && Array.isArray(topics) && topics.map((topic, index) => (
           <TopicCard

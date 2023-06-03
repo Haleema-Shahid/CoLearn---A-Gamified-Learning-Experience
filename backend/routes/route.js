@@ -233,7 +233,7 @@ router.get('/s/:userId/join-class/:classCode', async (request, response) => {
     // Check if the student ID already exists in the class
     console.log(userId);
     console.log(classObj);
-    const studentIndex = classObj.students.findIndex(student => student.id === userId);
+    const studentIndex = classObj.students.findIndex(student => student.id === new ObjectId(userId));
     if (studentIndex != -1) {
       console.log('Student already joined class');
       return response.status(400).json({ message: 'Student already joined class' });
@@ -259,6 +259,26 @@ router.get('/s/:userId/join-class/:classCode', async (request, response) => {
 });
 
 
+//get students of a class 
+router.get('/class/:classId/students', async (request, response) => {
+  try {
+    const classId = new ObjectId(request.params.classId);
+    // Assuming you have access to the class collection
+    const classObject = await client.db("colearnDb").collection("class").findOne({ _id: classId });
+
+    if (classObject) {
+      let students = [];
+      for (let i = 0; i < classObject.students.length; i++) {
+        students[i] = await client.db("colearnDb").collection("user").findOne({ _id: new ObjectId(classObject.students[i].id) });
+      }
+      response.json(students);
+    } else {
+      response.status(404).json({ message: 'class not found' });
+    }
+  } catch (error) {
+    response.status(500).json({ message: 'Internal server error' });
+  }
+});
 //get class info
 router.get('/class/:classId', async (req, res) => {
   try {
@@ -650,6 +670,104 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
   }
 });
 
+//upload material -teacher
+router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', async (request, response) => {
+  try {
+    const { topicId } = request.params;
+    const { material } = request.body;
+
+    console.log("material to be added ", material);
+
+    const materialObject = {
+      topicId: new ObjectId(topicId),
+      title: material.title,
+      description: material.description,
+      uploadtime: new Date(),
+      files: material.files
+    }
+
+    await client.db('colearnDb').collection('material').insertOne(materialObject);
+
+
+    // Send the assignment object as the response
+    response.status(200).json('material added successfully!');;
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//delete material -teacher
+router.delete('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material/:matterialId', async (request, response) => {
+  try {
+    const { topicId, materialId } = request.params;
+
+    // Delete the material from the database
+    const result = await client.db('colearnDb').collection('material').deleteOne({
+      _id: new ObjectId(materialId),
+      topicId: new ObjectId(topicId)
+    });
+
+    if (result.deletedCount === 0) {
+      // If no material was deleted, return an error response
+      response.status(404).json({ error: 'Material not found' });
+    } else {
+      // If material was deleted successfully, return a success response
+      response.status(200).json('Material deleted successfully');
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+//get material -teacher
+router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material/:materialId', async (request, response) => {
+  try {
+    const { topicId, materialId } = request.params;
+
+    // Delete the material from the database
+    const result = await client.db('colearnDb').collection('material').findOne({
+      _id: new ObjectId(materialId),
+      topicId: new ObjectId(topicId)
+    });
+
+    if (!result) {
+      // If no material was deleted, return an error response
+      response.status(404).json({ error: 'Material not found' });
+    } else {
+      // If material was deleted successfully, return a success response
+      response.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//get material -student
+router.get('/s/:userId/class/:classId/week/:weekId/topic/:topicId/material/:materialId', async (request, response) => {
+  try {
+    const { topicId, materialId } = request.params;
+
+    // Delete the material from the database
+    const result = await client.db('colearnDb').collection('material').findOne({
+      _id: new ObjectId(materialId),
+      topicId: new ObjectId(topicId)
+    });
+
+    if (!result) {
+      // If no material was deleted, return an error response
+      response.status(404).json({ error: 'Material not found' });
+    } else {
+      // If material was deleted successfully, return a success response
+      response.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 //get submissions -teacher
 router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, response) => {
   try {
@@ -689,6 +807,25 @@ router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, re
   }
 });
 
+//get specific submission -teacher
+router.get('/t/:userId/assignment/:assignmentId/submission/:submissionId/files', async (request, response) => {
+  try {
+    const { submissionId } = request.params;
+
+    const submission = await client.db('colearnDb').collection('submission').findOne({ _id: new ObjectId(submissionId) });
+
+    if (submission) {
+      response.status(200).json(submission);
+    } else {
+      return response.status(404).json({ error: 'No submission found.' });
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 //update obtainedmarks and weakTags in submissions -teacher
 router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (request, response) => {
   try {
@@ -702,10 +839,10 @@ router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (reques
 
     // Update each submission with the obtained marks
     for (let i = 0; i < updatedSubmissions.length; i++) {
-      console.log("in looping");
+      //console.log("in looping");
       const { _id, obtainedmarks, weaktags } = updatedSubmissions[i];
-      console.log("tags: ", weaktags);
-      console.log("marks: ", obtainedmarks);
+      //console.log("tags: ", weaktags);
+      //console.log("marks: ", obtainedmarks);
       await submissionCollection.updateOne({ _id: new ObjectId(_id), assignmentId: new ObjectId(assignmentId) }, { $set: { obtainedmarks, marked: true, weaktags } });
     }
 
@@ -718,52 +855,112 @@ router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (reques
   }
 });
 
-function recommendMaterial(tags, difficultyLevel, materialData) {
-  // Compute the similarity score between the given topics and the topics of each material
-  let materialScores = []; // This array has tuples (material, score)
-  for (let material of materialData) {
+
+//run recommender script
+function recommendMaterial(weaknessTags, studentLevel, materialData) {
+  let relevantMaterials = materialData.filter(material => {
+    return material.tags.some(tag => weaknessTags.includes(tag));// && material.level === studentLevel;
+  });
+
+  let materialScores = relevantMaterials.map(material => {
     let materialTags = material.tags;
-    let materialDifficulty = material.level;
-    // Calculate the score based on similar tags and difficulty level match
-    //console.log("weaknesses: ", tags);
-    //console.log("material tags: ", materialTags);
-    let tagIntersection = new Set(tags.filter(tag => materialTags.includes(tag)));
-    //console.log("intersection ", tagIntersection.size)
-    //console.log("tags ", tags.length)
-    let score = tagIntersection.size / tags.length;
-    materialScores.push({ material, score });
-  }
-
-  //console.log("material Scores: ", materialScores);
-  // Sort the materials by descending similarity score
-  let newMaterials = materialScores.filter(({ score }) => score > 0.0);
-
-  let newMaterialsUpdated = newMaterials.map(({ material, score }) => {
-    if (material.level === difficultyLevel) {
-      return { material, score: score + 0.25 };
-    }
+    let tagIntersection = weaknessTags.filter(tag => materialTags.includes(tag));
+    let score = tagIntersection.length / weaknessTags.length;
     return { material, score };
   });
 
-  newMaterialsUpdated.sort((a, b) => b.score - a.score);
+  materialScores.sort((a, b) => b.score - a.score);
 
-  // Select the material with the highest similarity score that matches the desired difficulty level
-  let recommendedMaterial;
-  for (let { material, score } of newMaterialsUpdated) {
-    if (material.level === difficultyLevel) {
-      recommendedMaterial = { material, score };
-      break;
+  let recommendedMaterials = [];
+  let matchedWeaknesses = new Set();
+
+  for (let { material, score } of materialScores) {
+    if (material.tags.some(tag => weaknessTags.includes(tag))) {
+      recommendedMaterials.push({ material, score });
+      material.tags.forEach(tag => {
+        if (weaknessTags.includes(tag)) {
+          matchedWeaknesses.add(tag);
+        }
+      });
+
+      if (matchedWeaknesses.size === weaknessTags.length) {
+        break; // Stop iterating if all weaknesses are covered
+      }
     }
   }
-  if (!recommendedMaterial) {
-    // If there is no material with the desired difficulty level, select the one with the highest score
-    recommendedMaterial = newMaterialsUpdated[0];
+
+  recommendedMaterials.sort((a, b) => b.score - a.score);
+
+  let materialsWithSameLevel = recommendedMaterials.filter(({ material }) => material.level === studentLevel);
+
+  if (materialsWithSameLevel.length > 0) {
+    return materialsWithSameLevel;
   }
 
-  return recommendedMaterial;
+  // If no materials found for the same level, recommend one material per weakness, ignoring level
+
+  console.log("recommended length: ", recommendedMaterials.length)
+  if (recommendedMaterials.length > 0) {
+    console.log("last resort execution")
+    let uniqueWeaknesses = new Set(weaknessTags);
+    let recommendedMaterialsLastResort = [];
+
+    for (let { material, score } of recommendedMaterials) {
+      material.tags.forEach(tag => {
+        if (uniqueWeaknesses.has(tag)) {
+          uniqueWeaknesses.delete(tag);
+          recommendedMaterialsLastResort.push({ material, score });
+        }
+      });
+
+      if (uniqueWeaknesses.size === 0) {
+        break; // Stop iterating if all weaknesses are covered
+      }
+    }
+    console.log("last resort length: ", recommendedMaterialsLastResort.length)
+
+    return recommendedMaterialsLastResort;
+  }
+  return []; // Return an empty array if no materials found
 }
 
-//run recommender script
+//store recommendations
+async function storeRecommendations(results, students) {
+  try {
+    const submissions = client.db("colearnDb").collection('submission');
+    const helpingmaterials = client.db("colearnDb").collection('helpingmaterial');
+
+    for (let i = 0; i < students.length; i++) {
+      const student = students[i];
+      const submissionId = student.subId;
+      const recommendation = results[submissionId];
+
+      // Find the submission with the given submissionId
+      const submission = await submissions.findOne({ _id: new ObjectId(submissionId) });
+
+      if (submission) {
+        // Update the recommended attribute with the recommended materials
+        let recommendations = []
+        for (let j = 0; j < recommendation.length; j++) {
+          console.log("finding: ", recommendation[j].material._id)
+          const material = await helpingmaterials.findOne({ _id: new ObjectId(recommendation[j].material._id) })
+          console.log(material);
+          recommendations = [...recommendations, material.file]
+          console.log("recommended ", recommendation[j].material)
+        }
+        await submissions.updateOne(
+          { _id: new ObjectId(submissionId) },
+          { $set: { recommended: recommendations } }
+        );
+      }
+    }
+  } catch (error) {
+    // Handle the error appropriately
+    console.log("oh no! cant place recommendations because ", error);
+  }
+}
+
+//save marks and weaknesses and prompt recommender
 router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, response) => {
   try {
     const assignmentId = new ObjectId(request.params.assignmentId);
@@ -831,9 +1028,15 @@ router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, resp
       //run pyhton script here
       //const pythonProcess = spawn('python', ['main.py', student_level, tags.join(','), JSON.stringify(helpingMaterials)]);
       results[students[i].subId] = recommendMaterial(tags, studentLevel, helpingMaterials);
+      console.log("weakness: ", students[i].weaktags, " level: ", students[i].level)
+      console.log("material: ");
+      for (let j = 0; j < results[students[i].subId].length; j++) {
+        console.log(results[students[i].subId][j].material.tags);
+      }
     }
-    console.log('Results:', results);
+    console.log(results);
     response.json(results);
+    storeRecommendations(results, students);
   }
   catch (error) {
     console.log("ERROR: ", error);

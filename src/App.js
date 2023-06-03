@@ -21,7 +21,7 @@ import Assignments from './StudentComponents/ClassAssignments/Assignment'
 import AddTopic from './components/Topics/TopicsMainPage/AddTopic'
 import ViewTopic from './components/Topics/TopicsView/ViewTopic'
 import TeacherMaterial from './components/TeacherMaterial/TeacherMaterial';
-import TeacherAssignmentViewer from './components/AssignmentPage/AssignmentViewer';
+import TeacherAssignmentViewer from './components/AssignmentPage/assignmentViewer';
 import TeacherMaterialViewer from './components/TeacherMaterial/TeacherMaterialViewer';
 import SubmissionsDisplay from './components/Submission/SubmissionsDisplay'
 import CloDetails from './components/CLO/CLODetails';
@@ -63,12 +63,12 @@ function App() {
           <//Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment" element={<AssignmentPage />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
-          <Route path="/t/:userId/class/:classId/week/:weekId/:weeknumber/topic/:topicId/TeacherMaterial" element={<TeacherMaterial />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/material" element={<TeacherMaterial />} />
+          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/materialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/t/:userId/class/:classId/classAnalytics" element={<TeacherAnalytics />} />
           <Route path="/t/:userId/class/:classId/classLeaderboard" element={<BoilerClassLeaderboard />} />
 
 
-          <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/TeacherMaterialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<TeacherAssignmentViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/submissions" element={<SubmissionsDisplay />} />
 

@@ -6,6 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import CLOstarter from '../CLO/CLOstarter'
 import { useState } from 'react';
+import StudentsDisplay from '../Students/studentsDisplay';
 
 export default function TeacherClassTabs(props) {
   const [value, setValue] = React.useState('2');
@@ -19,11 +20,11 @@ export default function TeacherClassTabs(props) {
   const getTabContent = (tabValue) => {
     switch (tabValue) {
       case '1':
-        return 'Item One'; //in class tab we can show leader board and class report for everyone to see
+        return 'item one'; //in class tab we can show leader board and class report for everyone to see
       case '2':
         return <CLOstarter userId={userId} classId={classId} />;
       case '3':
-        return 'Item Three';//in students tab we can show the teacher and students 
+        return <StudentsDisplay classId={classId} />;//in students tab we can show the teacher and students 
       default:
         return null;
     }
@@ -50,9 +51,9 @@ export default function TeacherClassTabs(props) {
               justifyContent: 'center',
             }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Class Report" value="1" />
-              <Tab label="Week Outline" value="2" />
-              <Tab label="Students" value="3" />
+              <Tab label="Class Report" value="1" sx={{ fontFamily: 'Montserrat' }} />
+              <Tab label="Week Outline" value="2" sx={{ fontFamily: 'Montserrat' }} />
+              <Tab label="Students" value="3" sx={{ fontFamily: 'Montserrat' }} />
             </TabList>
           </Box>
         </Box>

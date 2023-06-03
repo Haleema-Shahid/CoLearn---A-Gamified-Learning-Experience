@@ -53,7 +53,7 @@ class CloDetails extends Component {
     return (
       <div >
 
-        <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "0%" }}>
+        <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', marginLeft: "20%" }}>
           {cards}
         </div>
         {/* {this.state.showAddForm && (<AddTopic addToTopics={this.addTopic} topics={this.state.weekInfo[this.state.currWeekNumber].topics} ></AddTopic>)} */}

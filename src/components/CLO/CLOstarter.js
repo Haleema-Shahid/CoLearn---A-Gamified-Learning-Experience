@@ -137,7 +137,7 @@ class Clo extends Component {
 
     return (
       <div>
-        <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "20%" }}>
+        <div style={{ gap: '16px', justifyContent: 'center', alignItems: 'center', paddingLeft: "0%" }}>
           {!this.state.isWeekSelected && (
             <Box
               sx={{
@@ -149,7 +149,8 @@ class Clo extends Component {
               <Button onClick={this.onAddWeekClick} variant="outlined" startIcon={<AddCircleIcon />}
                 sx={{
                   width: '150px',
-                  marginBottom: '30px'
+                  marginBottom: '30px',
+                  marginLeft: '20%'
                 }}>
                 Add Week
               </Button>
