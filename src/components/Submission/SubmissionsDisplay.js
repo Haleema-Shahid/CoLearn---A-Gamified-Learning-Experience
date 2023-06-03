@@ -186,7 +186,9 @@ const SubmissionsDisplay = () => {
                 <thead>
                     <tr>
                         <th style={styles.tableHeader}>Student Name</th>
+                        <th style={styles.tableHeader}>Late</th>
                         <th style={styles.tableHeader}>Submission</th>
+
                         <th style={styles.tableHeader}>Marks</th>
                         <th style={styles.tableHeader}>Select Weakness</th> {/* New column */}
                     </tr>
@@ -199,10 +201,14 @@ const SubmissionsDisplay = () => {
                                 {submission.student.firstname} {submission.student.lastname}
                             </td>
                             <td style={styles.tableCell}>
+                                {submission.submission.late ? '✔' : '-'}
+                            </td>
+                            <td style={styles.tableCell}>
                                 <span onClick={() => handleSubmissionClick(submission.submission._id)} style={{ cursor: 'pointer', color: 'blue' }}>
                                     View Submission
                                 </span>
                             </td>
+
                             <td style={styles.tableCell}>
                                 <input
                                     type="number"
@@ -291,11 +297,13 @@ const styles = {
         color: 'white',
         padding: '10px',
         textAlign: 'left',
-        fontFamily: 'Montserrat'
+        fontFamily: 'Montserrat',
+        width: '20%'
     },
     tableCell: {
-        padding: '5px',
+        padding: '10px',
         borderBottom: '1px solid #ddd',
+        width: '20%'
     },
     input: {
         width: '60px',

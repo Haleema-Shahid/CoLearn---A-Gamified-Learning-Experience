@@ -30,20 +30,20 @@ const styles = {
 
 function MaterialCard(props) {
 
-    const [content, setContent]=useState(props.material)
-    const [contentType, setContentType]=useState(props.contentType)
-    const [anchorEl, setAnchorEl] = useState(null);
+  const [content, setContent] = useState(props.material)
+  const [contentType, setContentType] = useState(props.contentType)
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    const [userId, setUserId]=useState(props.userId)
-    const [classId, setClassId]=useState(props.classId)
-    const [weekId, setWeekId]=useState(props.weekId)
-    const [topicId, setTopicId]=useState(props.topicId)
-    const [materialId, setMaterialId]=useState(props.materialId)
+  const [userId, setUserId] = useState(props.userId)
+  const [classId, setClassId] = useState(props.classId)
+  const [weekId, setWeekId] = useState(props.weekId)
+  const [topicId, setTopicId] = useState(props.topicId)
+  const [materialId, setMaterialId] = useState(props.materialId)
 
 
-    //---------------------------------backend work--------------------
-    // using userid, classId, topicId, assignmentId 
-    //bring the assignment object from the backend ans save it in content
+  //---------------------------------backend work--------------------
+  // using userid, classId, topicId, assignmentId 
+  //bring the assignment object from the backend ans save it in content
 
 
   const handleMenuOpen = (event) => {
@@ -56,26 +56,26 @@ function MaterialCard(props) {
     setAnchorEl(null);
   };
 
-//   const handleDeleteClick = () => {
-//     props.onDelete(props.name, props.section);
-//     handleMenuClose();
-//   };
+  //   const handleDeleteClick = () => {
+  //     props.onDelete(props.name, props.section);
+  //     handleMenuClose();
+  //   };
 
   return (
     <Card sx={{ height: 20 + "vh", width: "70%", marginBottom: "16px", marginTop: "10px" }}>
       <CardHeader
         action={
           <div>
-            <div onClick={(e) => 
-              {
-              e.preventDefault();} }>
+            <div onClick={(e) => {
+              e.preventDefault();
+            }}>
               <IconButton style={{ color: "#2a5298" }} aria-label="settings" onClick={(e) => {
                 handleMenuOpen(e);
               }}>
                 <MoreVertIcon />
               </IconButton>
-              
-              
+
+
 
 
               <Menu
@@ -84,15 +84,15 @@ function MaterialCard(props) {
                 onClose={handleMenuClose}
               >
                 {/* <MenuItem onClick={handleDeleteClick}>Delete</MenuItem> */}
-                
-                <Link to={`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${materialId}/TeacherMaterialViewer`}><MenuItem >View Material</MenuItem></Link>
-                
+
+                <Link to={`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${materialId}/materialViewer`}><MenuItem >View Material</MenuItem></Link>
+
               </Menu>
             </div>
-            </div>
+          </div>
         }
-        title= { content.title}
-         sx={{ color: "#2a5298" }}
+        title={content.title}
+        sx={{ color: "#2a5298" }}
       //subheader={props.section}
       />
       <CardContent>

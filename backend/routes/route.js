@@ -678,7 +678,7 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', as
 });
 
 //delete material -teacher
-router.delete('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', async (request, response) => {
+router.delete('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material/:matterialId', async (request, response) => {
   try {
     const { topicId, materialId } = request.params;
 
@@ -700,6 +700,54 @@ router.delete('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', 
     response.status(500).json({ error: 'Internal server error' });
   }
 });
+//get material -teacher
+router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material/:materialId', async (request, response) => {
+  try {
+    const { topicId, materialId } = request.params;
+
+    // Delete the material from the database
+    const result = await client.db('colearnDb').collection('material').findOne({
+      _id: new ObjectId(materialId),
+      topicId: new ObjectId(topicId)
+    });
+
+    if (!result) {
+      // If no material was deleted, return an error response
+      response.status(404).json({ error: 'Material not found' });
+    } else {
+      // If material was deleted successfully, return a success response
+      response.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+//get material -student
+router.get('/s/:userId/class/:classId/week/:weekId/topic/:topicId/material/:materialId', async (request, response) => {
+  try {
+    const { topicId, materialId } = request.params;
+
+    // Delete the material from the database
+    const result = await client.db('colearnDb').collection('material').findOne({
+      _id: new ObjectId(materialId),
+      topicId: new ObjectId(topicId)
+    });
+
+    if (!result) {
+      // If no material was deleted, return an error response
+      response.status(404).json({ error: 'Material not found' });
+    } else {
+      // If material was deleted successfully, return a success response
+      response.json(result);
+    }
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 //get submissions -teacher
 router.get('/t/:userId/assignment/:assignmentId/submissions', async (request, response) => {
   try {

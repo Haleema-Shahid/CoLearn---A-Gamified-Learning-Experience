@@ -210,8 +210,27 @@ function AssignmentViewer() {
                         variant="standard"
                     />
                     <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
-
+                        <Typography variant="h5" component="h2" gutterBottom sx={{
+                            fontFamily: 'Montserrat'
+                        }}>
+                            Files
+                        </Typography>
                         {assignmentFiles && assignmentFiles.map((file, index) => (
+
+                            <div key={file.id} style={{ padding: "3px" }}>
+                                <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
+                            </div>
+                        ))}
+
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
+                        <Typography variant="h5" component="h2" gutterBottom sx={{
+                            fontFamily: 'Montserrat'
+                        }}>
+                            Helping Material
+                        </Typography>
+                        {assignmentFiles && assignmentFiles.map((file, index) => (
+
                             <div key={file.id} style={{ padding: "3px" }}>
                                 <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
                             </div>
