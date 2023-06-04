@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const StudentsDisplay = (props) => {
 
+    const { userId, classId } = props;
     const [students, setStudents] = useState([]);
 
 
@@ -9,7 +11,7 @@ const StudentsDisplay = (props) => {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/backend/class/${props.classId}/students`);
+                const response = await fetch(`http://localhost:4000/backend/class/${classId}/students`);
                 const data = await response.json();
                 setStudents(data);
                 console.log("students fetched: ", data);
@@ -21,8 +23,11 @@ const StudentsDisplay = (props) => {
         fetchStudents();
     }, []);
 
+
+    const navigate = useNavigate();
     const handleStudentClick = (studentId) => {
         console.log(studentId, " clicked!")
+        navigate(`/t/${userId}/class/${classId}/student/${studentId}`);
     }
 
 
