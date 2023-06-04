@@ -619,8 +619,9 @@ router.get('/t/:userId/topic/:topicId/assignment/:assignmentId', async (request,
       return response.status(404).json({ error: 'Assignment not found' });
     }
 
+    const helpingMaterials = await client.db('colearnDb').collection('helpingmaterial').find({ asnId: new ObjectId(assignmentId) }).toArray();
     // Send the assignment object as the response
-    response.json(assignment);
+    response.json({ assignment: assignment, helpingMaterials: helpingMaterials });
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: 'Internal server error' });
@@ -686,13 +687,13 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', as
       files: material.files
     }
 
-    const newMaterial= await client.db('colearnDb').collection('material').insertOne(materialObject);
+    const newMaterial = await client.db('colearnDb').collection('material').insertOne(materialObject);
 
 
     // Send the assignment object as the response
     //response.status(200).json('material added successfully!');;
     response.json(newMaterial);
-    
+
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: 'Internal server error' });

@@ -2,17 +2,20 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileAlt, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const TRecomFileItem = ({ file }) => {
+const TRecomFileItem = ({ file, level, tags }) => {
+  console.log("url: ", file);
+  console.log("level: ", level);
   const url = new URL(file);
   const fileName = decodeURIComponent(url.pathname).split('/').pop();
+  const fileLevel = level;
 
   const handleFileClick = (event) => {
     event.preventDefault();
-  
+
     window.open(file, '_blank');
     console.log("file clicked: ", file);
   };
-  
+
   return (
     <li
       style={{
