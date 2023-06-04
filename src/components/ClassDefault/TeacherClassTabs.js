@@ -24,7 +24,7 @@ export default function TeacherClassTabs(props) {
       case '2':
         return <CLOstarter userId={userId} classId={classId} />;
       case '3':
-        return <StudentsDisplay classId={classId} />;//in students tab we can show the teacher and students 
+        return <StudentsDisplay userId={userId} classId={classId} />;//in students tab we can show the teacher and students 
       default:
         return null;
     }

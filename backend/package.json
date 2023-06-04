@@ -10,11 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "mongodb": "^5.2.0",
-    "mongoose": "^7.0.2",
+    "mongoose": "^7.2.2",
     "node.js": "^0.0.1-security",
     "nodemon": "^2.0.21"
   }
