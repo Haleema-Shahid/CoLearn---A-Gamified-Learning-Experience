@@ -7,7 +7,6 @@ function RecomMaterialUI({recomFiles}) {
 
   return (
     <div >
-      <h2>Recommended Materials</h2>
       {fileUrls.map((file, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
           <RecomFileItem file={file} />

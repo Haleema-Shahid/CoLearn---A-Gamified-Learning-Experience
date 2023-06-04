@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import TRecomFileItem from './TRecomFileItem';
+import MaterialFileItem from './MaterialFileItem';
 //.link might have to change when material come
 
-function TRecomMaterialUI({recomFiles}) {
-  const [fileUrls, setFileUrls] = useState(recomFiles);
+function MaterialFileUI({materialFiles}) {
+  const [fileUrls, setFileUrls] = useState(materialFiles);
 
   return (
     <div >
       
       {fileUrls.map((file, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
-          <TRecomFileItem file={file.link} />
+          <MaterialFileItem file={file} />
         </div>
       ))}
     </div>
   );
 }
 
-export default TRecomMaterialUI;
+export default MaterialFileUI;

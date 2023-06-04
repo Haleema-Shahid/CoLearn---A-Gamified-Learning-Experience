@@ -24,6 +24,9 @@ import HelpingMaterial from "../HelpingMaterial/HelpingMaterial";
 import { Link } from 'react-router-dom';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Typography } from "@mui/material";
+import MaterialFileUI from "./MaterialFileUI";
+import { Grid } from '@mui/material';
+
 
 function TeacherMaterialViewer() {
     const [content, setContent] = useState(null);
@@ -34,6 +37,7 @@ function TeacherMaterialViewer() {
     const [creationDate, setCreationDate] = useState("");
     const [creationTime, setCreationTime] = useState("");
     const [MaterialAttachmentFiles, setMaterialAttachmentFiles] = useState("")
+    const [uploadTime, setUploadTime] = useState(null);
     //const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
     const [CurrentTag, setCurrentTag] = useState("")
     const [HelpingMaterialFiles, setHelpingMaterialFiles] = useState(['chip1', 'chip2'])
@@ -43,6 +47,23 @@ function TeacherMaterialViewer() {
     //set the content using userId, classId, weekNumber, topicId, materialId
     //using content set the title, description, topic name
 
+    const getDateTimeString = (datetime) => {
+        console.log(datetime);
+        const date = new Date(datetime);
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            timeZone: 'UTC',
+        });
+        const result = `${formattedDate}, ${formattedTime}`;
+        return result;
+    }
+
     useEffect(() => {
         const fetchMaterial = async () => {
             try {
@@ -51,6 +72,7 @@ function TeacherMaterialViewer() {
                 setTitle(data.title);
                 setDescription(data.description);
                 setMaterialAttachmentFiles(data.files);
+                setUploadTime(getDateTimeString(data.uploadtime));
             } catch (error) {
                 console.error('Error fetching material:', error);
             }
@@ -71,28 +93,177 @@ function TeacherMaterialViewer() {
 
 
     return (
-        <div>
-            <div>
-                <div className="split left" style={{ width: "50%", left: 0 }}>
-                    <div className="assignment header" style={{ padding: "5%", paddingLeft: "25%" }}>
-                        <Typography variant="h4" sx={{
-                            fontFamily: 'Montserrat',
-                            color: "#4b6cb7"
-                        }}>
-                            {title}
-                        </Typography>
-                        <Typography variant="h6" sx={{
-                            fontFamily: 'Montserrat',
-                            color: "#1a1c1f"
-                        }}>
-                            {description}
-                        </Typography>
-                    </div>
+        
+        
+        <div  style={{  backgroundColor: '#1e3c72',
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        paddingTop: "5%",
+        paddingBottom: "5%",}} >
+       <div style={{ marginLeft: '10%', marginRight: '10%',   backgroundColor: '#1e3c72' }}>
+<Box
+sx={{
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: 'calc(100vh - 80px)', // Adjust the value based on your page layout
+}}
+>
+<Box sx={{ flexGrow: 1 }}>
+  <Grid container spacing={2}>
+    <Grid item xs={12} md={6} lg={12}>
+      <Paper 
+        sx={{
+          p: 2,
+          display: 'flex',
+          paddingLeft: '5%',
+          paddingRight: '5%',
+          borderRadius: "20px", // Adjust the value to control the roundness of the corners
+          backgroundColor: "#f8f8f8",
+          boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+          justifyContent:'center'
+        
+        }}
+      >
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            backgroundColor: '#1e3c72',
+            color: 'white',
+            borderRadius: '10px',
+            padding: '10px 30px',
+            fontSize: '1rem',
+            '&:hover': {
+              backgroundColor: '#0c2461',
+            },
+          }}
+        //   onClick={handleSubmissionsClick}
+          //disabled={submitted}
+        >
+          Edit Material
+        </Button>
+        
+      </Paper>
+    </Grid>
+    <Grid item xs={6} md={6} lg={6}>
+      <Paper 
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+      
+          borderRadius: "10px", // Adjust the value to control the roundness of the corners
+          backgroundColor: "#f8f8f8",
+          boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+          overflow:'auto'
+        
 
+        }}
+      >
+        <Box
+          sx={{
+            margin: 'auto',
+            border: 2,
+            borderRadius: "10px",
+            borderColor: "#4b6cb7",
+            width: "100%",
+            padding: "30px",
+            display: "flex",
+            flexDirection: "column",
+            "& .MuiTextField-root": { m: 1, width: "50ch" },
+            paddingLeft: "50px"
+          }}
+        >
+          <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{
+              fontFamily: 'Montserrat'
+            }}>
+              Material
+            </Typography>
+            <Typography variant="h5" component="h2" gutterBottom sx={{
+              fontFamily: 'Montserrat'
+            }}>
+              Uploaded on: {uploadTime}
+            </Typography>
+          </div>
+          <Stack spacing={2}>
+            <TextField
+              id="standard-read-only-input"
+              label="Title"
+              value={title}
+              defaultValue={title}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="standard"
+            />
+            <TextField
+              id="standard-multiline-static"
+              label="Description"
+              multiline
+              rows={4}
+              value={description}
+              defaultValue={description}
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="standard"
+            />
+          </Stack>
+        </Box>
+      </Paper>
+    </Grid>
 
-                </div>
-            </div>
-        </div>
+    {/* Assignment Material */}
+    {MaterialAttachmentFiles.length > 0 && (
+      <Grid item xs={12} sm={6} md={6} lg={6}>
+        <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            height: 350,
+            backgroundColor: '#f8f8f8',
+            borderRadius: "10px", // Adjust the value to control the roundness of the corners
+           
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+           
+           
+          
+          }}
+        >
+        <h2>Material Attachments</h2>
+        
+        <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            height: 350,
+            backgroundColor: '#f8f8f8',
+            borderRadius: "10px", // Adjust the value to control the roundness of the corners
+            
+           
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+            overflow: "auto",
+            marginTop:'3%'
+          
+          }}
+        >
+
+          <MaterialFileUI materialFiles={MaterialAttachmentFiles} />
+        </Paper>
+        </Paper>
+      </Grid>
+    )}
+
+  </Grid>
+</Box>
+</Box>
+</div>
+
+    </div>
     );
 }
 

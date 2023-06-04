@@ -1,8 +1,5 @@
 
 
-
-
-///////////////////////////////
 import React, { useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -11,11 +8,22 @@ import storage from '../../firebase';
 import {ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 
 
-const FileUploader = ({ files, setFiles, remFile }) => {
+const FileUploader = ({ files, setFiles, remFile, fileData, setData }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const inputRef = useRef();
   const [progress, setProgress] = useState(0);
   const [progressShow, setProgressShow] = useState(false);
+
+  
+  const uploadHandlerNew = (event) => {
+    setProgressShow(true);
+    const file = event.target.files[0];
+    if (!file) return;
+
+    console.log(file);
+    setData([...fileData, file]);
+    console.log(fileData);
+  };
 
   const uploadHandler = (event) => {
     setProgressShow(true);
@@ -56,7 +64,7 @@ const FileUploader = ({ files, setFiles, remFile }) => {
     <>
       <div className="file-card">
         <div className="file-inputs">
-          <input ref={inputRef} type="file" label="Upload a file" onChange={uploadHandler} />
+          <input ref={inputRef} type="file" label="Upload a file" onChange={uploadHandlerNew} />
           <button>
             <i>
               <FontAwesomeIcon icon={faPlus} />
@@ -82,124 +90,3 @@ const FileUploader = ({ files, setFiles, remFile }) => {
 };
 
 export default FileUploader;
-
-////////////////////////////////////////////////////////////
-
-// import React, { useState } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faPlus } from '@fortawesome/free-solid-svg-icons';
-// import './FileUploader.css';
-
-// const FileUploader = ({ files, setFiles, remFile }) => {
-//   const [selectedFiles, setSelectedFiles] = useState([]);
-
-//   const uploadHandler = (event) => {
-//     const file = event.target.files[0];
-//     if (!file) return;
-//     //file.isUploading = true;
-//     console.log("file: ",file.name);
-//     setFiles([...files, file]);
-//     setSelectedFiles([...selectedFiles, file.name]);
-    
-//     // upload file
-//     const formData = new FormData();
-//     // ...
-
-//   };
-
-//   return (
-//     <>
-//       <div className="file-card">
-//         <div className="file-inputs">
-//           <input type="file" label="Upload a file" onChange={uploadHandler} />
-//           <button>
-//             <i>
-//               <FontAwesomeIcon icon={faPlus} />
-//             </i>
-//             Upload
-//           </button>
-//         </div>
-//         {selectedFiles.length > 0 && (
-//           <div>
-//             <p className="file-name">Selected files:</p>
-//             <ul>
-//               {selectedFiles.map((fileName, index) => (
-//                 <li key={index}>{fileName}</li>
-//               ))}
-//             </ul>
-//           </div>
-//         )}
-//         <p className="main">Supported files</p>
-//         <p className="info">PDF, JPG, PNG</p>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default FileUploader;
-
-
-
-// import React from 'react'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faPlus } from '@fortawesome/free-solid-svg-icons'
-// import './FileUploader.css'
-// import storage from '../../firebase';
-// import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-
-
-
-// const FileUploader = ({ files, setFiles, remFile }) => {
-//     const [progress, setProgress] = useState(0);
-//     const [progressShow, setProgressShow] = useState(false);
-//     const [selectedFiles, setSelectedFiles] = useState([]);
-//     const inputRef = useRef();
-  
-//     const uploadHandler = (event) => {
-//         const file = event.target.files[0];
-//         if (!file) return;
-//         file.isUploading = true;
-//         setFiles([...files, file])
-
-//         // upload file
-//         const formData = new FormData();
-//         // formData.append(
-//         //     "newFile",
-//         //     file,
-//         //     file.name
-//         // )
-//         // axios.post('http://localhost:8080/upload', formData)
-//         //     .then((res) => {
-//         //         file.isUploading = false;
-//         //         setFiles([...files, file])
-//         //     })
-//         //     .catch((err) => {
-//         //         // inform the user
-//         //         console.error(err)
-//         //         removeFile(file.name)
-//         //     });
-//     }
-
-//     return (
-//         <>
-//             <div className="file-card">
-
-//                 <div className="file-inputs">
-//                     <input type="file" label="Upload a file" onChange={uploadHandler} />
-//                     <button>
-//                         <i>
-//                             <FontAwesomeIcon icon={faPlus} />
-//                         </i>
-//                         Upload
-//                     </button>
-//                 </div>
-
-//                 <p className="main">Supported files</p>
-//                 <p className="info">PDF, JPG, PNG</p>
-
-//             </div>
-//         </>
-//     )
-// }
-
-// export default FileUploader
