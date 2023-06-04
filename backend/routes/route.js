@@ -686,11 +686,13 @@ router.post('/t/:userId/class/:classId/week/:weekId/topic/:topicId/material', as
       files: material.files
     }
 
-    await client.db('colearnDb').collection('material').insertOne(materialObject);
+    const newMaterial= await client.db('colearnDb').collection('material').insertOne(materialObject);
 
 
     // Send the assignment object as the response
-    response.status(200).json('material added successfully!');;
+    //response.status(200).json('material added successfully!');;
+    response.json(newMaterial);
+    
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: 'Internal server error' });
