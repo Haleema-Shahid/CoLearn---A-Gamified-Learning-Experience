@@ -48,6 +48,7 @@ function TeacherMaterial() {
     }
 
 
+    
     const handleSubmit = async (event) => {
         //here goes the backend for uploading the material
         event.preventDefault();
@@ -111,8 +112,11 @@ function TeacherMaterial() {
                 body: JSON.stringify({ material: newMaterial })
             });
             if (response.ok) {
-                const data = response.json();
-                navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${data.materialId}/materialViewer`)
+                const data = await response.json();
+                console.log("Response is ", data);
+                const materialId=data.insertedId;
+                console.log("id is ,",materialId)
+                navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${materialId}/materialViewer`)
 
             }
             else {
@@ -128,6 +132,9 @@ function TeacherMaterial() {
         
 
     };
+
+
+    
 
     const deleteMaterialFileItem = (name) => {
         setMaterialData(Files => Files.filter((File) => File.name !== name))

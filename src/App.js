@@ -9,7 +9,7 @@ import ClassDefault from './components/ClassDefault/ClassDefault';
 import ClassDefault2 from './StudentComponents/ClassDefault/ClassDefault';
 //import TopicsBoard from './components/Topics/TopicsBoard';
 import AssignmentPage from './components/AssignmentPage/AssignmentPage';
-import Assignment from './StudentComponents/ClassAssignments/Assignment';
+import StudentAssignmentViewer from './StudentComponents/ClassAssignments/Assignment';
 import SignUp from './components/LogInSignUp/SignUp'
 import SignIn from './components/LogInSignUp/SignIn'
 import LoginNav from './components/Navigations/LoginNav'
@@ -72,7 +72,8 @@ function App() {
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<TeacherAssignmentViewer />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/submissions" element={<SubmissionsDisplay />} />
 
-          <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId" element={<Assignment />} />
+          {/* <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId" element={<Assignment />} /> */}
+          <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<StudentAssignmentViewer />} />
 
 
         </Routes>

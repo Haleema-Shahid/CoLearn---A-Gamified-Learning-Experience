@@ -17,11 +17,22 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import { Typography } from "@mui/material";
+import { Grid } from '@mui/material';
+import AsgnFilesUI from "./AsgnFilesUI";
+import TRecomMaterialUI from "./TRecomMaterialUI";
+import backgroundImage from "../../images/sample.jpg"; // Add the path to your background image
+
+
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Description } from "@mui/icons-material";
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
+
 function AssignmentViewer() {
+
+
+
     // const { userId, classId, assignmentID } = useParams();
     //we need to get title,description, deadline, totalmarks, assignment files using the assignment ID
 
@@ -137,162 +148,199 @@ function AssignmentViewer() {
 
     }
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: '50px'
-        }}>
-
-
-            <Box
-                sx={{
-                    margin: 'auto',
-                    border: 2,
-                    borderRadius: "20px",
-                    borderColor: "#4b6cb7",
-                    width: "70%",
-                    padding: "30px",
-                    display: "flex",
-                    flexDirection: "column",
-                    "& .MuiTextField-root": { m: 1, width: "50ch" },
-                    paddingLeft: "50px",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}
-
+        
+            <div  style={{  backgroundColor: '#1e3c72',
+            backgroundSize: "cover",
+            minHeight: "100vh",
+            paddingTop: "5%",
+            paddingBottom: "5%",}} >
+           <div style={{ marginLeft: '10%', marginRight: '10%',   backgroundColor: '#1e3c72' }}>
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: 'calc(100vh - 80px)', // Adjust the value based on your page layout
+    }}
+  >
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6} lg={12}>
+          <Paper 
+            sx={{
+              p: 2,
+              display: 'flex',
+              justifyContent: 'space-between', // Add spacing between the buttons
+              paddingLeft: '30%',
+              paddingRight: '30%',
+              borderRadius: "20px", // Adjust the value to control the roundness of the corners
+              backgroundColor: "#f8f8f8",
+              boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+            
+            }}
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: '#1e3c72',
+                color: 'white',
+                borderRadius: '10px',
+                padding: '10px 30px',
+                fontSize: '1rem',
+                '&:hover': {
+                  backgroundColor: '#0c2461',
+                },
+              }}
+              onClick={handleSubmissionsClick}
+              //disabled={submitted}
             >
-                <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
-                    <Typography variant="h4" component="h1" gutterBottom sx={{
-                        fontFamily: 'Montserrat'
-                    }}>
-                        Assignment
-                    </Typography>
-                    <Typography variant="h5" component="h2" gutterBottom sx={{
-                        fontFamily: 'Montserrat'
-                    }}>
-                        Marks: {totalMarks}
-                    </Typography>
-                    <Typography variant="h5" component="h2" gutterBottom sx={{
-                        fontFamily: 'Montserrat'
-                    }}>
-                        Deadline: {deadline}
-                    </Typography>
-                    <Typography variant="h5" component="h2" gutterBottom sx={{
-                        fontFamily: 'Montserrat'
-                    }}>
-                        Uploaded on: {uploadTime}
-                    </Typography>
+              Submissions
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: '#1e3c72',
+                color: 'white',
+                borderRadius: '10px',
+                padding: '10px 30px',
+                fontSize: '1rem',
+                '&:hover': {
+                  backgroundColor: '#0c2461',
+                },
+              }}
+              //disabled={submitted}
+            >
+              Edit Assignment
+            </Button>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6} lg={12}>
+          <Paper 
+            sx={{
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+          
+              borderRadius: "10px", // Adjust the value to control the roundness of the corners
+              backgroundColor: "#f8f8f8",
+              boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+            
 
-                </div>
-                <Stack spacing={2}>
-                    <TextField
-                        id="standard-read-only-input"
-                        label="Title"
-                        value={title}
-                        defaultValue={title}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        variant="standard"
-                    />
-                    <TextField
-                        id="standard-multiline-static"
-                        label="Description"
-                        multiline
-                        rows={4}
-                        value={description}
-                        defaultValue={description}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        variant="standard"
-                    />
-                    <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
-                        <Typography variant="h5" component="h2" gutterBottom sx={{
-                            fontFamily: 'Montserrat'
-                        }}>
-                            Files
-                        </Typography>
-                        {assignmentFiles && assignmentFiles.map((file, index) => (
-
-                            <div key={file.id} style={{ padding: "3px" }}>
-                                <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
-                            </div>
-                        ))}
-
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "row", color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }} >
-                        <Typography variant="h5" component="h2" gutterBottom sx={{
-                            fontFamily: 'Montserrat'
-                        }}>
-                            Helping Material
-                        </Typography>
-                        {assignmentFiles && assignmentFiles.map((file, index) => (
-
-                            <div key={file.id} style={{ padding: "3px" }}>
-                                <Chip key={file.id} label={file.name} onClick={() => handleFileClick(file)} onDelete={() => handleDeleteTag(file)} />
-                            </div>
-                        ))}
-
-                    </div>
-
-                    {/* add style to this div */}
-                    <div>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '10px 30px',
-                                fontSize: '1rem',
-                                '&:hover': {
-                                    backgroundColor: '#0c2461',
-                                },
-                            }}
-                            onClick={handleSubmissionsClick}
-                        //disabled={submitted}
-                        >
-                            Submissions
-                        </Button>
-
-                    </div>
-
-
-
-
-
-
-
-                    {/* <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '10px 30px',
-                                fontSize: '1rem',
-                                '&:hover': {
-                                    backgroundColor: '#0c2461',
-                                },
-                            }}
-                            onClick={handleSubmit}
-                        >
-                            Submit
-                        </Button> */}
-
-                </Stack>
-
+            }}
+          >
+            <Box
+              sx={{
+                margin: 'auto',
+                border: 2,
+                borderRadius: "10px",
+                borderColor: "#4b6cb7",
+                width: "100%",
+                padding: "30px",
+                display: "flex",
+                flexDirection: "column",
+                "& .MuiTextField-root": { m: 1, width: "50ch" },
+                paddingLeft: "50px"
+              }}
+            >
+              <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
+                <Typography variant="h4" component="h1" gutterBottom sx={{
+                  fontFamily: 'Montserrat'
+                }}>
+                  Assignment
+                </Typography>
+                <Typography variant="h5" component="h2" gutterBottom sx={{
+                  fontFamily: 'Montserrat'
+                }}>
+                  Marks: {totalMarks}
+                </Typography>
+                <Typography variant="h5" component="h2" gutterBottom sx={{
+                  fontFamily: 'Montserrat'
+                }}>
+                  Deadline: {deadline}
+                </Typography>
+                <Typography variant="h5" component="h2" gutterBottom sx={{
+                  fontFamily: 'Montserrat'
+                }}>
+                  Uploaded on: {uploadTime}
+                </Typography>
+              </div>
+              <Stack spacing={2}>
+                <TextField
+                  id="standard-read-only-input"
+                  label="Title"
+                  value={title}
+                  defaultValue={title}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="standard"
+                />
+                <TextField
+                  id="standard-multiline-static"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  value={description}
+                  defaultValue={description}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="standard"
+                />
+              </Stack>
             </Box>
+          </Paper>
+        </Grid>
 
+        {/* Assignment Material */}
+        {assignmentFiles.length > 0 && (
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <Paper
+              sx={{
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                height: 240,
+                backgroundColor: '#f8f8f8',
+                borderRadius: "10px", // Adjust the value to control the roundness of the corners
+               
+                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+              
+              }}
+            >
+              <AsgnFilesUI asgnFiles={assignmentFiles} />
+            </Paper>
+          </Grid>
+        )}
 
-
+        {/* Recommended Material */}
+        {assignmentFiles.length > 0 && (
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <Paper 
+              sx={{
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                height: 240,
+                borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                backgroundColor: "#f8f8f8",
+                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+              
+              }}
+            >
+              <TRecomMaterialUI recomFiles={assignmentFiles} />
+            </Paper>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
+  </Box>
+</div>
 
         </div>
+
     );
 }
 
