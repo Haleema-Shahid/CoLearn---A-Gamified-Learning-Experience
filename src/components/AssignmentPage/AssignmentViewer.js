@@ -117,6 +117,7 @@ function AssignmentViewer() {
               setAssignmentFiles([...assignmentFiles, thisFile]);
               //console.log(fileNames);
               index = index + 1;
+              //hello i changed this
             });
           }
 
