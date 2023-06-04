@@ -94,11 +94,11 @@ function ViewTopic(props) {
         }}>
 
 
-        {!(assignments.length > 0) ? (
+        {!((assignments.length > 0 || materials.length>0)) && (
           <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
             No assignments or materials yet!
           </Typography>
-        ) : (
+        ) }
           <div style={{
             display: 'flex',
             flexDirection: 'row',
@@ -115,7 +115,7 @@ function ViewTopic(props) {
                 width: '50%',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'center'
+                
               }}>
               <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Assignments</h2>
 
@@ -156,7 +156,7 @@ function ViewTopic(props) {
               ))}
             </div>
           </div>
-        )}
+        
       </Box>
     </div>
 
