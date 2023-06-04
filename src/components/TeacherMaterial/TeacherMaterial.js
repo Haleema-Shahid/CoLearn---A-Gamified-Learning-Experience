@@ -12,6 +12,9 @@ import Stack from "@mui/material/Stack";
 import '../AssignmentPage/AssignmentPage.css';
 import FileUploader from "../AssignmentPage/FileUploader";
 import Button from '@mui/material/Button';
+import storage from '../../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import FileItem from "../AssignmentPage/FileItem";
 
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
@@ -33,6 +36,9 @@ function TeacherMaterial() {
     const [creationDate, setCreationDate] = useState("");
     const [creationTime, setCreationTime] = useState("");
     const [MaterialAttachmentFiles, setMaterialAttachmentFiles] = useState("")
+
+    const [materialData, setMaterialData]=useState([]);//full file of material
+
     //const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
 
     const navigate = useNavigate();
@@ -44,13 +50,56 @@ function TeacherMaterial() {
 
     const handleSubmit = async (event) => {
         //here goes the backend for uploading the material
+        event.preventDefault();
 
         try {
+            const newMaterialFiles = [];
+
+            for (const file of materialData) {
+                if (!file) return;
+
+                // Upload file to Firebase Storage
+                const storageRef = ref(storage, `/files/${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                await new Promise((resolve, reject) => {
+                    uploadTask.on(
+                        'state_changed',
+                        (snapshot) => {
+                            // Track upload progress if needed
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log(`Upload progress: ${progress}%`);
+                        },
+                        (error) => {
+                            console.error('Error uploading file:', error);
+                            reject(error);
+                        },
+                        async () => {
+                            // File upload completed
+                            console.log('File', file.name, 'uploaded successfully');
+                            try {
+                                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                                console.log('File URL:', url);
+
+                                newMaterialFiles.push(url);
+                                // setAssignmentFiles([...assignmentFiles, url]);
+                                resolve();
+                            } catch (error) {
+                                console.error('Error getting file URL:', error);
+                                reject(error);
+                            }
+                        }
+                    );
+                });
+                console.log("new material files are: " ,newMaterialFiles);
+
+            }
+            //-----------------------------
             const newMaterial = {
                 topicId: topicId,
                 title: title,
                 description: description,
-                files: MaterialAttachmentFiles,
+                files: newMaterialFiles,
                 uploadtime: new Date()
             }
 
@@ -63,18 +112,26 @@ function TeacherMaterial() {
             });
             if (response.ok) {
                 const data = response.json();
-                navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment/${data.materialId}/MaterialViewer`)
+                navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${data.materialId}/materialViewer`)
 
             }
             else {
                 throw new Error("failed to add material");
             }
+
+
         }
+       
         catch (error) {
+            console.error('Error adding material:', error);
         }
-        event.preventDefault();
+        
 
     };
+
+    const deleteMaterialFileItem = (name) => {
+        setMaterialData(Files => Files.filter((File) => File.name !== name))
+    }
 
     return (
         <div>
@@ -201,8 +258,15 @@ function TeacherMaterial() {
                 </div>
                 <div className="split right" >
                     <div className="file-uploader-container">
-                        <FileUploader files={MaterialAttachmentFiles} setFiles={setMaterialAttachmentFiles} remFile={removeFile}></FileUploader>
+                        <FileUploader files={MaterialAttachmentFiles} setFiles={setMaterialAttachmentFiles} remFile={removeFile} assignmentData={materialData} setData={setMaterialData}></FileUploader>
                     </div>
+                    <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
+      {materialData.map((file, index) => (
+        <div key={index} style={{ marginBottom: '10px' }}>
+          <FileItem file={file} deleteFile={deleteMaterialFileItem} />
+        </div>
+      ))}
+    </div>
                 </div>
             </div>
         </div>

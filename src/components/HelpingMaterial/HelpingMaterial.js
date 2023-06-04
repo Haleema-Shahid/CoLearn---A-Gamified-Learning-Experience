@@ -9,44 +9,72 @@ import Box from "@mui/material/Box";
 import Chip from '@mui/material/Chip';
 import Stack from "@mui/material/Stack";
 import { useNavigate, useLocation } from 'react-router-dom';
+import FileItem from './FileItem';
+import './HelpingMaterial.css'
+import HelpingFileItem from './HelpingFileItem';
 
 
 
 
-const HelpingMaterial = () => {
-  const { userId, classId, weekId, topicId } = useParams();
-  const [helpingMaterialFile, setHelpingMaterialFile] = useState([]);
-  const [tags, setTags] = useState('');
-  const [difficulty, setDifficulty] = useState('');
-  const [helpingMaterialTags, setHelpingMaterialTags] = useState([]);
-  const [helpingMaterials, setHelpingMaterials] = useState([]);
-  const [CurrentTag, setCurrentTag] = useState("")
-  const navigate = useNavigate();
-  const location = useLocation();
-  //console.log("outside everything: ", helpingMaterialFile)
+const HelpingMaterial = ({ helpingData, setHelpingMaterialData, onNextClick }) => {
+    console.log(setHelpingMaterialData);
+    const { userId, classId, weekId, topicId } = useParams();
+    const [currHelpingMaterialFile, setCurrHelpingMaterialFile ]=useState();//this has only the current file in question..file uploader can set only this
+    const [helpingMaterialFile, setHelpingMaterialFile] = useState([]);
+    const [tags, setTags] = useState('');
+    const [difficulty, setDifficulty] = useState('');
+    const [helpingMaterialTags, setHelpingMaterialTags] = useState([]);
+    const [helpingMaterials, setHelpingMaterials] = useState([]);
+    const [CurrentTag, setCurrentTag] = useState("")
+    const navigate = useNavigate();
+    const location = useLocation();
 
-
-
+    
 
   const handleSubmitHelpingMaterial = (e) => {
     e.preventDefault();
+    if( currHelpingMaterialFile)
+    {
+
+
+    
     const helpingMaterial = {
       is_recommended: false,
       level: difficulty,
       tags: helpingMaterialTags,
       file: helpingMaterialFile
     };
+
+    //aleena part
+    const helpingMaterialwithFile={
+      is_recommended: false,
+      level: difficulty,
+      tags: helpingMaterialTags,
+      file: currHelpingMaterialFile
+    }
+    //setHelpingMaterialData(prevPlayers => [...prevPlayers, helpingMaterialwithFile]);
+    console.log("helping data: ", helpingData);
+    setHelpingMaterialData([...helpingData, helpingMaterialwithFile]);
+    //part end
     console.log("in handle submit: ", helpingMaterial);
     setHelpingMaterials([...helpingMaterials, helpingMaterial]);
     setHelpingMaterialFile('');
     setHelpingMaterialTags([]);
     setDifficulty('');
+    setCurrHelpingMaterialFile();
+
 
     // props.setFiles([...props.files, helpingMaterial]);
     // props.onAddHelpingMaterial(helpingMaterial);
     //this will send all the helping material back to parent assignment material,
     //------maybe we need to send tags too--------------
   }
+  else
+  {
+    console.log("empty file cannot upload");
+  }
+  };
+  
   const removeFile = (filename) => {
     setHelpingMaterialFile(helpingMaterialFile.filter(file => file.name !== filename))
   }
@@ -65,10 +93,11 @@ const HelpingMaterial = () => {
 
 
   const handleNextClick = () => {
+    onNextClick();
 
-    const link = `/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`;
-    // Navigating to the link using react-router-dom's useNavigate hook
-    navigate(link, { state: { helpingMaterials: helpingMaterials } }); // Sending the helpingMaterials array as a prop
+    // const link = `/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`;
+    // // Navigating to the link using react-router-dom's useNavigate hook
+    // navigate(link, { state: { helpingMaterials: helpingMaterials } }); // Sending the helpingMaterials array as a prop
   };
 
   const handleCurrentTagChange = (event) => {
@@ -89,8 +118,17 @@ const HelpingMaterial = () => {
     setHelpingMaterialTags(helpingMaterialTags => helpingMaterialTags.filter((helpingMaterialTag) => helpingMaterialTag != tagToDelete))
   }
 
+  //set curent helping material file empty
+  const deleteCurrHelpingMaterialFile=()=>{
+    setCurrHelpingMaterialFile();
+  }
+
+  const deleteHelpingMaterialFileItem=(name)=>{
+    setHelpingMaterialData(Files => Files.filter((DataFile) => DataFile.file.name !== name))
+  }
+
   return (
-    <div className='Helping material left'>
+    <div>
       <div>
         <div className="split left" style={{ width: "50%", left: 0, marginTop: '9%' }}>
           <div className="HelpingMaterial header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
@@ -194,10 +232,40 @@ const HelpingMaterial = () => {
 
 
         </div>
-        <div className="split right" >
-          <div className="file-uploader-container">
-            <FileUploader files={helpingMaterialFile} setFiles={setHelpingMaterialFile} remFile={removeFile}></FileUploader>
+        {/* //............. */}
+
+        <div
+  style={{
+    display: 'flex',
+    justifyContent: 'flex-end',
+    height: '100vh',
+    paddingRight: '20px',
+  }}
+>
+  <div style={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ marginBottom: '30px', marginTop: '20px' }}>
+            <FileUploader files={helpingMaterialFile} setFiles={setHelpingMaterialFile} remFile={removeFile} currHelpingMaterialFile={currHelpingMaterialFile} setCurrHelpingMaterialFile={setCurrHelpingMaterialFile}></FileUploader>
           </div>
+
+          <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
+      
+        <div style={{ marginBottom: '10px' }}>
+          Curr file
+          {currHelpingMaterialFile!=null &&(<FileItem file={currHelpingMaterialFile} deleteFile={deleteCurrHelpingMaterialFile} />)}
+        </div>
+    </div>
+
+          <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
+      
+      
+      {helpingData && helpingData.map((Datafile, index) => (
+        <div key={index} style={{ marginBottom: '10px' }}>
+          <HelpingFileItem file={Datafile.file} deleteFile={deleteHelpingMaterialFileItem} difficulty={Datafile.level} />
+        </div>
+      ))}
+    </div>
+    <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
+
           <Button
             onClick={handleNextClick}
             type="submit"
@@ -217,10 +285,13 @@ const HelpingMaterial = () => {
           >
             Next
           </Button>
+          </div>
         </div>
       </div>
-
+      </div>
     </div>
+
+  
 
   );
 };

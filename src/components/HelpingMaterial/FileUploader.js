@@ -6,12 +6,23 @@ import './FileUploader.css';
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-const FileUploader = ({ files, setFiles, remFile }) => {
+const FileUploader = ({ files, setFiles, remFile, currHelpingMaterialFile, setCurrHelpingMaterialFile }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const inputRef = useRef();
     const [progress, setProgress] = useState(0);
     const [progressShow, setProgressShow] = useState(false);
     const [uploadDisabled, setUploadDisabled] = useState(false);
+
+    //new upload handler will take the file and save it in 
+    const uploadHandlerNew = (event) => {
+        setProgressShow(true);
+        const file = event.target.files[0];
+        if (!file) return;
+    
+        console.log(file);
+        setCurrHelpingMaterialFile(file);
+        console.log(currHelpingMaterialFile);
+      };
 
     const uploadHandler = (event) => {
         setProgressShow(true);
@@ -54,7 +65,7 @@ const FileUploader = ({ files, setFiles, remFile }) => {
         <>
             <div className="file-card">
                 <div className="file-inputs">
-                    <input ref={inputRef} type="file" label="Upload a file" onChange={uploadHandler} disabled={uploadDisabled} />
+                    <input ref={inputRef} type="file" label="Upload a file" onChange={uploadHandlerNew} disabled={uploadDisabled} />
                     <button disabled={uploadDisabled}>
                         <i>
                             <FontAwesomeIcon icon={faPlus} />

@@ -94,8 +94,8 @@ function TopicCard(props) {
               >
 
                 <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem>
-                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/HelpingMaterial`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
-                {/* <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/${props.weekNumber}/topic/${props.topicId}/TeacherMaterial`}><MenuItem onClick={handleMenuClose}>Add a Material</MenuItem></Link> */}
+                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/assignment`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
+                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/material`}><MenuItem >Add a Material</MenuItem></Link>
                 <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
                 <MenuItem onClick={handleSomething}>something</MenuItem>
               </Menu>

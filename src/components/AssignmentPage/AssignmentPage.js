@@ -41,12 +41,15 @@ function AssignmentPage() {
     const [creationTime, setCreationTime] = useState("");
 
 
-    const [helpingMaterialClick, setHelpingMaterialClick] = useState(false);
+    const [helpingMaterialClick, setHelpingMaterialClick] = useState(true);
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
     const [assignmentFiles, setAssignmentFiles] = useState([])
     const [assignmentTags, setAssignmentTags] = useState(['chip1'])
     const [assignmentFilesData, setAssignmentFilesData] = useState([])
+    const [helpingMaterialData, setHelpingMaterialData]= useState([])
+    //an array that has all the helping material data
+    //like is_Recommended, full file, difficulty level and tags for all the files
 
 
     const [currentTag, setCurrentTag] = useState("")
@@ -131,9 +134,59 @@ function AssignmentPage() {
         console.log("handle submit clicked");
         console.log("before fetching api: helpingMaterials: ", helpingMaterialFiles);
         console.log(assignmentFilesData)
+        console.log(helpingMaterialData)
 
         try {
             const newAssignmentFiles = [];
+            const newHelpingMaterialData = [];
+
+            for (const data of helpingMaterialData) {
+
+                if (!data.file) continue;
+                const storageRef = ref(storage, `/helping-material/${data.file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, data.file);
+
+                try {
+                    await new Promise((resolve, reject) => {
+                      uploadTask.on(
+                        'state_changed',
+                        (snapshot) => {
+                          // Track upload progress if needed
+                          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                          console.log(`Upload progress: ${progress}%`);
+                        },
+                        (error) => {
+                          console.error('Error uploading file:', error);
+                          reject(error);
+                        },
+                        async () => {
+                          // File upload completed
+                          console.log('File', data.file.name, 'uploaded successfully');
+                          try {
+                            const url = await getDownloadURL(uploadTask.snapshot.ref);
+                            console.log('File URL:', url);
+                
+                            const newData = {
+                              is_recommended: data.is_recommended,
+                              level: data.level,
+                              tags: data.tags,
+                              url: url
+                            };
+                
+                            newHelpingMaterialData.push(newData);
+                            resolve();
+                          } catch (error) {
+                            console.error('Error getting file URL:', error);
+                            reject(error);
+                          }
+                        }
+                      );
+                    });
+                  } catch (error) {
+                    console.error('Error uploading file:', error);
+                  }
+            }
+
 
             for (const file of assignmentFilesData) {
                 if (!file) return;
@@ -171,7 +224,8 @@ function AssignmentPage() {
                         }
                     );
                 });
-                console.log(newAssignmentFiles);
+                console.log("new assignment files are: " ,newAssignmentFiles);
+                console.log("new helping materials are: ", newHelpingMaterialData);
 
             }
             //-----------------------------
@@ -197,7 +251,7 @@ function AssignmentPage() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ newAssn: newAssn, helpingMaterials: location.state?.helpingMaterials })
+                body: JSON.stringify({ newAssn: newAssn, helpingMaterials: newHelpingMaterialData })
             });
 
             if (response.ok) {
@@ -265,8 +319,10 @@ function AssignmentPage() {
     }
 
     const handleHelpingMaterialClick = () => {
-        setHelpingMaterialClick(true);
+        setHelpingMaterialClick(!helpingMaterialClick);
     }
+
+    
     return (
         <div>
             {!helpingMaterialClick && (<div>
@@ -434,7 +490,7 @@ function AssignmentPage() {
         </div>
       ))}
     </div>
-                    {/* <div>
+                    <div>
                         <Button onClick={handleHelpingMaterialClick}
 
                             variant="contained"
@@ -449,11 +505,11 @@ function AssignmentPage() {
                                 },
                             }}
                         >
-                            Add Helping Material
+                            Go back to Helping Material
                         </Button>
 
 
-                    </div> */}
+                    </div>
 
 
 
@@ -463,12 +519,14 @@ function AssignmentPage() {
                 </div>
             </div>
             </div>)}
-            {/* {
-                helpingMaterialClick && <div>
-
-                    <HelpingMaterial files={helpingMaterialFiles} setFiles={setHelpingMaterialFiles} onAddHelpingMaterial={onAddHelpingMaterial}></HelpingMaterial>
+            {
+                helpingMaterialClick && 
+                <div>
+                    
+{    console.log("helping material data: ", helpingMaterialData)}
+<HelpingMaterial helpingData={helpingMaterialData} setHelpingMaterialData={setHelpingMaterialData} onNextClick={handleHelpingMaterialClick} />
                 </div>
-            } */}
+            }
 
 
         </div>
