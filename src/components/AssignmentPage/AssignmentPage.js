@@ -45,7 +45,7 @@ function AssignmentPage() {
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
     const [assignmentFiles, setAssignmentFiles] = useState([])
-    const [assignmentTags, setAssignmentTags] = useState(['chip1'])
+    const [assignmentTags, setAssignmentTags] = useState([]);
     const [assignmentFilesData, setAssignmentFilesData] = useState([])
     const [helpingMaterialData, setHelpingMaterialData]= useState([])
     //an array that has all the helping material data
@@ -299,12 +299,10 @@ function AssignmentPage() {
         }
       };
       
-    const handleCurrentTagChange = (event) => {
+      const handleCurrentTagChange = (event) => {
         const value = event.target.value;
-        if (value !== "") {
-            setCurrentTag(value)
-        }
-    };
+        setCurrentTag(value);
+      };
     const handleAssignmentTags = () => {
 
         if (currentTag !== "") {
@@ -325,6 +323,16 @@ function AssignmentPage() {
     const handleHelpingMaterialClick = () => {
         setHelpingMaterialClick(!helpingMaterialClick);
     }
+
+    
+const handleKeyDownforTag = (event) => {
+    if (event.key === "Backspace" && currentTag === "") {
+      // Handle backspace to delete the last tag
+      setAssignmentTags(assignmentTags =>
+        assignmentTags.slice(0, assignmentTags.length - 1)
+      );
+    }
+  };
 
     
     return (
@@ -425,7 +433,7 @@ function AssignmentPage() {
                                         display: 'flex',
                                         flexDirection: 'row'
                                     }}>
-                                    <Button className='HandleTags' onClick={handleAssignmentTags} sx={{
+                                    <Button className='HandleTags' onClick={handleAssignmentTags} onKeyDown={handleKeyDownforTag}  sx={{
                                         backgroundColor: '#1e3c72',
                                         color: 'white',
                                         borderRadius: '10px',
