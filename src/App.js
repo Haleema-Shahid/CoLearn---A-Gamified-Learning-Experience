@@ -28,6 +28,8 @@ import CloDetails from './components/CLO/CLODetails';
 import TeacherAnalytics from './Teacher Analytics/TeacherAnalyticsDashboard'
 import BoilerClassLeaderboard from './Leaderboard/BoilerClassLeaderboard';
 import ProgressDashboard from './components/Students/Progress';
+import StudentMaterialViewer from './StudentComponents/StMaterialViewer.js/StMaterialViewer';
+
 
 function App() {
   return (
@@ -76,6 +78,7 @@ function App() {
 
           {/* <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId" element={<Assignment />} /> */}
           <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<StudentAssignmentViewer />} />
+          <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/StudentMaterialViewer" element={<StudentMaterialViewer />} />
 
 
         </Routes>

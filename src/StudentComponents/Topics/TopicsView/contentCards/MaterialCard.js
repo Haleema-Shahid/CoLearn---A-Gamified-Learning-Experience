@@ -85,7 +85,7 @@ function MaterialCard(props) {
               >
                 {/* <MenuItem onClick={handleDeleteClick}>Delete</MenuItem> */}
 
-                <Link to={`/s/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${materialId}/TeacherMaterialViewer`}><MenuItem >View Material</MenuItem></Link>
+                <Link to={`/s/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/materialId/${materialId}/StudentMaterialViewer`}><MenuItem >View Material</MenuItem></Link>
 
               </Menu>
             </div>

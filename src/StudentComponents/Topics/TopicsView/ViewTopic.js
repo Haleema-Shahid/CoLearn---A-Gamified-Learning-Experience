@@ -94,67 +94,68 @@ function ViewTopic(props) {
         }}>
 
 
-        {!(assignments.length > 0) ? (
+        {!((assignments.length > 0 || materials.length > 0)) && (
           <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
             No assignments or materials yet!
           </Typography>
-        ) : (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            //marginLeft: '197px'
-            paddingLeft: '15%'
-          }}>
-            <div
-              style={{
-                left: 0,
-                position: 'relative',
-                overflowX: 'hidden',
-                overflowY: 'auto',
-                width: '50%',
-                //justifyContent: 'center'
-              }}>
-              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Assignments</h2>
-
-              {assignments.map((assignment) => (
-                <ContentCard
-                  key={assignment._id}
-                  contentType="assignmentContent"
-                  userId={userId}
-                  classId={classId}
-                  weekId={weekId}
-                  topicId={topicId}
-                  materialId={assignment._id}
-                  materialContent={assignment}
-                //onDelete={handleDelete}
-                />
-              ))}
-            </div>
-            <div style={{
+        )}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          //marginLeft: '197px'
+          paddingLeft: '15%'
+        }}>
+          <div
+            style={{
               left: 0,
-
               position: 'relative',
               overflowX: 'hidden',
               overflowY: 'auto',
-              width: '50%'
+              width: '50%',
+              //justifyContent: 'center'
+
             }}>
-              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Materials</h2>
-              {materials.map((material) => (
-                <ContentCard
-                  key={material._id}
-                  contentType="materialContent"
-                  userId={userId}
-                  classId={classId}
-                  weekId={weekId}
-                  topicId={topicId}
-                  materialId={material._id}
-                  materialContent={material}
-                />
-              ))}
-            </div>
+            <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Assignments</h2>
+
+            {assignments.map((assignment) => (
+              <ContentCard
+                key={assignment._id}
+                contentType="assignmentContent"
+                userId={userId}
+                classId={classId}
+                weekId={weekId}
+                topicId={topicId}
+                materialId={assignment._id}
+                materialContent={assignment}
+              //onDelete={handleDelete}
+              />
+            ))}
           </div>
-        )}
+          <div style={{
+            left: 0,
+
+            position: 'relative',
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            width: '50%'
+          }}>
+            <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Materials</h2>
+            {materials.map((material) => (
+              <ContentCard
+                key={material._id}
+                contentType="materialContent"
+                userId={userId}
+                classId={classId}
+                weekId={weekId}
+                topicId={topicId}
+                materialId={material._id}
+                materialContent={material}
+              />
+            ))}
+          </div>
+        </div>
+
       </Box>
     </div>
 

@@ -32,7 +32,7 @@ function AddTopic(props) {
 
 
   const handleAddTopicSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     console.log("handleaddtopic clicked");
 
     // Checking if this topic already exists

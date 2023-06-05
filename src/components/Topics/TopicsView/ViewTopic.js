@@ -42,8 +42,8 @@ function ViewTopic(props) {
             const sortedMaterials = data.materials.sort((a, b) => new Date(b.uploadtime) - new Date(a.uploadtime));
             setMaterials(sortedMaterials);
           }
-          console.log('asses: ', assignments);
-          console.log('materials: ', materials);
+          
+          setTopic(data.topicObject);
         }
         else {
           console.log("no classes found");
@@ -54,10 +54,12 @@ function ViewTopic(props) {
       }
     };
     fetchData();
+    console.log('asses: ', assignments);
+    console.log('materials: ', materials);
   }, [topicId]);
 
   const handleAddAssignment = () => {
-    navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/HelpingMaterial`)
+    navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/assignment`)
   }
   const handleAddMaterial = () => {
     navigate(`/t/${userId}/class/${classId}/week/${weekId}/topic/${topicId}/material`)
@@ -102,11 +104,11 @@ function ViewTopic(props) {
           </Button>
         </Box>
 
-        {!(assignments.length > 0) ? (
+        {!(assignments.length > 0 || materials.length>0) && (
           <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
-            No assignments or materials yet!
+            No assignments yet!
           </Typography>
-        ) : (
+        ) }
           <div style={{
             display: 'flex',
             flexDirection: 'row',
@@ -161,8 +163,8 @@ function ViewTopic(props) {
               ))}
             </div>
           </div>
-        )
-        }
+        
+        
       </Box >
     </div >
   );

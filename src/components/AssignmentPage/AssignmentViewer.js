@@ -321,7 +321,25 @@ function AssignmentViewer() {
 
                     }}
                   >
+                    <h2>Assignment Attachments</h2>
+                    <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            height: 350,
+            backgroundColor: '#f8f8f8',
+            borderRadius: "10px", // Adjust the value to control the roundness of the corners
+            
+           
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+            overflow: "auto",
+            marginTop:'3%'
+          
+          }}
+        >
                     <AsgnFilesUI asgnFiles={assignmentFiles} />
+                    </Paper>
                   </Paper>
                 </Grid>
               )}
@@ -342,7 +360,25 @@ function AssignmentViewer() {
 
                     }}
                   >
+                    <h2>Helping Material</h2>
+                    <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            height: 350,
+            backgroundColor: '#f8f8f8',
+            borderRadius: "10px", // Adjust the value to control the roundness of the corners
+            
+           
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+            overflow: "auto",
+            marginTop:'3%'
+          
+          }}
+        >
                     <TRecomMaterialUI recomFiles={helpingMaterials} />
+                    </Paper>
                   </Paper>
                 </Grid>
               )}
