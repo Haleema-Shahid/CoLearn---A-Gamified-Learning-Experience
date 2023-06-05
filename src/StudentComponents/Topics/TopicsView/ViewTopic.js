@@ -103,21 +103,19 @@ function ViewTopic(props) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            //paddingLeft: '20%'
+            //marginLeft: '197px'
+            paddingLeft: '15%'
           }}>
             <div
               style={{
-
                 left: 0,
                 position: 'relative',
                 overflowX: 'hidden',
                 overflowY: 'auto',
                 width: '50%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center'
+                //justifyContent: 'center'
               }}>
-              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Assignments</h2>
+              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Assignments</h2>
 
               {assignments.map((assignment) => (
                 <ContentCard
@@ -141,7 +139,7 @@ function ViewTopic(props) {
               overflowY: 'auto',
               width: '50%'
             }}>
-              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat', marginBottom: '20px' }}>Materials</h2>
+              <h2 style={{ color: "#2a5298", fontFamily: 'Montserrat' }}>Materials</h2>
               {materials.map((material) => (
                 <ContentCard
                   key={material._id}
