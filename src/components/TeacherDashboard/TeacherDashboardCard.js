@@ -22,7 +22,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 }));
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
-  background: `linear-gradient(to right, #0047AB, #0047AB)`,
+  background: `linear-gradient(to right, #073980, #073980)`,
   color: 'white',
   padding: theme.spacing(3),
   '& .MuiCardHeader-title': {

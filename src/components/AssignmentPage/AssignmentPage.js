@@ -279,22 +279,26 @@ function AssignmentPage() {
             assignmentFiles
         });
     };
-
     const handleTotalMarksChange = (event) => {
-        const value = Number(event.target.value);
-        if (value > 1000) {
-            setTotalMarks(1000);
+        let value = event.target.value.trim(); // Trim any leading/trailing spaces
+        value = value.replace(/^0+/, ''); // Remove leading zeros
+      
+        if (value === "") {
+          setTotalMarks(""); // If the input becomes empty, set it as an empty string
+        } else {
+          const numericValue = Number(value); // Convert the value to a number
+          if (!isNaN(numericValue)) { // Check if the numeric value is valid
+            if (numericValue > 1000) {
+              setTotalMarks(1000);
+            } else if (numericValue < 0) {
+              setTotalMarks(0);
+            } else {
+              setTotalMarks(numericValue);
+            }
+          }
         }
-        else if (event.key === "Backspace" && value === 0) {
-            setTotalMarks("");
-        }
-        else if (value < 0) {
-            setTotalMarks(0);
-        }
-        else {
-            setTotalMarks(value);
-        }
-    };
+      };
+      
     const handleCurrentTagChange = (event) => {
         const value = event.target.value;
         if (value !== "") {
