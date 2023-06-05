@@ -133,7 +133,7 @@ function AssignmentCard(props) {
         // title={props.name}
         //subheader={props.section}
         title={<Typography variant="body2" color="#ffffff" sx={{ fontFamily: 'Montserrat' }}>
-          {content.description}
+          {content.title}
         </Typography>}
         sx={{ background: "linear-gradient(to right, #1e3c72, #2a5298)" }}
       />

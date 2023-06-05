@@ -35,11 +35,12 @@ const SubmissionsDisplay = () => {
 
                 const response2 = await fetch(`http://localhost:4000/backend/t/${userId}/topic/${topicId}/assignment/${assignmentId}`);
                 const data2 = await response2.json();
-                console.log("fetched: ", data);
+                console.log("fetched: ", data2);
                 if (data2) {
                     //setClasses(data);
                     console.log("fetched in front end: ", data2);
-                    setTags(data2.tags);
+                    console.log("data2.tags: ",data2.tags );
+                    setTags(data2.assignment.tags);
                 }
 
             } catch (error) {
@@ -50,6 +51,9 @@ const SubmissionsDisplay = () => {
         fetchSubmissions();
     }, [assignmentId]);
 
+    useEffect(()=>{
+console.log("in useeffect: ", tags);
+    }, [tags])
     const recommendMaterial = async () => {
         try {
             const response = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/submissions`);
@@ -254,6 +258,7 @@ const SubmissionsDisplay = () => {
                                                 return '';
                                             }}
                                         >
+                                        {console.log("tags:",tags)}
                                             {tags.map((tag) => (
                                                 <MenuItem key={tag} value={tag}
                                                     sx={{

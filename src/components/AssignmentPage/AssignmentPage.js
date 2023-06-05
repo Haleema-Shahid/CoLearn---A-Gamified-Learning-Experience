@@ -170,7 +170,7 @@ function AssignmentPage() {
                               is_recommended: data.is_recommended,
                               level: data.level,
                               tags: data.tags,
-                              url: url
+                              file: url
                             };
                 
                             newHelpingMaterialData.push(newData);

@@ -8,7 +8,7 @@ const path = require('path');
 const { RepeatOneSharp } = require('@mui/icons-material');
 
 
-const uri = "mongodb+srv://hatUser:Hat2023@cluster0.an4x4aw.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb://hatUser:Hat2023@ac-qxjfc1x-shard-00-00.an4x4aw.mongodb.net:27017,ac-qxjfc1x-shard-00-01.an4x4aw.mongodb.net:27017,ac-qxjfc1x-shard-00-02.an4x4aw.mongodb.net:27017/?ssl=true&replicaSet=atlas-dkezdr-shard-0&authSource=admin&retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 client.connect(() => console.log("db connected"))
 
@@ -657,7 +657,8 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
       marked: submission.marked,
       late: submission.late,
       files: submission.files,
-      weaktags
+      weaktags: [],
+      recommended: []
     }
 
     await client.db('colearnDb').collection('submission').insertOne(submissionObject);
