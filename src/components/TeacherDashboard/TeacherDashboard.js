@@ -12,6 +12,15 @@ import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import TeacherDashboardHeader from './DashboardHeader';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import createClassBg from '../../images/classaddcard.jpg'
+import sample from '../../images/sample.jpg'
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
+import Tooltip from '@mui/material/Tooltip';
+
+
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -27,6 +36,8 @@ function TeacherDashboard() {
 
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
+
+  const [newClass, setNewClass]=useState();
 
   const navigate = useNavigate();
 
@@ -65,7 +76,7 @@ function TeacherDashboard() {
     setClassName(event.target.value);
   };
 
-  const handledescriptionChange = (event) => {
+  const handleDescriptionChange = (event) => {
     setdescription(event.target.value);
   };
 
@@ -83,6 +94,13 @@ function TeacherDashboard() {
     const info = new FormData(e.currentTarget);
     const name = className;
     const desc = description;
+
+    //check for duplicalte classes
+    if (classes.some(cls => cls.name === name && cls.description === desc)) {
+      setOpen(true);
+      return;
+    }
+
     //fetch api here
     console.log(name);
     const requestOptions = {
@@ -95,35 +113,34 @@ function TeacherDashboard() {
     const response = await fetch(`http://localhost:4000/backend/create-class`, requestOptions);
     const data = await response.json();
     if (data) {
-      navigate(`/t/${userId}`);
+      const newClass = { name: className, description };
+      setClasses(prevClasses => [...prevClasses, newClass]); // Append the new class to the existing array
     }
-    //checking if this class name and section already exists
-    if (classes.filter(cls => cls.name === className && cls.description === description).length > 0) {
-      console.log("entered");
-      setOpen(true);
-      return
-
-    }
-
-
-    // Create new class from backend and fetch in front end again
-    // setClasses([...classes, { name: className, description }]);
-    setShowCreateClassModal(false);
-    setClassName('');
-    setdescription('');
-  };
-
-  const handleCancelClick = () => {
+  
     setShowCreateClassModal(false);
     setClassName('');
     setdescription('');
     setCreateNewClassButton(false)
+
+
+    
+  };
+
+  const handleCancelClick = () => {
+    
+    setCreateNewClassButton(false);
+    setShowCreateClassModal(false);
+    setClassName('');
+    setdescription('');
+    
+   
+    
   };
 
   const handleDeleteClass = async (name, description, _id) => {
     console.log("in delete class");
     console.log(classes);
-    const thisClass = classes.find(cls => cls.classId === _id);
+    const thisClass = classes.find(cls => cls._id === _id);
     const thisClassId = thisClass._id;
     try {
       const response = await fetch(`http://localhost:4000/backend/delete-class/${thisClassId}`, {
@@ -132,10 +149,11 @@ function TeacherDashboard() {
           'Content-Type': 'application/json',
         }
       });
-
+  
       if (response.ok) {
         console.log('Class deleted successfully');
-        setClasses(classes.filter(cls => !(cls.name === name && cls.description === description)));
+        // Update the classes state by filtering out the deleted class
+        setClasses(prevClasses => prevClasses.filter(cls => !(cls.name === name && cls.description === description)));
         // Handle any additional logic after successful deletion
       } else {
         console.error('Failed to delete class:', response.statusText);
@@ -149,11 +167,40 @@ function TeacherDashboard() {
 
   return (
     <div className='TeacherDashboard' sx={{
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      padding: '0px 4px'
     }}>
 
       <TeacherDashboardHeader userId={userId} />
-      <button onClick={handleCreateClassClick} className="create-class-button" hidden={createNewClassButton}>Create New Class</button>
+     
+
+      
+      {!createNewClassButton && (
+        <Tooltip title="Add a new class">
+          <IconButton
+  onClick={handleCreateClassClick}
+  sx={{
+    backgroundColor: '#0E3386',
+    color: 'white',
+    position: 'fixed',
+    bottom: '30px',
+    right: '30px',
+    zIndex: 999,
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+    transition: 'background-color 0.3s ease-in-out',
+    '@media (max-width: 600px)': {
+      bottom: '20px',
+      right: '20px',
+    },
+    
+  }}
+>
+  <AddIcon fontSize="large" sx={{ fontSize: '3rem' }}/>
+</IconButton>
+        </Tooltip>
+      )}
+
+      {/* <button onClick={handleCreateClassClick} className="create-class-button" hidden={createNewClassButton}>Create New Class</button> */}
       {open && (
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
@@ -162,20 +209,13 @@ function TeacherDashboard() {
         </Snackbar>
       )}
 
-      {showCreateClassModal && (
-
-        <div >
-          <Box component="form" onSubmit={handleCreateClassSubmit}
-            sx={{
-              margin: "auto",
-              display: "flex",
-              flexDirection: "column",
-
-              paddingLeft: "50px",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
+{showCreateClassModal && (
+  <div style={{ }}>
+  <Grid container justifyContent="center" style={{ width: '100%', height: '100%', position: 'fixed', top: 0, left: 0}}>
+    <Grid item xs={12} md={6} lg={4} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Paper elevation={3} style={{ padding: '40px', backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '90%'}}>
+        <Paper elevation={0} style={{ padding: '20px' }}>
+          <form onSubmit={handleCreateClassSubmit}>
             <Stack spacing={2}>
               <TextField
                 required
@@ -190,48 +230,66 @@ function TeacherDashboard() {
                 id="sectionInput"
                 label="Section"
                 value={description}
-                onChange={handledescriptionChange}
+                onChange={handleDescriptionChange}
                 fullWidth
               />
               <Button
                 type="submit"
                 variant="contained"
-                sx={{
-                  backgroundColor: '#1e3c72',
+                style={{
+                  backgroundColor: '#0E3386',
                   color: 'white',
                   borderRadius: '10px',
                   padding: '10px 30px',
                   fontSize: '1rem',
                   '&:hover': {
-                    backgroundColor: '#0c2461',
+                    backgroundColor: '#0E3386',
                   },
                 }}
               >
                 Create Class
               </Button>
-              <Button onClick={handleCancelClick} variant="outlined">
+              <Button
+                onClick={handleCancelClick}
+                variant="outlined"
+                sx={{borderColor:'#0E3386', color:'#0E3386'}}
+              >
                 Cancel
               </Button>
             </Stack>
-          </Box>
+          </form>
+        </Paper>
+      </Paper>
+    </Grid>
+  </Grid>
+  </div>
+)}
+     {!showCreateClassModal && (
+  <div style={{
+    backgroundColor: '#eae4e9',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gridGap: '40px',
+    padding: '20px',
+    
+  }}>
+    <Grid container spacing={3}>
+      {classes.map((classObj) => (
+        <Grid item xs={12} sm={6} md={4} key={classObj.name + classObj.description} style={{ height: '200px', width:'300px' }}>
+          <TeacherDashboardCard
+            name={classObj.name}
+            section={classObj.description}
+            classId={classObj._id}
+            userId={userId}
+            onDelete={handleDeleteClass}
+            style={{ height: '500px' }}
+          />
+        </Grid>
+      ))}
+    </Grid>
+  </div>
+)}
 
-        </div>
-
-
-      )}
-      {!showCreateClassModal && (
-        <div className="classes-grid" sx={{
-          backgroundColor: 'white'
-        }}>
-          {classes.map((classObj) => (
-            // <Link to={`/user/${userId}/class/${classObj._id}`} key={classObj._id}>
-            <div className="container_card" key={classObj.name + classObj.description} >
-              <TeacherDashboardCard name={classObj.name} section={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
-            </div>
-            // </Link>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

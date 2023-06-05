@@ -1,36 +1,45 @@
 import * as React from 'react';
-import { stopPropagation } from 'react';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
-const styles = {
+const StyledCard = styled(Card)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: '20px',
 
+ 
+  
+}));
 
-}
+const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
+  background: `linear-gradient(to right, #0047AB, #0047AB)`,
+  color: 'white',
+  padding: theme.spacing(3),
+  '& .MuiCardHeader-title': {
+    fontSize: '1.15rem',
+  },
+  
+}));
+
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  flex: '1 0 auto',
+}));
 
 function TeacherDashboardCard(props) {
-
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (event) => {
-    event.stopPropagation(); // stop event propagation to the card
+    event.stopPropagation();
     event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
@@ -40,86 +49,39 @@ function TeacherDashboardCard(props) {
   };
 
   const handleDeleteClick = () => {
-    props.onDelete(props.name, props.section);
+    props.onDelete(props.name, props.section, props.classId);
     handleMenuClose();
   };
 
   return (
-    <Card sx={{ height: 20 + "vh", maxwidth: 100 }}>
-      <CardHeader
-        sx={{
-          height: '50%',
-          background: `linear-gradient(to right, #1e3c72, #2a5298)`,
-          color: 'white',
-          justifyContent: 'center',
-          padding: '20px',
-          '& .MuiCardHeader-title': {
-            fontSize: '1.15rem', // Adjust the font size as needed
-          },
-
-        }}
+    <StyledCard>
+      <StyledCardHeader
         action={
-          <div>
-            <div onClick={(e) => {
-              e.preventDefault();
-            }}>
-              <IconButton aria-label="settings" onClick={(e) => {
-                handleMenuOpen(e);
-              }}>
-                <MoreVertIcon />
-              </IconButton>
-
-
-
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
-                <Link to={`/t/${props.userId}/class/${props.classId}`}><MenuItem >View Class</MenuItem></Link>
-
-                <Link to={`/t/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
-                <Link to={`/t/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link>
-              </Menu>
-            </div>
-          </div>
+          <IconButton aria-label="settings" onClick={handleMenuOpen}>
+            <MoreVertIcon />
+          </IconButton>
         }
         title={props.name}
-      //subheader={props.section}
       />
-      <CardContent>
+      <StyledCardContent>
         <Typography variant="body2" color="text.secondary">
           {props.section}
         </Typography>
-      </CardContent>
-    </Card>
+      </StyledCardContent>
 
-    // <div className="class-card">
-    //     <div className='class-name-container'>
-    //         <div className='dropdown'>
-    //             <div className='dropbtn optionContainer btn-right showLeft '>
-    //                 <li></li>
-    //                 <li></li>
-    //                 <li></li>
-    //             </div>
-    //             <div class="dropdown-content-forTeacher-class">
-    //                 <a href="#home">Delete</a>
-    //                 <a href="#about">Copy Code</a>
-    //                 <a href="#about">View CLO</a>
-    //                 <a href="#about">Class Analytics</a>
-    //                 <a href="#about">Leaderboard</a>
-    //             </div>
-    //         </div>
-
-    //         <h3 className="class-name">{props.name}</h3>
-    //     </div>
-    //     <div class-section-container>
-    //         <p className="class-section">{props.section}</p>
-    //     </div>
-    // </div>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
+        <Link to={`/t/${props.userId}/class/${props.classId}`}><MenuItem>View Class</MenuItem></Link>
+        <Link to={`/t/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem>Class Analytics</MenuItem></Link>
+        <Link to={`/t/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link>
+      </Menu>
+    </StyledCard>
   );
 }
 
-export default TeacherDashboardCard
+export default TeacherDashboardCard;

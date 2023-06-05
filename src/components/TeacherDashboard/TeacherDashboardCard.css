@@ -1,4 +1,4 @@
-.class-card {
+/* .class-card {
 
   position: absolute;
 
@@ -10,10 +10,10 @@
   height: 150px;
   transition: box-shadow 0.3s;
 
-}
-
+} */
+/* 
 .class-card .class-name-container {
-  /* new styles */
+  
   position: relative;
 
   padding-top: 16px;
@@ -41,7 +41,7 @@
   left: 0;
   border-radius: 20px 20px 0 0;
   opacity: 0.7;
-}
+} */
 
 /* 
 .class-card>.class-name-container:after{
@@ -51,42 +51,42 @@
     #fb36f4 );
  
 } */
-
+/* 
 .class-card .class-name {
-  /* existing styles */
+ 
   font-size: 20px;
   font-weight: bold;
   margin: 10px;
-  /* new styles */
+ 
   color: white;
   width: 200px;
   overflow: hidden;
   white-space: nowrap;
-  /*wouldn't go to multiple lines and will not overflow*/
+ 
   text-overflow: ellipsis;
   padding-left: 5%;
 
 
-}
-
+} */
+/* 
 .class-card .class-section-container {
-  /* new styles */
+ 
   background-color: white;
 
   text-align: center;
   padding-top: 20px;
-}
-
+} */
+/* 
 .class-card .class-section {
-  /* existing styles */
+  
   color: rgb(34, 1, 95);
   font-size: 20px;
   margin: 10px;
   padding-left: 5%;
   padding-top: 16px;
 
-}
-
+} */
+/* 
 .dropdown {
   position: absolute;
   display: inline-block;
@@ -102,7 +102,7 @@
 }
 
 /*copied*/
-.dropdown-content-forTeacher-class {
+/* .dropdown-content-forTeacher-class {
   display: block;
   position: relative;
   margin-top: 60px;
@@ -111,8 +111,8 @@
   overflow: auto;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
-}
-
+} */
+/* 
 .dropdown-content-forTeacher-class a {
   color: black;
   padding: 12px 16px;
@@ -122,9 +122,9 @@
 
 .dropdown-content-forTeacher-class a:hover {
   background-color: #f1f1f1
-}
+} */
 
-
+/* 
 
 .class-name-container .optionContainer li {
   background: none repeat scroll 0 0 #fff;
@@ -145,26 +145,26 @@
   color: #fff !important;
   align-items: right;
   padding: 10px;
-}
-
+} */
+/* 
 .btn-left {
   left: 0.4em;
 }
 
 .btn-right {
   right: 0.4em;
-}
-
+} */
+/* 
 .btn-left,
 .btn-right {
   position: absolute;
   top: 0.24em;
 }
 
+ */
 
 
-
-
+/* 
 
 .create-class-modal label {
   font-size: 18px;
@@ -172,10 +172,10 @@
   margin: 0;
   text-align: center;
   color: rgb(5, 1, 106);
-}
+} */
 
-
+/* 
 
 .class-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+} */

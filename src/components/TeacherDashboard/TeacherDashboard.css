@@ -64,7 +64,7 @@ body {
 
 
 
-.create-class-button {
+/* .create-class-button {
   position: absolute;
   left: 50%;
   bottom: 16px;
@@ -74,8 +74,8 @@ body {
   background-color: #0072c6;
   color: white;
   padding: 8px 16px;
-}
-
+} */
+/* 
 .create-class-form .create-button {
   font-size: 18px;
   border-radius: 8px;
@@ -85,8 +85,8 @@ body {
   margin-top: 16px;
   margin-right: 8px;
   border: 1px solid #cccccc;
-}
-
+} */
+/* 
 .create-class-form .cancel-button {
   font-size: 18px;
   border-radius: 8px;
@@ -95,4 +95,4 @@ body {
   padding: 8px 16px;
   margin-top: 16px;
   border: 1px solid #cccccc;
-}
+} */
