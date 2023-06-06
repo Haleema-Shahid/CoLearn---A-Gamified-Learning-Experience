@@ -45,7 +45,7 @@ function AssignmentPage() {
     const [deadline, setDeadline] = useState(null);
     const [totalMarks, setTotalMarks] = useState("");
     const [assignmentFiles, setAssignmentFiles] = useState([])
-    const [assignmentTags, setAssignmentTags] = useState(['chip1'])
+    const [assignmentTags, setAssignmentTags] = useState([]);
     const [assignmentFilesData, setAssignmentFilesData] = useState([])
     const [helpingMaterialData, setHelpingMaterialData] = useState([])
     //an array that has all the helping material data
@@ -148,6 +148,7 @@ function AssignmentPage() {
 
                 try {
                     await new Promise((resolve, reject) => {
+
                         uploadTask.on(
                             'state_changed',
                             (snapshot) => {
@@ -181,6 +182,7 @@ function AssignmentPage() {
                                 }
                             }
                         );
+
                     });
                 } catch (error) {
                     console.error('Error uploading file:', error);
@@ -279,27 +281,29 @@ function AssignmentPage() {
             assignmentFiles
         });
     };
-
     const handleTotalMarksChange = (event) => {
-        const value = Number(event.target.value);
-        if (value > 1000) {
-            setTotalMarks(1000);
-        }
-        else if (event.key === "Backspace" && value === 0) {
-            setTotalMarks("");
-        }
-        else if (value < 0) {
-            setTotalMarks(0);
-        }
-        else {
-            setTotalMarks(value);
+        let value = event.target.value.trim(); // Trim any leading/trailing spaces
+        value = value.replace(/^0+/, ''); // Remove leading zeros
+
+        if (value === "") {
+            setTotalMarks(""); // If the input becomes empty, set it as an empty string
+        } else {
+            const numericValue = Number(value); // Convert the value to a number
+            if (!isNaN(numericValue)) { // Check if the numeric value is valid
+                if (numericValue > 1000) {
+                    setTotalMarks(1000);
+                } else if (numericValue < 0) {
+                    setTotalMarks(0);
+                } else {
+                    setTotalMarks(numericValue);
+                }
+            }
         }
     };
+
     const handleCurrentTagChange = (event) => {
         const value = event.target.value;
-        if (value !== "") {
-            setCurrentTag(value)
-        }
+        setCurrentTag(value);
     };
     const handleAssignmentTags = () => {
 
@@ -321,6 +325,18 @@ function AssignmentPage() {
     const handleHelpingMaterialClick = () => {
         setHelpingMaterialClick(!helpingMaterialClick);
     }
+
+
+
+    const handleKeyDownforTag = (event) => {
+        if (event.key === "Backspace" && currentTag === "") {
+            // Handle backspace to delete the last tag
+            setAssignmentTags(assignmentTags =>
+                assignmentTags.slice(0, assignmentTags.length - 1)
+            );
+        }
+    };
+
 
 
     return (
@@ -421,7 +437,7 @@ function AssignmentPage() {
                                         display: 'flex',
                                         flexDirection: 'row'
                                     }}>
-                                    <Button className='HandleTags' onClick={handleAssignmentTags} sx={{
+                                    <Button className='HandleTags' onClick={handleAssignmentTags} onKeyDown={handleKeyDownforTag} sx={{
                                         backgroundColor: '#1e3c72',
                                         color: 'white',
                                         borderRadius: '10px',

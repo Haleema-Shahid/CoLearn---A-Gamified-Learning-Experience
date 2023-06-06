@@ -78,6 +78,7 @@ const SubmissionsDisplay = () => {
                 if (data2) {
                     //setClasses(data);
                     console.log("fetched in front end: ", data2);
+
                     setTags(data2.assignment.tags);
                 }
 
@@ -89,6 +90,9 @@ const SubmissionsDisplay = () => {
         fetchSubmissions();
     }, [assignmentId]);
 
+    useEffect(() => {
+        console.log("in useeffect: ", tags);
+    }, [tags])
     const recommendMaterial = async () => {
         try {
             const response = await fetch(`http://localhost:4000/backend/t/${userId}/assignment/${assignmentId}/submissions`);
@@ -303,6 +307,7 @@ const SubmissionsDisplay = () => {
                                                     return '';
                                                 }}
                                             >
+                                                {console.log("tags:", tags)}
                                                 {tags.map((tag) => (
                                                     <MenuItem key={tag} value={tag}
                                                         sx={{
