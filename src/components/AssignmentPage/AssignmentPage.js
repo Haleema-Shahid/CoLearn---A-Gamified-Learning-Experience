@@ -24,8 +24,9 @@ import Typography from '@mui/material/Typography';
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import FileItem from "./FileItem";
+import ClassHeader from "../ClassHeader/ClassHeader";
 
-
+import Grid from '@mui/material/Grid';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -340,53 +341,63 @@ function AssignmentPage() {
 
 
     return (
-        <div>
-            {!helpingMaterialClick && (<div>
-                <div className="split left" >
-                    <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
-                        <Typography variant="body1" gutterBottom
-                            sx={{
-                                fontSize: '2rem',
-                                fontFamily: 'Montserrat',
-                                fontWeight: '-50'
-                            }}>
-                            Assignment
-                        </Typography>
-                    </div>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                        sx={{
-                            // margin: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            "& .MuiTextField-root": { width: "50ch" },
-                            paddingLeft: "50px",
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <Stack spacing={1.25}>
-                            <TextField
-                                required
-                                id="assignment-title"
-                                label="Assignment Title"
-                                value={title}
-                                onChange={(event) => setTitle(event.target.value)}
-                                fullWidth
-                            />
-                            <TextField
-                                id="assignment-description"
-                                label="Description"
-                                value={description}
-                                onChange={(event) => setDescription(event.target.value)}
-                                multiline
-                                rows={4}
-                                fullWidth
-                            />
-                            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <div style={{ justifyContent: 'center' }}>
+            <div>
+                <ClassHeader userId={userId} classId={classId} />
+            </div>
+            {!helpingMaterialClick && (
+                <div style={{ paddingLeft: '8%', paddingRight: '10%', paddingTop: '20px', paddingBottom: '20px' }}>
+                    <Grid container spacing={3} >
+                        {/* Assignment Information */}
+                        <Grid item xs={12} md={6} lg={8} style={{ display: 'flex' }}>
+                            <Paper elevation={3} style={{ flexGrow: 1 }}>
+                                <div>
+                                    
+                                    <Box
+                                        component="form"
+                                        onSubmit={handleSubmit}
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            "& .MuiTextField-root": { width: "50ch" },
+                                            paddingLeft: "20px",
+                                            paddingRight: '20px',
+                                            justifyContent: "center",
+                                            alignItems: "center"
+                                        }}
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <Stack spacing={1.25}>
+                                        <div style={{ color: "#4b6cb7" }}>
+                                        <Typography variant="body1" gutterBottom
+                                            sx={{
+                                                fontSize: '1rem',
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: '-50',
+                                                paddingTop:'5px',
+                                            }}>
+                                            <h1>Assignment</h1>
+                                        </Typography>
+                                    </div>
+                                            <TextField
+                                                required
+                                                id="assignment-title"
+                                                label="Assignment Title"
+                                                value={title}
+                                                onChange={(event) => setTitle(event.target.value)}
+                                                fullWidth
+                                            />
+                                            <TextField
+                                                id="assignment-description"
+                                                label="Description"
+                                                value={description}
+                                                onChange={(event) => setDescription(event.target.value)}
+                                                multiline
+                                                rows={4}
+                                                fullWidth
+                                            />
+                                            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                                 <DatePicker
                                     label="Deadline"
                                     value={deadline}
@@ -395,146 +406,141 @@ function AssignmentPage() {
                                     fullWidth
                                 />
                             </LocalizationProvider> */}
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateTimePicker
-                                    label="Deadline"
-                                    defaultValue={yesterday}
-                                    disablePast
-                                    views={['year', 'month', 'day', 'hours', 'minutes']}
-                                    onChange={(newValue) => setDeadline(newValue.toDate())} // Convert newValue to a Date object}
-                                />
-                            </LocalizationProvider>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <DateTimePicker
+                                                    label="Deadline"
+                                                    defaultValue={yesterday}
+                                                    disablePast
+                                                    views={['year', 'month', 'day', 'hours', 'minutes']}
+                                                    onChange={(newValue) => setDeadline(newValue.toDate())} // Convert newValue to a Date object}
+                                                />
+                                            </LocalizationProvider>
 
-                            <TextField
-                                required
-                                id="total-marks"
-                                label="Total Marks"
-                                type="number"
-                                inputProps={{ min: 0, max: 1000 }}
-                                value={totalMarks}
-                                onChange={handleTotalMarksChange}
-                                onKeyDown={handleTotalMarksChange}
-                                error={totalMarks > 1000}
-                                helperText={totalMarks > 1000 || totalMarks < 0 ? "Maximum 1000 marks allowed" : ""}
-                                sx={{ width: "100%", mt: 2 }}
-                            />
+                                            <TextField
+                                                required
+                                                id="total-marks"
+                                                label="Total Marks"
+                                                type="number"
+                                                inputProps={{ min: 0, max: 1000 }}
+                                                value={totalMarks}
+                                                onChange={handleTotalMarksChange}
+                                                onKeyDown={handleTotalMarksChange}
+                                                error={totalMarks > 1000}
+                                                helperText={totalMarks > 1000 || totalMarks < 0 ? "Maximum 1000 marks allowed" : ""}
+                                                sx={{ width: "100%", mt: 2 }}
+                                            />
 
-                            <div className="Tags-Assignment"
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column'
-                                }}>
-                                <TextField
-                                    required
-                                    id="AssignmentTags"
-                                    label="Input Tags for Assignment"
-                                    value={currentTag}
-                                    onChange={handleCurrentTagChange}
-                                    sx={{ width: "100%", mt: 2 }}
-                                />
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row'
-                                    }}>
-                                    <Button className='HandleTags' onClick={handleAssignmentTags} onKeyDown={handleKeyDownforTag} sx={{
-                                        backgroundColor: '#1e3c72',
-                                        color: 'white',
-                                        borderRadius: '10px',
-                                        padding: '5px 15px',
-                                        fontSize: '0.75rem',
-                                        marginRight: '5px',
-                                        '&:hover': {
-                                            backgroundColor: '#0c2461',
-                                        },
-                                    }}>Add Tag</Button>
-                                    {
-                                        assignmentTags.map((tag) => (
-                                            <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
-                                        ))
-                                    }
+                                            <div className="Tags-Assignment" style={{ display: 'flex', flexDirection: 'column', marginBottom: '10px' }}>
+                                                <TextField
+                                                    required
+                                                    id="AssignmentTags"
+                                                    label="Input Tags for Assignment"
+                                                    value={currentTag}
+                                                    onChange={handleCurrentTagChange}
+                                                    sx={{ width: "100%", mt: 2, marginBottom: '10px' }}
+                                                />
+                                                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                                    <Button
+                                                        className='HandleTags'
+                                                        onClick={handleAssignmentTags}
+                                                        onKeyDown={handleKeyDownforTag}
+                                                        sx={{
+                                                            backgroundColor: '#1e3c72',
+                                                            color: 'white',
+                                                            borderRadius: '10px',
+                                                            padding: '5px 15px',
+                                                            fontSize: '0.75rem',
+                                                            marginBottom: '5px',
+                                                            marginRight: '5px',
+                                                            '&:hover': {
+                                                                backgroundColor: '#0c2461',
+                                                            },
+                                                        }}
+                                                    >
+                                                        Add Tag
+                                                    </Button>
+                                                    
+                                                    {assignmentTags.map((tag) => (
+                                                        <Chip
+                                                            key={tag}
+                                                            label={tag}
+                                                            onDelete={() => handleDeleteTag(tag)}
+                                                            sx={{ marginRight: '5px', marginBottom: '5px' }}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                        </Stack>
+
+                                        {/* Buttons */}
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px', gap: '10px', marginBottom: '20px' }}>
+                                            <Button
+                                                type="submit"
+                                                variant="contained"
+                                                sx={{
+                                                    backgroundColor: '#1e3c72',
+                                                    color: 'white',
+                                                    borderRadius: '10px',
+                                                    padding: '5px 20px',
+                                                    fontSize: '0.9rem',
+                                                    '&:hover': {
+                                                        backgroundColor: '#0c2461',
+                                                    },
+                                                }}
+                                            >
+                                                Post Assignment
+                                            </Button>
+                                            <Button
+                                                onClick={handleHelpingMaterialClick}
+                                                variant="contained"
+                                                sx={{
+                                                    backgroundColor: '#1e3c72',
+                                                    color: 'white',
+                                                    borderRadius: '10px',
+                                                    padding: '5px 20px',
+                                                    fontSize: '0.9rem',
+                                                    '&:hover': {
+                                                        backgroundColor: '#0c2461',
+                                                    },
+                                                }}
+                                            >
+                                                Go back to Helping Material
+                                            </Button>
+                                        </div>
+
+                                    </Box>
                                 </div>
+                            </Paper>
+                        </Grid>
 
-                            </div>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px 30px',
-                                    fontSize: '1rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}
-                            >
-                                Post Assignment
-                            </Button>
+                        {/* File Uploader */}
+                        <Grid item xs={12} md={6} lg={4} style={{ display: 'flex', }}>
+                            <Paper elevation={3} style={{ padding: '40px', flexGrow: 1 }}>
 
-                        </Stack>
+                                <div >
+                                    <div style={{ marginBottom: '30px', marginTop: '20px' }}>
+                                        <FileUploader
+                                            files={assignmentFiles}
+                                            setFiles={setAssignmentFiles}
+                                            remFile={removeFile}
+                                            assignmentData={assignmentFilesData}
+                                            setData={setAssignmentFilesData}
+                                        ></FileUploader>
+                                    </div>
 
-                    </Box>
-
-
-                </div>
-                {/* //----------------- */}
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        height: '100vh',
-                        paddingRight: '20px',
-                    }}
-                >
-                    <div style={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <div style={{ marginBottom: '30px', marginTop: '20px' }}>
-                            <FileUploader
-                                files={assignmentFiles}
-                                setFiles={setAssignmentFiles}
-                                remFile={removeFile}
-                                assignmentData={assignmentFilesData}
-                                setData={setAssignmentFilesData}
-                            ></FileUploader>
-                        </div>
-
-                        <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
-                            {assignmentFilesData.map((file, index) => (
-                                <div key={index} style={{ marginBottom: '10px' }}>
-                                    <FileItem file={file} deleteFile={deleteAssignmentFileItem} />
+                                    <div style={{ padding: '10px' }}>
+                                        {assignmentFilesData.map((file, index) => (
+                                            <div key={index} style={{ marginBottom: '10px', }}>
+                                                <FileItem file={file} deleteFile={deleteAssignmentFileItem} />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
-                        <div>
-                            <Button onClick={handleHelpingMaterialClick}
-
-                                variant="contained"
-                                sx={{
-                                    backgroundColor: '#1e3c72',
-                                    color: 'white',
-                                    borderRadius: '10px',
-                                    padding: '10px 30px',
-                                    fontSize: '1rem',
-                                    '&:hover': {
-                                        backgroundColor: '#0c2461',
-                                    },
-                                }}
-                            >
-                                Go back to Helping Material
-                            </Button>
-
-
-                        </div>
-
-
-
-                        {/* <div className="file-uploader-container" style={{ marginTop: '20px' }}>
-                        <FileUploader files={AssignmentFiles} setFiles={setAssignmentFiles} remFile={removeFile}></FileUploader>
-                    </div> */}
-                    </div>
-                </div>
-            </div>)}
+                            </Paper>
+                        </Grid>
+                    </Grid>
+                </div>)}
             {
                 helpingMaterialClick &&
                 <div>
@@ -543,10 +549,9 @@ function AssignmentPage() {
                     <HelpingMaterial helpingData={helpingMaterialData} setHelpingMaterialData={setHelpingMaterialData} onNextClick={handleHelpingMaterialClick} />
                 </div>
             }
-
-
         </div>
     );
+
 }
 
 export default AssignmentPage;

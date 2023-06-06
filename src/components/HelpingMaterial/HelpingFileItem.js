@@ -1,9 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileAlt, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faFileAlt, faSpinner, faTrash, faCircle, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-const HelpingFileItem = ({ file, deleteFile, difficulty}) => {
-  //in helping material file item we have difficulty levels as well
+const HelpingFileItem = ({ file, deleteFile, difficulty, tags }) => {
+  const [showTags, setShowTags] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleDropdownClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const renderTags = () => {
+    if (tags.length === 0) {
+      return <span>No tags available</span>;
+    }
+
+    return <span>{tags.join(', ')}</span>;
+  };
+
+  const getCircleColor = () => {
+    if (difficulty === 'easy') {
+      return '#80b918';
+    } else if (difficulty === 'medium') {
+      return '#fe7f2d';
+    } else if (difficulty === 'hard') {
+      return '#00509d';
+    } else {
+      return 'gray';
+    }
+  };
+
+  const getCircleHoverText = () => {
+    if (difficulty === 'easy') {
+      return 'Easy';
+    } else if (difficulty === 'medium') {
+      return 'Medium';
+    } else if (difficulty === 'hard') {
+      return 'Hard';
+    } else {
+      return 'Unknown';
+    }
+  };
+
   return (
     <li
       style={{
@@ -17,9 +55,9 @@ const HelpingFileItem = ({ file, deleteFile, difficulty}) => {
       }}
       key={file}
     >
-      <FontAwesomeIcon icon={faFileAlt} style={{ marginRight: '0.5em', color:'4b6cb7' }} />
-      <p style={{ fontSize: '0.9rem', margin: '0' }}>{file.name} </p>
-      <p style={{ fontSize: '0.9rem', margin: '0' }}>{difficulty} </p>
+      <FontAwesomeIcon icon={faCircle} style={{ marginRight: '0.5em', color: getCircleColor() }} title={getCircleHoverText()} />
+      <p style={{ fontSize: '0.9rem', margin: '0' }}>{file.name}</p>
+      
       <div className="actions" style={{ marginLeft: 'auto' }}>
         <div className="loading"></div>
         {file.isUploading && (
@@ -37,7 +75,24 @@ const HelpingFileItem = ({ file, deleteFile, difficulty}) => {
             onClick={() => deleteFile(file.name)}
           />
         )}
+        <FontAwesomeIcon
+          icon={faAngleDown}
+          style={{ color: '4b6cb7', marginLeft: '0.5em', cursor: 'pointer' }}
+          onClick={handleDropdownClick}
+        />
       </div>
+      {dropdownOpen && (
+        <div
+          style={{
+            marginTop: '0.5em',
+            backgroundColor: 'white',
+            padding: '0.5em',
+            borderRadius: '5px',
+          }}
+        >
+          {renderTags()}
+        </div>
+      )}
     </li>
   );
 };
