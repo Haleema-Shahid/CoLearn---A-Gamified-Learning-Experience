@@ -23,6 +23,7 @@ import TRecomMaterialUI from "./TRecomMaterialUI";
 import backgroundImage from "../../images/sample.jpg"; // Add the path to your background image
 
 
+import TeacherDashboardHeader from '../DashboardHeader';
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Description } from "@mui/icons-material";
@@ -162,9 +163,10 @@ function AssignmentViewer() {
       backgroundColor: '#1e3c72',
       backgroundSize: "cover",
       minHeight: "100vh",
-      paddingTop: "5%",
+      paddingTop: "0%",
       paddingBottom: "5%",
     }} >
+      <TeacherDashboardHeader userId={userId} />
       <div style={{ marginLeft: '10%', marginRight: '10%', backgroundColor: '#1e3c72' }}>
         <Box
           sx={{
@@ -174,7 +176,10 @@ function AssignmentViewer() {
             minHeight: 'calc(100vh - 80px)', // Adjust the value based on your page layout
           }}
         >
-          <Box sx={{ flexGrow: 1 }}>
+          <Box sx={{
+            display: 'flex',
+            flexGrow: 1
+          }}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={12}>
                 <Paper
@@ -227,6 +232,9 @@ function AssignmentViewer() {
                   </Button>
                 </Paper>
               </Grid>
+
+
+
               <Grid item xs={12} md={6} lg={12}>
                 <Paper
                   sx={{
@@ -251,6 +259,8 @@ function AssignmentViewer() {
                       padding: "30px",
                       display: "flex",
                       flexDirection: "column",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                       "& .MuiTextField-root": { m: 1, width: "50ch" },
                       paddingLeft: "50px"
                     }}
@@ -305,6 +315,9 @@ function AssignmentViewer() {
                 </Paper>
               </Grid>
 
+
+
+
               {/* Assignment Material */}
               {assignmentFiles.length > 0 && (
                 <Grid item xs={12} sm={6} md={6} lg={6}>
@@ -313,7 +326,7 @@ function AssignmentViewer() {
                       p: 2,
                       display: 'flex',
                       flexDirection: 'column',
-                      height: 240,
+                      height: 'auto',
                       backgroundColor: '#f8f8f8',
                       borderRadius: "10px", // Adjust the value to control the roundness of the corners
 
@@ -323,37 +336,45 @@ function AssignmentViewer() {
                   >
                     <h2>Assignment Attachments</h2>
                     <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 350,
-            backgroundColor: '#f8f8f8',
-            borderRadius: "10px", // Adjust the value to control the roundness of the corners
-            
-           
-            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-            overflow: "auto",
-            marginTop:'3%'
-          
-          }}
-        >
-                    <AsgnFilesUI asgnFiles={assignmentFiles} />
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 'auto',
+                        backgroundColor: '#f8f8f8',
+                        borderRadius: "10px", // Adjust the value to control the roundness of the corners
+
+
+                        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                        overflow: "auto",
+                        marginTop: '3%'
+
+                      }}
+                    >
+                      <AsgnFilesUI asgnFiles={assignmentFiles} />
                     </Paper>
                   </Paper>
                 </Grid>
               )}
 
+
+
+
+
+
+
+
               {/* Recommended Material */}
+
               {console.log("hm just before ui: ", helpingMaterials)}
               {helpingMaterials.length > 0 && (
-                <Grid item xs={12} sm={6} md={6} lg={6}>
+                <Grid item xs={12} sm={6} md={6} lg={6} >
                   <Paper
                     sx={{
                       p: 2,
                       display: 'flex',
                       flexDirection: 'column',
-                      height: 240,
+                      height: 'auto',
                       borderRadius: "10px", // Adjust the value to control the roundness of the corners
                       backgroundColor: "#f8f8f8",
                       boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
@@ -362,26 +383,28 @@ function AssignmentViewer() {
                   >
                     <h2>Helping Material</h2>
                     <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 350,
-            backgroundColor: '#f8f8f8',
-            borderRadius: "10px", // Adjust the value to control the roundness of the corners
-            
-           
-            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-            overflow: "auto",
-            marginTop:'3%'
-          
-          }}
-        >
-                    <TRecomMaterialUI recomFiles={helpingMaterials} />
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 'auto',
+                        width: 'auto',
+                        backgroundColor: '#f8f8f8',
+                        borderRadius: "10px", // Adjust the value to control the roundness of the corners
+
+
+                        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                        overflow: "auto",
+                        marginTop: '3%'
+
+                      }}
+                    >
+                      <TRecomMaterialUI recomFiles={helpingMaterials} />
                     </Paper>
                   </Paper>
                 </Grid>
               )}
+
             </Grid>
           </Box>
         </Box>

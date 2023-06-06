@@ -444,6 +444,7 @@ router.get('/t/:userId/class/:classId/week/:weekId/topic/:topicId', async (req, 
   try {
     const { topicId } = req.params;
 
+    console.log("topicId is ", topicId);
     // Fetch the topic
     const topicObject = await client.db("colearnDb").collection("topic").findOne({ _id: new ObjectId(topicId) });
 

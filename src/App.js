@@ -30,6 +30,8 @@ import BoilerClassLeaderboard from './Leaderboard/BoilerClassLeaderboard';
 import ProgressDashboard from './components/Students/Progress';
 import StudentMaterialViewer from './StudentComponents/StMaterialViewer.js/StMaterialViewer';
 
+import ViewTopicS from './StudentComponents/Topics/TopicsView/ViewTopic';
+
 
 function App() {
   return (
@@ -62,6 +64,7 @@ function App() {
           <Route path="/s/:userId/class/:classId" element={<ClassDefault2 />} />
 
           <Route path="/t/:userId/class/:classId/week/:weekId" element={<CloDetails />} />
+
           {/*// 
           <//Route path="/t/:userId/class/:classId/week/:weekId/:weekNumber" element={<TopicsBoard />} /> */}
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment" element={<AssignmentPage />} />

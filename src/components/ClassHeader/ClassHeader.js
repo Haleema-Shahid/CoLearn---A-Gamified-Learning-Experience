@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import 'typeface-montserrat';
-import DashboardHeader from '../TeacherDashboard/DashboardHeader';
+import DashboardHeader from '../DashboardHeader';
 import Box from '@mui/material/Box';
 
 const GradientBackground = styled(Paper)(({ theme }) => ({

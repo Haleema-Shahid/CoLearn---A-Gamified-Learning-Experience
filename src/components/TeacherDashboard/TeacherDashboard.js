@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import TeacherDashboardHeader from './DashboardHeader';
+import TeacherDashboardHeader from '../DashboardHeader';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import createClassBg from '../../images/classaddcard.jpg'
@@ -37,7 +37,7 @@ function TeacherDashboard() {
   const [open, setOpen] = useState(false);
   const [createNewClassButton, setCreateNewClassButton] = useState(false);
 
-  const [newClass, setNewClass]=useState();
+  const [newClass, setNewClass] = useState();
 
   const navigate = useNavigate();
 
@@ -116,25 +116,25 @@ function TeacherDashboard() {
       const newClass = { name: className, description };
       setClasses(prevClasses => [...prevClasses, newClass]); // Append the new class to the existing array
     }
-  
+
     setShowCreateClassModal(false);
     setClassName('');
     setdescription('');
     setCreateNewClassButton(false)
 
 
-    
+
   };
 
   const handleCancelClick = () => {
-    
+
     setCreateNewClassButton(false);
     setShowCreateClassModal(false);
     setClassName('');
     setdescription('');
-    
-   
-    
+
+
+
   };
 
   const handleDeleteClass = async (name, description, _id) => {
@@ -149,7 +149,7 @@ function TeacherDashboard() {
           'Content-Type': 'application/json',
         }
       });
-  
+
       if (response.ok) {
         console.log('Class deleted successfully');
         // Update the classes state by filtering out the deleted class
@@ -172,31 +172,31 @@ function TeacherDashboard() {
     }}>
 
       <TeacherDashboardHeader userId={userId} />
-     
 
-      
+
+
       {!createNewClassButton && (
         <Tooltip title="Add a new class">
           <IconButton
-  onClick={handleCreateClassClick}
-  sx={{
-    backgroundColor: '#0E3386',
-    color: 'white',
-    position: 'fixed',
-    bottom: '30px',
-    right: '30px',
-    zIndex: 999,
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-    transition: 'background-color 0.3s ease-in-out',
-    '@media (max-width: 600px)': {
-      bottom: '20px',
-      right: '20px',
-    },
-    
-  }}
->
-  <AddIcon fontSize="large" sx={{ fontSize: '3rem' }}/>
-</IconButton>
+            onClick={handleCreateClassClick}
+            sx={{
+              backgroundColor: '#0E3386',
+              color: 'white',
+              position: 'fixed',
+              bottom: '30px',
+              right: '30px',
+              zIndex: 999,
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+              transition: 'background-color 0.3s ease-in-out',
+              '@media (max-width: 600px)': {
+                bottom: '20px',
+                right: '20px',
+              },
+
+            }}
+          >
+            <AddIcon fontSize="large" sx={{ fontSize: '3rem' }} />
+          </IconButton>
         </Tooltip>
       )}
 
@@ -209,86 +209,88 @@ function TeacherDashboard() {
         </Snackbar>
       )}
 
-{showCreateClassModal && (
-  <div style={{ }}>
-  <Grid container justifyContent="center" style={{ width: '100%', height: '100%', position: 'fixed', top: 0, left: 0}}>
-    <Grid item xs={12} md={6} lg={4} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Paper elevation={3} style={{ padding: '40px', backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '90%'}}>
-        <Paper elevation={0} style={{ padding: '20px' }}>
-          <form onSubmit={handleCreateClassSubmit}>
-            <Stack spacing={2}>
-              <TextField
-                required
-                id="className"
-                label="Class Name"
-                value={className}
-                onChange={handleClassNameChange}
-                fullWidth
-              />
-              <TextField
-                required
-                id="sectionInput"
-                label="Section"
-                value={description}
-                onChange={handleDescriptionChange}
-                fullWidth
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                style={{
-                  backgroundColor: '#0E3386',
-                  color: 'white',
-                  borderRadius: '10px',
-                  padding: '10px 30px',
-                  fontSize: '1rem',
-                  '&:hover': {
-                    backgroundColor: '#0E3386',
-                  },
-                }}
-              >
-                Create Class
-              </Button>
-              <Button
-                onClick={handleCancelClick}
-                variant="outlined"
-                sx={{borderColor:'#0E3386', color:'#0E3386'}}
-              >
-                Cancel
-              </Button>
-            </Stack>
-          </form>
-        </Paper>
-      </Paper>
-    </Grid>
-  </Grid>
-  </div>
-)}
-     {!showCreateClassModal && (
-  <div style={{
-    backgroundColor: '#eae4e9',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-    gridGap: '40px',
-    padding: '20px',
-    
-  }}>
-    <Grid container spacing={3}>
-      {classes.map((classObj) => (
-        <Grid item xs={12} sm={6} md={4} key={classObj.name + classObj.description} style={{ height: '200px', width:'300px' }}>
-          <TeacherDashboardCard
-            name={classObj.name}
-            section={classObj.description}
-            classId={classObj._id}
-            userId={userId}
-            onDelete={handleDeleteClass}
-            style={{ height: '500px' }}
-          />
-        </Grid>
-      ))}
-    </Grid>
-  </div>
-)}
+      {showCreateClassModal && (
+        <div style={{}}>
+          <Grid container justifyContent="center" style={{ width: '100%', height: '100%', position: 'fixed', top: 0, left: 0 }}>
+            <Grid item xs={12} md={6} lg={4} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Paper elevation={3} style={{ padding: '40px', backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '90%' }}>
+                <Paper elevation={0} style={{ padding: '20px' }}>
+                  <form onSubmit={handleCreateClassSubmit}>
+                    <Stack spacing={2}>
+                      <TextField
+                        required
+                        id="className"
+                        label="Class Name"
+                        value={className}
+                        onChange={handleClassNameChange}
+                        fullWidth
+                      />
+                      <TextField
+                        required
+                        id="sectionInput"
+                        label="Section"
+                        value={description}
+                        onChange={handleDescriptionChange}
+                        fullWidth
+                      />
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        style={{
+                          backgroundColor: '#0E3386',
+                          color: 'white',
+                          borderRadius: '10px',
+                          padding: '10px 30px',
+                          fontSize: '1rem',
+                          '&:hover': {
+                            backgroundColor: '#0E3386',
+                          },
+                        }}
+                      >
+                        Create Class
+                      </Button>
+                      <Button
+                        onClick={handleCancelClick}
+                        variant="outlined"
+                        sx={{ borderColor: '#0E3386', color: '#0E3386' }}
+                      >
+                        Cancel
+                      </Button>
+                    </Stack>
+                  </form>
+                </Paper>
+              </Paper>
+            </Grid>
+          </Grid>
+        </div>
+      )}
+      {!showCreateClassModal && (
+        <div style={{
+          backgroundColor: 'white',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+          gridGap: '40px',
+          padding: '20px',
+
+        }}>
+          <Grid container spacing={3}>
+            {classes.map((classObj) => (
+              <Grid item xs={12} sm={6} md={4} key={classObj.name + classObj.description} style={{ height: '200px', width: '300px' }}>
+                <Link to={`/t/${userId}/class/${classObj._id}`}>
+                  <TeacherDashboardCard
+                    name={classObj.name}
+                    section={classObj.description}
+                    classId={classObj._id}
+                    userId={userId}
+                    onDelete={handleDeleteClass}
+                    style={{ height: '500px' }}
+                  />
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      )}
 
     </div>
   );

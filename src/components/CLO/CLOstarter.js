@@ -10,11 +10,17 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CloDetails from './CLODetails';
 import TopicsBoard from '../Topics/TopicsMainPage/TopicsBoard'
 import ViewTopic from '../Topics/TopicsView/ViewTopic';
+import { Link } from '@mui/icons-material';
+import { Navigate } from 'react-router';
+import { useRef } from 'react';
+
 
 class Clo extends Component {
 
+
   constructor(props) {
     super(props);
+    const history = props.history;
     this.state = {
       userId: props.userId,
       classId: props.classId,
@@ -112,7 +118,13 @@ class Clo extends Component {
     }
   };
 
+  handleViewTopic = () => {
+    console.log("in handle view topic: ", this.history.push)
 
+    //const navigate = useNavigate();
+    this.history.push(`/t/${this.state.userId}/class/${this.state.classId}/week/${this.state.selectedTopicsWeekId}/topic/${this.state.selectedTopic}`)
+
+  }
 
   handleTopicSelect = (topicId, userId, classId, weekId) => {
 
@@ -131,6 +143,8 @@ class Clo extends Component {
   };
 
   render() {
+
+
     const { classId, weekNumber } = this.state;
     console.log("in clo starter");
 
@@ -155,6 +169,7 @@ class Clo extends Component {
                 Add Week
               </Button>
               <CloDetails userId={this.state.userId} classId={this.state.classId} numberWeeks={this.state.weekNumber} weeksInfo={this.state.weekInfo} onWeekSelect={this.onWeekSelect}></CloDetails>
+
             </Box>
           )
           }
@@ -167,11 +182,14 @@ class Clo extends Component {
                 paddingLeft: '20%'
               }}>
               <TopicsBoard userId={this.state.userId} classId={this.state.classId} weekId={this.state.weekInfo[this.state.selectedWeekIndex]._id} weekNumber={this.state.selectedWeekIndex + 1} onTopicSelect={this.handleTopicSelect} />
+
             </Box>
           )
           }
           {
-            this.state.isWeekSelected && this.state.showViewTopic && (
+            this.state.isWeekSelected && this.state.showViewTopic &&
+            // this.handleViewTopic()
+            (
               <ViewTopic
                 userId={this.state.userId}
                 classId={this.state.classId}
@@ -179,6 +197,7 @@ class Clo extends Component {
                 topicId={this.state.selectedTopic}
 
               ></ViewTopic>
+
 
             )
           }
