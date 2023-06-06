@@ -5,7 +5,7 @@ import StudentDashboardCard from './StudentDashboardCard';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import DashboardHeader from './DashboardHeader';
+import DashboardHeader from '../DashboardHeader';
 
 
 
@@ -110,13 +110,16 @@ function StudentDashboard() {
           {classes.map((classObj) => (
             // <Link to={`/user/${userId}/class/${classObj.id}`} key={classObj.id}>
             <div className="container_card" key={classObj.name + classObj.discription} >
-              <StudentDashboardCard name={classObj.name} section={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
+              <Link to={`/s/${userId}/class/${classObj._id}`} style={{ textDecoration: 'none' }}>
+                <StudentDashboardCard name={classObj.name} section={classObj.description} classId={classObj._id} userId={userId} onDelete={handleDeleteClass} />
+              </Link>
             </div>
             // </Link>
           ))}
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

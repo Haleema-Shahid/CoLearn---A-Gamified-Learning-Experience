@@ -93,9 +93,9 @@ function CLOCard(props) {
                 onClose={handleMenuClose}
               >
                 <MenuItem onClick={handleWeekClick}>View Week Material</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
+                {/* <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Tester</MenuItem>
+                <MenuItem onClick={handleMenuClose}>Tester</MenuItem> */}
               </Menu>
             </div>
           </div>

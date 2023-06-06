@@ -4,10 +4,11 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button/Button';
-import dashboardHeader from '../../images/dashboardheader.png';
+import dashboardHeader from '../images/dashboardheader.png';
 import { IconButton, MenuItem, Menu } from '@mui/material';
-import logoblue from '../../images/logoblue.png';
+import logoblue from '../images/logoblue.png';
 import Box from "@mui/material/Box";
+import { Link } from 'react-router-dom';
 
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -85,15 +86,16 @@ const DashboardHeader = () => {
                 alt="Your logo."
                 src={logoblue}
             />
-            <Typography variant="h6" component="div" sx={{
-                fontFamily: 'Montserrat',
-                fontSize: '1.5rem',
-                letterSpacing: '0.05rem',
-                fontWeight: '1',
-                color: 'GrayText',
-            }}>
-                {name}
-            </Typography>
+            <Link to={`/s/${userId}`} style={{ textDecoration: 'none' }}>
+                <Typography variant="h6" component="div" sx={{
+                    fontFamily: 'Montserrat',
+                    fontSize: '1.5rem',
+                    letterSpacing: '0.05rem',
+                    fontWeight: 'Bold',
+                    color: '#001340',
+                }}>
+                    {name}
+                </Typography></Link>
             <IconButton color="inherit" onClick={handleMenuOpen}>
                 <MenuIcon sx={{
                     color: '#545454',
@@ -112,8 +114,6 @@ const DashboardHeader = () => {
                 onClose={handleMenuClose}
             >
                 <MenuItem onClick={() => handleLogout('Option 1')}>Logout</MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick('Option 2')}>Option 2</MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick('Option 3')}>Option 3</MenuItem>
             </Menu>
 
         </HeaderContainer >
