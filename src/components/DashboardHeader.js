@@ -91,6 +91,7 @@ const TeacherDashboardHeader = () => {
                 letterSpacing: '0.01rem',
                 fontWeight: '1',
                 color: 'Black',
+                marginLeft: '-100px'
             }}>
                 {name}
             </Typography>
