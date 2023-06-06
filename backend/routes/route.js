@@ -657,7 +657,8 @@ router.post('/s/:userId/assignment/:assignmentId/submission', async (request, re
       marked: submission.marked,
       late: submission.late,
       files: submission.files,
-      weaktags
+      weaktags: [],
+      recommended: []
     }
 
     await client.db('colearnDb').collection('submission').insertOne(submissionObject);
