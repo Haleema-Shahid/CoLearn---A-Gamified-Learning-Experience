@@ -10,6 +10,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button } from '@mui/material';
+
+
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -48,10 +52,28 @@ function TeacherDashboardCard(props) {
     setAnchorEl(null);
   };
 
-  const handleDeleteClick = () => {
+
+
+
+
+  const [open, setOpen] = useState(false);
+
+  const handleDeleteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
     props.onDelete(props.name, props.section, props.classId);
+    setOpen(false);
     handleMenuClose();
   };
+
+  const handleCancelDelete = () => {
+    setOpen(false);
+  };
+
 
   return (
     <StyledCard>
@@ -75,7 +97,17 @@ function TeacherDashboardCard(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                {/* <MenuItem onClick={handleDeleteClick}>Delete</MenuItem> */}
+                <MenuItem onClick={(e) => { handleDeleteClick(e); }}>Delete</MenuItem>
+                <Dialog open={open} onClose={handleCancelDelete}>
+                  <DialogTitle>Confirmation</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>Are you sure you want to delete?</DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleConfirmDelete} color="primary">Yes</Button>
+                    <Button onClick={handleCancelDelete} color="primary" autoFocus>No</Button>
+                  </DialogActions>
+                </Dialog>
                 <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
                 <Link to={`/t/${props.userId}/class/${props.classId}`}><MenuItem >View Class</MenuItem></Link>
 

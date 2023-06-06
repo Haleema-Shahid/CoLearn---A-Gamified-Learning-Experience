@@ -1049,4 +1049,58 @@ router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, resp
   }
 });
 
+
+//fetch assignment title, and max, min, avg for report
+router.get('/class/:classId/analytics', async (request, response) => {
+  try {
+    const classId = new ObjectId(request.params.classId);
+
+    const weeks = await client.db('colearnDb').collection('week').find({ classId: classId }).toArray();
+    let weekIds = [];
+    for (let i = 0; i < weeks.length; i++) {
+      weekIds.push(weeks[i]._id);
+    }
+    //console.log("weekIds: ", weekIds);
+    const topics = await client.db('colearnDb').collection('topic').find({ weekId: { $in: weekIds } }).toArray();
+    let topicIds = [];
+    for (let i = 0; i < topics.length; i++) {
+      topicIds.push(topics[i]._id);
+    }
+    //console.log("topicIds: ", topicIds);
+
+    const assignments = await client.db('colearnDb').collection('assignment').find({ topicId: { $in: topicIds } }).toArray();
+
+    let assignmentIds = [];
+    for (let i = 0; i < assignments.length; i++) {
+      assignmentIds.push(assignments[i]._id);
+    }
+
+    //console.log("ass Ids: ", assignmentIds);
+    const submissions = await client.db('colearnDb').collection('submission').find({ assignmentId: { $in: assignmentIds } }).toArray();
+
+    //console.log("submmissions: ", submissions);
+    let assignmentData = [];
+    for (let i = 0; i < assignments.length; i++) {
+      const assignment = assignments[i];
+      //console.log("assId: ", assignment._id);
+      const assignmentSubmissions = [];
+      for (let j = 0; j < submissions.length; j++) {
+
+        //console.log("subId: ", submissions[j].assignmentId);
+        if (submissions[j].assignmentId.equals(assignment._id)) {
+          assignmentSubmissions.push(submissions[j]);
+        }
+      }
+
+      assignmentData.push({ assignment, submissions: assignmentSubmissions });
+    }
+
+    console.log("Class report data: ", assignmentData);
+    response.json(assignmentData);
+  } catch (error) {
+    console.error("Error fetching class analytics:", error);
+    response.status(500).json({ error: "An error occurred while fetching class analytics." });
+  }
+});
+
 module.exports = router
