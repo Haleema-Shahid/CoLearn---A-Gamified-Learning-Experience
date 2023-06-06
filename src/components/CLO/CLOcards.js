@@ -46,6 +46,9 @@ function CLOCard(props) {
     setAnchorEl(null);
   };
 
+  const handleDeleteWeek = () => {
+
+  }
   // const handleCardClick = () => {
   //   console.log("card clicked for week")
   //   console.log(props.weekNumber-1);
@@ -93,8 +96,7 @@ function CLOCard(props) {
               >
                 <MenuItem onClick={handleWeekClick}>View Week Material</MenuItem>
                 <MenuItem onClick={handleMenuClose}>Add Topic</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Delete</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Tester</MenuItem>
+                {/* <MenuItem onClick={handleMenuClose}>Delete</MenuItem> */}
               </Menu>
             </div>
           </div>

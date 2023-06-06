@@ -71,8 +71,8 @@ function App() {
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/HelpingMaterial" element={<HelpingMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/material" element={<TeacherMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/materialViewer" element={<TeacherMaterialViewer />} />
-          <Route path="/t/:userId/class/:classId/classAnalytics" element={<TeacherAnalytics />} />
-          <Route path="/t/:userId/class/:classId/classLeaderboard" element={<BoilerClassLeaderboard />} />
+          <Route path="/user/:userId/class/:classId/classAnalytics" element={<TeacherAnalytics />} />
+          <Route path="/user/:userId/class/:classId/classLeaderboard" element={<BoilerClassLeaderboard />} />
           <Route path="/t/:userId/class/:classId/student/:studentId" element={<ProgressDashboard />} />
 
 

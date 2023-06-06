@@ -160,14 +160,14 @@ function AssignmentViewer() {
   return (
 
     <div style={{
-      backgroundColor: '#1e3c72',
+      backgroundColor: 'white',
       backgroundSize: "cover",
       minHeight: "100vh",
       paddingTop: "0%",
       paddingBottom: "5%",
     }} >
       <TeacherDashboardHeader userId={userId} />
-      <div style={{ marginLeft: '10%', marginRight: '10%', backgroundColor: '#1e3c72' }}>
+      <div style={{ marginLeft: '10%', marginRight: '10%' }}>
         <Box
           sx={{
             display: 'flex',
@@ -186,11 +186,11 @@ function AssignmentViewer() {
                   sx={{
                     p: 2,
                     display: 'flex',
-                    justifyContent: 'space-between', // Add spacing between the buttons
+                    justifyContent: 'center', // Add spacing between the buttons
                     paddingLeft: '30%',
                     paddingRight: '30%',
                     borderRadius: "20px", // Adjust the value to control the roundness of the corners
-                    backgroundColor: "#f8f8f8",
+                    backgroundColor: "white",
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
 
                   }}
@@ -213,7 +213,7 @@ function AssignmentViewer() {
                   >
                     Submissions
                   </Button>
-                  <Button
+                  {/* <Button
                     type="submit"
                     variant="contained"
                     sx={{
@@ -229,7 +229,7 @@ function AssignmentViewer() {
                   //disabled={submitted}
                   >
                     Edit Assignment
-                  </Button>
+                  </Button> */}
                 </Paper>
               </Grid>
 
@@ -243,7 +243,7 @@ function AssignmentViewer() {
                     flexDirection: 'column',
 
                     borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                    backgroundColor: "#f8f8f8",
+                    backgroundColor: "white",
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
 
 
@@ -327,7 +327,7 @@ function AssignmentViewer() {
                       display: 'flex',
                       flexDirection: 'column',
                       height: 'auto',
-                      backgroundColor: '#f8f8f8',
+                      backgroundColor: 'white',
                       borderRadius: "10px", // Adjust the value to control the roundness of the corners
 
                       boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
@@ -341,7 +341,7 @@ function AssignmentViewer() {
                         display: 'flex',
                         flexDirection: 'column',
                         height: 'auto',
-                        backgroundColor: '#f8f8f8',
+                        backgroundColor: 'white',
                         borderRadius: "10px", // Adjust the value to control the roundness of the corners
 
 
@@ -376,7 +376,7 @@ function AssignmentViewer() {
                       flexDirection: 'column',
                       height: 'auto',
                       borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                      backgroundColor: "#f8f8f8",
+                      backgroundColor: "white",
                       boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
 
                     }}

@@ -54,7 +54,6 @@ function LineChart01({ data, width, height }) {
   return (
     <div className="card" style={{ boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
       <div className="card-body" style={{ padding: '20px' }}>
-        <h2 className="card-title" style={{ marginBottom: '10px' }}>All Assignments Line Chart</h2>
         <div style={{ width, height }}>
           <canvas ref={canvasRef} width={width} height={height}></canvas>
         </div>

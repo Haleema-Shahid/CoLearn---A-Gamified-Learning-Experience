@@ -8,7 +8,7 @@ import dashboardHeader from '../images/dashboardheader.png';
 import { IconButton, MenuItem, Menu } from '@mui/material';
 import logoblue from '../images/logoblue.png'
 import Box from "@mui/material/Box";
-
+import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const HeaderContainer = styled(Paper)(({ theme }) => ({
@@ -85,20 +85,21 @@ const TeacherDashboardHeader = () => {
                 alt="Your logo."
                 src={logoblue}
             />
-            <Typography variant="h6" component="div" sx={{
-                fontFamily: 'Montserrat',
-                fontSize: '1.5rem',
-                letterSpacing: '0.01rem',
-                fontWeight: '1',
-                color: 'Black',
-                marginLeft: '-100px'
-            }}>
-                {name}
-            </Typography>
-            <IconButton color="inherit" onClick={handleMenuOpen}>
+            <Link to={`/t/${userId}`} style={{ textDecoration: 'none' }}>
+                <Typography variant="h6" component="div" sx={{
+                    fontFamily: 'Montserrat',
+                    fontSize: '1.5rem',
+                    letterSpacing: '0.01rem',
+                    fontWeight: 'bold',
+                    color: '#001340',
+                    marginLeft: '-70px'
+                }}>
+                    {name}
+                </Typography></Link>
+            <IconButton color="inherit" sx={{ marginRight: '30px' }} onClick={handleMenuOpen}>
                 <MenuIcon sx={{
                     color: '#545454',
-                    marginRight: '30px',
+                    //marginRight: '30px',
                     '& .MuiSvgIcon-root': {
                         strokeWidth: '2px',
                         strokeMiterlimit: '4',
@@ -108,6 +109,9 @@ const TeacherDashboardHeader = () => {
                 }} />
             </IconButton>
             <Menu
+                sx={{
+                    marginRight: '30px'
+                }}
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}

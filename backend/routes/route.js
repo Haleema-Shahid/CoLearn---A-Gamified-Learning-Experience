@@ -207,6 +207,69 @@ router.post('/delete-class/:thisClassId', async (request, response) => {
   }
 });
 
+//delete week
+router.post('/delete-week/:weekId', async (request, response) => {
+  const classId = new ObjectId(request.params.thisClassId);
+  console.log("classId: ", classId);
+
+  try {
+    const classesCollection = client.db("colearnDb").collection("class");
+    const weeksCollection = client.db("colearnDb").collection("week");
+    const topicsCollection = client.db("colearnDb").collection("topic");
+    const assignmentsCollection = client.db("colearnDb").collection("assignment");
+    const materialsCollection = client.db("colearnDb").collection("material");
+    const submissionsCollection = client.db("colearnDb").collection("submission");
+
+    // Check if the class exists
+    const existingClass = await classesCollection.findOne({ _id: classId });
+    if (!existingClass) {
+      return response.status(404).json({ error: 'Class not found' });
+    }
+
+    // Get the IDs of weeks associated with the class
+    const weeksToBeDeleted = await weeksCollection.find({ classId: classId }).toArray();
+    const weekIdsToDelete = [];
+    for (let i = 0; i < weeksToBeDeleted.length; i++) {
+      weekIdsToDelete.push(weeksToBeDeleted[i]._id);
+    }
+
+    // Get the IDs of topics associated with the weeks
+    const topicsToBeDeleted = await topicsCollection.find({ weekId: { $in: weekIdsToDelete } }).toArray();
+    const topicIdsToDelete = [];
+    for (let i = 0; i < topicsToBeDeleted.length; i++) {
+      topicIdsToDelete.push(topicsToBeDeleted[i]._id);
+    }
+
+    // Get the IDs of assignments associated with the topics
+    const assignmentsToBeDeleted = await assignmentsCollection.find({ topicId: { $in: topicIdsToDelete } }).toArray();
+    const assignmentIdsToDelete = [];
+    for (let i = 0; i < assignmentsToBeDeleted.length; i++) {
+      assignmentIdsToDelete.push(assignmentsToBeDeleted[i]._id);
+    }
+
+    // Perform cascading deletions
+    for (let i = 0; i < assignmentIdsToDelete.length; i++) {
+      await submissionsCollection.deleteMany({ assignmentId: assignmentIdsToDelete[i] });
+      await assignmentsCollection.deleteOne({ _id: assignmentIdsToDelete[i] });
+    }
+
+    for (let i = 0; i < topicIdsToDelete.length; i++) {
+      await materialsCollection.deleteMany({ topicId: topicIdsToDelete[i] });
+      await topicsCollection.deleteOne({ _id: topicIdsToDelete[i] });
+    }
+
+    for (let i = 0; i < weekIdsToDelete.length; i++) {
+      await weeksCollection.deleteOne({ _id: weekIdsToDelete[i] });
+    }
+
+    await classesCollection.deleteOne({ _id: classId });
+
+    return response.status(200).json({ message: 'Class and associated data deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting class and associated data:', error);
+    return response.status(500).json({ error: 'An error occurred while deleting the class and associated data' });
+  }
+});
 
 
 
@@ -972,7 +1035,7 @@ router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, resp
 
     const submissions = await client.db('colearnDb').collection('submission')
       .find({ assignmentId: assignmentId })
-      .sort({ obtainedMarks: -1 }) // Sort in descending order based on obtainedMarks
+      .sort({ obtainedmarks: -1 }) // Sort in descending order based on obtainedMarks
       .toArray();
 
     const helpingMaterials = await client.db('colearnDb').collection('helpingmaterial').find().toArray();
@@ -983,11 +1046,11 @@ router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, resp
 
     //console.log("materials: ", materials);
     const assignment = await client.db('colearnDb').collection('assignment').findOne({ _id: assignmentId });
-    const totalMarks = assignment.totalmarks;
+    const totalMarks = Number(assignment.totalmarks);
 
     let totalObtainedMarks = 0;
     submissions.forEach(submission => {
-      totalObtainedMarks += submission.obtainedMarks;
+      totalObtainedMarks += Number(submission.obtainedmarks);
     });
 
     const average = totalObtainedMarks / submissions.length;

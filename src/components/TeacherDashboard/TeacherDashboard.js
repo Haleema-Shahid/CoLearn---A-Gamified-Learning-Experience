@@ -276,7 +276,7 @@ function TeacherDashboard() {
           <Grid container spacing={3}>
             {classes.map((classObj) => (
               <Grid item xs={12} sm={6} md={4} key={classObj.name + classObj.description} style={{ height: '200px', width: '300px' }}>
-                <Link to={`/t/${userId}/class/${classObj._id}`}>
+                <Link to={`/t/${userId}/class/${classObj._id}`} style={{ textDecoration: 'none' }}>
                   <TeacherDashboardCard
                     name={classObj.name}
                     section={classObj.description}

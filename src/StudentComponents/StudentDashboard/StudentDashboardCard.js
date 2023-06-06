@@ -35,7 +35,9 @@ function StudentDashboardCard(props) {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     setAnchorEl(null);
   };
 
@@ -74,16 +76,16 @@ function StudentDashboardCard(props) {
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
+                onClose={(e) => { handleMenuClose(e) }}
               >
-                <MenuItem onClick={handleMenuClose}>View Assignments</MenuItem>
-                <MenuItem onClick={handleDeleteClick}>Leave Class</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem>
+                {/* <MenuItem onClick={handleMenuClose}>View Assignments</MenuItem>
+                <MenuItem onClick={handleDeleteClick}>Leave Class</MenuItem> */}
+                {/* <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem> */}
                 {/* <Link to={`/user/${props.userID}/class/${props.id}`}> */}
                 <Link to={`/s/${props.userId}/class/${props.classId}`}> <MenuItem onClick={handleMenuClose}>View Class</MenuItem></Link>
                 {/* </Link> */}
-                <MenuItem onClick={handleMenuClose}>Class Analytics</MenuItem>
-                <MenuItem onClick={handleMenuClose}>Leaderboard</MenuItem>
+                <Link to={`/user/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
+                {/* <Link to={`/user/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link> */}
               </Menu>
             </div>
           </div>

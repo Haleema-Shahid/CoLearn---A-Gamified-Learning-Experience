@@ -6,6 +6,8 @@ import LineChart01 from '../Charts/LineChart01';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
+import TeacherDashboardHeader from '../components/DashboardHeader';
+import DashboardHeader from '../StudentComponents/DashboardHeader';
 
 Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip);
 /*
@@ -141,6 +143,7 @@ function TeacherAnalyticsDashboard() {
 
   return (
     <div className="flex flex-col">
+      {/* <TeacherDashboardHeader userId={userId} /> */}
       <div
         style={{
           display: 'flex',
@@ -150,7 +153,7 @@ function TeacherAnalyticsDashboard() {
           marginTop: '5%'
         }}>
 
-        <Typography variant="h3" component="h3" style={{ fontFamily: 'Montserrat', fontWeight: 'bold' }}>
+        <Typography variant="h4" component="h4" style={{ fontFamily: 'Montserrat', color: '#03194f', fontWeight: 'bold' }}>
           Class Analytics
         </Typography>
         <div
