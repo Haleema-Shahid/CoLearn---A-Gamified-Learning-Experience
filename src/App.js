@@ -29,7 +29,7 @@ import TeacherAnalytics from './Teacher Analytics/TeacherAnalyticsDashboard'
 import BoilerClassLeaderboard from './Leaderboard/BoilerClassLeaderboard';
 import ProgressDashboard from './components/Students/Progress';
 import StudentMaterialViewer from './StudentComponents/StMaterialViewer.js/StMaterialViewer';
-
+import StudentAnalytics from './Teacher Analytics/AnalyticsDashboard'
 import ViewTopicS from './StudentComponents/Topics/TopicsView/ViewTopic';
 
 
@@ -72,11 +72,15 @@ function App() {
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/material" element={<TeacherMaterial />} />
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/materialViewer" element={<TeacherMaterialViewer />} />
           <Route path="/user/:userId/class/:classId/classAnalytics" element={<TeacherAnalytics />} />
+
+          <Route path="/s/:userId/class/:classId/classAnalytics" element={<StudentAnalytics />} />
+
           <Route path="/user/:userId/class/:classId/classLeaderboard" element={<BoilerClassLeaderboard />} />
           <Route path="/t/:userId/class/:classId/student/:studentId" element={<ProgressDashboard />} />
 
 
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<TeacherAssignmentViewer />} />
+
           <Route path="/t/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/submissions" element={<SubmissionsDisplay />} />
 
           {/* <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId" element={<Assignment />} /> */}
