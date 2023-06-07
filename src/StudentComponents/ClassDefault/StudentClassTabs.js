@@ -6,6 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import CLOstarter from '../CLO/CLOstarter'
 import { useState } from 'react';
+import StudentsDisplay from '../Students/studentsDisplay';
 export default function TeacherClassTabs(props) {
   const [value, setValue] = React.useState('2');
   const [userId, setUserId] = useState(props.userId);
@@ -22,7 +23,7 @@ export default function TeacherClassTabs(props) {
       case '2':
         return <CLOstarter userId={userId} classId={classId} />;
       case '3':
-        return 'Item Three';
+        return <StudentsDisplay userId={userId} classId={classId} />;;
       default:
         return null;
     }
