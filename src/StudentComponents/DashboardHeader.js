@@ -93,13 +93,14 @@ const DashboardHeader = () => {
                     letterSpacing: '0.05rem',
                     fontWeight: 'Bold',
                     color: '#001340',
+                    marginLeft: '-70px'
                 }}>
                     {name}
                 </Typography></Link>
             <IconButton color="inherit" onClick={handleMenuOpen}>
                 <MenuIcon sx={{
                     color: '#545454',
-                    marginRight: '30px',
+                    //marginRight: '30px',
                     '& .MuiSvgIcon-root': {
                         strokeWidth: '2px',
                         strokeMiterlimit: '4',
@@ -109,6 +110,9 @@ const DashboardHeader = () => {
                 }} />
             </IconButton>
             <Menu
+                sx={{
+                    marginRight: '30px'
+                }}
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}

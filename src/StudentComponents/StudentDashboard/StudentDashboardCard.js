@@ -84,7 +84,7 @@ function StudentDashboardCard(props) {
                 {/* <Link to={`/user/${props.userID}/class/${props.id}`}> */}
                 <Link to={`/s/${props.userId}/class/${props.classId}`}> <MenuItem onClick={handleMenuClose}>View Class</MenuItem></Link>
                 {/* </Link> */}
-                <Link to={`/user/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
+                <Link to={`/s/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
                 {/* <Link to={`/user/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link> */}
               </Menu>
             </div>

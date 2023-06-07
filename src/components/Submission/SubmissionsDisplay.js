@@ -323,7 +323,8 @@ const SubmissionsDisplay = () => {
                                     </td>
                                     <td style={styles.tableCell}>
                                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                            <FormControl style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'inherit' }}>
+                                            {/* // display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}> */}
+                                            <FormControl style={{ width: '100%', alignItems: 'center' }}>
                                                 <Select
                                                     labelId="demo-multiple-checkbox-label"
                                                     id="demo-multiple-checkbox"
@@ -334,9 +335,10 @@ const SubmissionsDisplay = () => {
                                                     }}
                                                     sx={{
                                                         height: '35px',
-                                                        width: '100px'
+                                                        width: '100px',
+                                                        alignItems: 'left'
                                                     }}
-                                                    input={<OutlinedInput style={{ width: '50%' }} label="Tag" />}
+                                                    input={<OutlinedInput style={{ width: '50%', }} label="Tag" />}
                                                     renderValue={(selected) => {
                                                         if (Array.isArray(selected)) {
                                                             return selected.join(', ');
@@ -351,21 +353,25 @@ const SubmissionsDisplay = () => {
                                                             sx={{
                                                                 width: '100%',
                                                                 padding: '5px',
-                                                                fontSize: '0.85rem'
+                                                                fontSize: '0.85rem',
+
                                                             }}
                                                         >
                                                             <Checkbox
                                                                 checked={(submission.submission.weaktags || []).indexOf(tag) > -1}
                                                                 sx={{
-                                                                    margin: '0px',
+
                                                                     padding: '0px',
-                                                                    width: '100%'
+
+
+
+
                                                                 }}
                                                             />
                                                             <ListItemText
                                                                 primary={tag}
                                                                 sx={{
-                                                                    margin: '0px',
+
                                                                     padding: '1px'
                                                                 }}
                                                             />
