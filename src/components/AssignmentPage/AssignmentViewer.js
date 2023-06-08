@@ -21,7 +21,7 @@ import { Grid } from '@mui/material';
 import AsgnFilesUI from "./AsgnFilesUI";
 import TRecomMaterialUI from "./TRecomMaterialUI";
 import backgroundImage from "../../images/sample.jpg"; // Add the path to your background image
-
+import createClassBg from '../../images/classaddcard.jpg'
 
 import TeacherDashboardHeader from '../DashboardHeader';
 
@@ -46,6 +46,7 @@ function AssignmentViewer() {
   const [assignmentFiles, setAssignmentFiles] = useState([]);
   const [helpingMaterials, setHelpingMaterials] = useState([]);
   const [uploadTime, setUploadTime] = useState(null);
+  const [asgnTags, setAsgnTags]=useState([]);
 
 
   const [submitted, setSubmitted] = useState(false);
@@ -102,6 +103,7 @@ function AssignmentViewer() {
           setTotalMarks(data.assignment.totalmarks);
           setDeadline(getDateTimeString(data.assignment.deadline));
           setUploadTime(getDateTimeString(data.assignment.uploadtime));
+          setAsgnTags(data.assignment.tags);
 
           console.log("data.files: ", data.assignment.files);
 
@@ -110,17 +112,13 @@ function AssignmentViewer() {
           let index = 0;
           //console.log("assignmentfiles: ", assignmentFiles);
           if (data.assignment.files) {
-            data.assignment.files.forEach((downloadUrl) => {
-              console.log("looping");
+            const files = data.assignment.files.map((downloadUrl, index) => {
               const filename = downloadUrl.substring(downloadUrl.lastIndexOf('%2F') + 3, downloadUrl.indexOf('?'));
-              const thisFile = { id: index, name: filename, link: downloadUrl };
-              console.log(thisFile);
-              setAssignmentFiles([...assignmentFiles, thisFile]);
-              //console.log(fileNames);
-              index = index + 1;
-              //hello i changed this
+              return { id: index, name: filename, link: downloadUrl };
             });
+            setAssignmentFiles(files);
           }
+
 
 
           //console.log("F: ", fileNames);
@@ -181,7 +179,7 @@ function AssignmentViewer() {
             flexGrow: 1
           }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6} lg={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Paper
                   sx={{
                     p: 2,
@@ -192,6 +190,7 @@ function AssignmentViewer() {
                     borderRadius: "20px", // Adjust the value to control the roundness of the corners
                     backgroundColor: "white",
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                    backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center'
 
                   }}
                 >
@@ -235,7 +234,7 @@ function AssignmentViewer() {
 
 
 
-              <Grid item xs={12} md={6} lg={12}>
+              <Grid item xs={12} md={12} lg={12}>
                 <Paper
                   sx={{
                     p: 2,
@@ -245,6 +244,7 @@ function AssignmentViewer() {
                     borderRadius: "10px", // Adjust the value to control the roundness of the corners
                     backgroundColor: "white",
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+
 
 
                   }}
@@ -310,6 +310,16 @@ function AssignmentViewer() {
                         }}
                         variant="standard"
                       />
+                      <div>
+                      <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                      }}>
+                        Assignment is tagged as: 
+                      </Typography>
+                        {asgnTags.map((tag, index) => (
+                          <Chip key={index} label={tag} style={{ marginRight: '5px' }} />
+                        ))}
+                      </div>
                     </Stack>
                   </Box>
                 </Paper>
@@ -318,30 +328,34 @@ function AssignmentViewer() {
 
 
 
+
               {/* Assignment Material */}
+              {console.log("hm just before assignmetn files ui: ", assignmentFiles)}
               {assignmentFiles.length > 0 && (
-                <Grid item xs={12} sm={6} md={6} lg={6}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+
                   <Paper
                     sx={{
                       p: 2,
                       display: 'flex',
                       flexDirection: 'column',
                       height: 'auto',
-                      backgroundColor: 'white',
                       borderRadius: "10px", // Adjust the value to control the roundness of the corners
-
+                      backgroundColor: "white",
                       boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                      backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center'
 
                     }}
                   >
-                    <h2>Assignment Attachments</h2>
+                    <h2 style={{ color: 'white' }}>Assignment Attachments</h2>
                     <Paper
                       sx={{
                         p: 2,
                         display: 'flex',
                         flexDirection: 'column',
                         height: 'auto',
-                        backgroundColor: 'white',
+                        width: 'auto',
+                        backgroundColor: '#f8f8f8',
                         borderRadius: "10px", // Adjust the value to control the roundness of the corners
 
 
@@ -368,7 +382,7 @@ function AssignmentViewer() {
 
               {console.log("hm just before ui: ", helpingMaterials)}
               {helpingMaterials.length > 0 && (
-                <Grid item xs={12} sm={6} md={6} lg={6} >
+                <Grid item xs={12} sm={12} md={6} lg={6} >
                   <Paper
                     sx={{
                       p: 2,
@@ -378,10 +392,11 @@ function AssignmentViewer() {
                       borderRadius: "10px", // Adjust the value to control the roundness of the corners
                       backgroundColor: "white",
                       boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                      backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center'
 
                     }}
                   >
-                    <h2>Helping Material</h2>
+                    <h2 style={{ color: 'white' }}>Helping Material</h2>
                     <Paper
                       sx={{
                         p: 2,

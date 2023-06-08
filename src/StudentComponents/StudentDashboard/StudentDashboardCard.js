@@ -62,7 +62,7 @@ function TeacherDashboardCard(props) {
 
   const handleDeleteClick = (e) => {
     e.preventDefault();
-   // e.stopPropagation();
+    e.stopPropagation();
     setOpen(true);
   };
 
@@ -141,6 +141,17 @@ function TeacherDashboardCard(props) {
         <Link to={`/s/${props.userId}/class/${props.classId}`}> <MenuItem >View Class</MenuItem></Link>
         <Link to={`/user/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
         <Link to={`/user/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link>
+        <MenuItem onClick={(e) => { handleDeleteClick(e); }}>Leave</MenuItem>
+        <Dialog open={open} onClose={handleCancelDelete}>
+                  <DialogTitle>Confirmation</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>Are you sure you want to Leave?</DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleConfirmDelete} color="primary">Yes</Button>
+                    <Button onClick={handleCancelDelete} color="primary" autoFocus>No</Button>
+                  </DialogActions>
+                </Dialog>
       </Menu>
     </StyledCard>
   );

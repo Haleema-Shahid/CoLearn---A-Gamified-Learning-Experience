@@ -117,17 +117,6 @@ function TopicsBoard(props) {
       </Box>
 
 
-
-
-
-      {/* {
-        addTopic && (
-          <div>
-            <AddTopic weekId={weekId} classId={props.classId} userId={props.userId} closeAddTopic={handleCloseTopic} ></AddTopic>
-          </div>
-        )
-      } */}
-
     </div>
 
 

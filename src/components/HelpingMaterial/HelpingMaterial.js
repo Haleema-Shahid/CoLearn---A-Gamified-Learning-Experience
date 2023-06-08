@@ -102,28 +102,42 @@ const HelpingMaterial = ({ helpingData, setHelpingMaterialData, onNextClick }) =
   return (
     <div style={{ paddingLeft: '5%', paddingRight: '5%', paddingTop: '20px', paddingBottom: '20px' }}>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={5} lg={5}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
+        <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+
+                    borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                    backgroundColor: "white",
+                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+
+
+
+                  }}
+                >
           
             <div>
               <div className="HelpingMaterial header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
                 <h1>Helping Material</h1>
               </div >
+              <div className="HelpingMaterial header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%"}}>
+                
+                <h4>Add some helping material for your class. This can help them perform better next time</h4>
+              </div >
               <div style={{margin:'10px', padding:'20px'}}>
               <Box
                 component="form"
                 sx={{
-                  margin: "5%",
+                 
                   display: "flex",
                   flexDirection: "column",
                   "& .MuiTextField-root": { m: 1, width: "50ch" },
-                  paddingLeft: "50px",
+                 
                   justifyContent: "center",
                   alignItems: "center",
-                  padding: "5%",
-                  marginTop: "20px",
-          marginBottom: "20px", 
-          marginLeft: "20px",
-          marginRight: "20px", 
+                 
                  
                 }}
                 noValidate
@@ -228,10 +242,11 @@ const HelpingMaterial = ({ helpingData, setHelpingMaterialData, onNextClick }) =
               </Box>
             </div>
             </div>
+            </Paper>
          
         </Grid>
 
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12}  sm={12} md={12} lg={6}>
           <Paper elevation={3} style={{ padding: '40px' }}>
             <div>
               <div style={{ marginBottom: '30px', marginTop: '20px' }}>

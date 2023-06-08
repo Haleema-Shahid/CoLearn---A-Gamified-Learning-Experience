@@ -30,6 +30,7 @@ import { Description } from "@mui/icons-material";
 
 import CircleProgress from "./CircleProgress";
 import RecomMaterialUI from "./RecomMaterialUI";
+import ClassHeader from "../ClassHeader/ClassHeader";
 
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -273,6 +274,8 @@ function Assignment() {
             paddingTop: "5%",
             paddingBottom: "5%",
         }} >
+             <ClassHeader userId={userId} classId={classId} />
+
             {/* <div
                 style={{
                     display: 'flex',

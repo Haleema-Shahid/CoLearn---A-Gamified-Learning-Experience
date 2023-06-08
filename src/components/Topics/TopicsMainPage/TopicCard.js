@@ -19,14 +19,28 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
+import { WindowSharp } from '@mui/icons-material';
+
+const TruncatedTypography = styled(Typography)(({ theme }) => ({
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  maxWidth: '100%', // Set the maximum width for the title
 
 
-const styles = {
-
-
-}
+}));
 
 function TopicCard(props) {
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleCardMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleCardMouseLeave = () => {
+    setIsHovered(false);
+  };
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -40,39 +54,71 @@ function TopicCard(props) {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
   const handleTopicSelection = () => {
+    console.log("clicked view topic in teacher components");
 
-    console.log("clicked view topic in teacher components")
-    console.log("we are in TopicCard.js: ")
-    console.log("this is topicId ", props.topicId)
-    console.log("this is weekId ", props.weekId)
-    console.log("this is classId ", props.classId)
-    console.log("this is userId ", props.userId)
-
+    //console.log(props.topicId, props.userId, props.classId, props.weekId)
     props.onViewTopic(props.topicId, props.userId, props.classId, props.weekId);
     handleMenuClose();
   };
 
   const handleTopicDeletion = () => {
-
-    console.log("clicked delete topic")
-    props.onDeleteTopic(props.topicId, props.userId, props.classId, props.weekId);
-    handleMenuClose();
+    console.log("clicked delete topic");
+    // Rest of the code...
   };
 
-  const handleSomething = () => {
-    console.log("clicked view topic");
-  }
+  const cardRef = React.useRef(null);
 
+  React.useEffect(() => {
+    const handleResize = () => {
+      const cardWidth = cardRef.current.offsetWidth;
+      //window.alert(cardWidth);
+      const titleElement = cardRef.current.querySelector('.MuiCardHeader-title');
+      const titleFontSize = window.getComputedStyle(titleElement).getPropertyValue('font-size');
+      const titleLength = props.title.length;
+      //window.alert(titleFontSize);
+      const maxTitleLength = Math.floor(cardWidth / (parseFloat(titleFontSize) - 7));
+      const truncatedTitle = props.title.slice(0, maxTitleLength) + '...';
+
+      if (titleLength > maxTitleLength) {
+        titleElement.textContent = truncatedTitle;
+      } else {
+        titleElement.textContent = props.title;
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [props.title]);
 
   return (
-
-    <Card onClick={handleTopicSelection} sx={{ height: 20 + "vh", width: "40%", marginBottom: "16px", marginTop: "10px" }}>
+    <Card
+      //onClick={handleTopicSelection}
+      ref={cardRef}
+      onMouseEnter={handleCardMouseEnter}
+      onMouseLeave={handleCardMouseLeave}
+      sx={{
+        height: '20vh',
+        width: '40%', // Adjust the width as needed
+        marginBottom: '16px',
+        marginTop: '10px',
+      }}
+    >
       <CardHeader
         sx={{
           height: '50%',
-          background: `linear-gradient(to right, #1e3c72, #2a5298)`,
+          background: 'linear-gradient(to right, #1e3c72, #2a5298)',
           color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          //pointerEvents: 'none',
         }}
         action={
           <div>
@@ -84,30 +130,28 @@ function TopicCard(props) {
               }}>
                 <MoreVertIcon />
               </IconButton>
-
-
-
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
 
-
                 <MenuItem onClick={handleTopicSelection}>View Topic</MenuItem>
-                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/assignment`}><MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem></Link>
-                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/material`}><MenuItem >Add a Material</MenuItem></Link>
+
+                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/assignment`}>
+                  <MenuItem onClick={handleMenuClose}>Add an Assignment</MenuItem>
+                </Link>
+                <Link to={`/t/${props.userId}/class/${props.classId}/week/${props.weekId}/topic/${props.topicId}/material`}>
+                  <MenuItem >Add a Material</MenuItem>
+                </Link>
                 {/* <MenuItem onClick={handleTopicDeletion}>Delete</MenuItem> */}
               </Menu>
             </div>
           </div>
         }
-        title={
-          <Typography variant="h5" component="div" sx={{ fontFamily: 'Montserrat', fontSize: '1.25rem' }}>
-            {props.title}
-          </Typography>
-        }
-      //subheader={props.section}
+        title={<TruncatedTypography variant="h5" component="div">
+          {props.title}
+        </TruncatedTypography>}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -115,8 +159,7 @@ function TopicCard(props) {
         </Typography>
       </CardContent>
     </Card>
-
   );
 }
 
-export default TopicCard
+export default TopicCard;

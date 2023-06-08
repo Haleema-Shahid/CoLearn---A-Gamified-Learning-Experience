@@ -25,6 +25,7 @@ import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import FileItem from "./FileItem";
 import ClassHeader from "../ClassHeader/ClassHeader";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import Grid from '@mui/material/Grid';
 
@@ -55,6 +56,9 @@ function AssignmentPage() {
 
     const [currentTag, setCurrentTag] = useState("")
     const [helpingMaterialFiles, setHelpingMaterialFiles] = useState([])
+
+    const [isUploading, setIsUploading] = useState(false);
+
     const today = dayjs();
     const yesterday = dayjs().subtract(1, 'day');
 
@@ -128,6 +132,7 @@ function AssignmentPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsUploading(true);
         //here goes the backend for uploading the assignment
         //creation date and time setter
         console.log("here: ", location.state?.helpingMaterials);
@@ -269,8 +274,9 @@ function AssignmentPage() {
         } catch (error) {
             console.error('Error adding assignment:', error);
         }
+        finally {
 
-        const now = dayjs();
+            const now = dayjs();
         // setCreationDate(now.format('YYYY-MM-DD'));
         // setCreationTime(now.format('HH:mm:ss'));
         event.preventDefault();
@@ -281,6 +287,11 @@ function AssignmentPage() {
             totalMarks,
             assignmentFiles
         });
+
+        setIsUploading(false);
+        }
+
+        
     };
     const handleTotalMarksChange = (event) => {
         let value = event.target.value.trim(); // Trim any leading/trailing spaces
@@ -338,10 +349,34 @@ function AssignmentPage() {
         }
     };
 
+    
+const uploadingProgressStyle = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '20px',
+    color: 'white',
+    borderRadius: '8px',
+    zIndex: '9999',
+  };
+  
+  const blurStyle = {
+    filter: 'blur(5px)',
+    pointerEvents: 'none',
+  };
+
 
 
     return (
+
         <div style={{ justifyContent: 'center' }}>
+            <div style={isUploading ? blurStyle : {}}>
             <div>
                 <ClassHeader userId={userId} classId={classId} />
             </div>
@@ -549,6 +584,13 @@ function AssignmentPage() {
                     <HelpingMaterial helpingData={helpingMaterialData} setHelpingMaterialData={setHelpingMaterialData} onNextClick={handleHelpingMaterialClick} />
                 </div>
             }
+            </div>
+            {isUploading && (
+  <div style={uploadingProgressStyle}>
+    <CircularProgress />
+    <p>Uploading...</p>
+  </div>
+)}
         </div>
     );
 

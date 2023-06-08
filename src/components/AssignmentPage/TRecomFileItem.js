@@ -1,13 +1,55 @@
-import React from 'react';
+//shows teacher side assignment viewer component's added recommended material
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileAlt, faSpinner, faTrash } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
+import { faFileAlt, faSpinner, faTrash, faCircle, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-const TRecomFileItem = ({ file, level, tags }) => {
+
+const TRecomFileItem = ({ file, difficulty, tags }) => {
   console.log("url: ", file);
-  console.log("level: ", level);
+ 
   const url = new URL(file);
   const fileName = decodeURIComponent(url.pathname).split('/').pop();
-  const fileLevel = level;
+  const fileLevel = difficulty;
+
+  const [showTags, setShowTags] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleDropdownClick = (event) => {
+    event.stopPropagation();
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const renderTags = () => {
+    if (tags.length === 0) {
+      return <span>No tags available</span>;
+    }
+
+    return <span>{tags.join(', ')}</span>;
+  };
+
+  const getCircleColor = () => {
+    if (difficulty === 'easy') {
+      return '#80b918';
+    } else if (difficulty === 'medium') {
+      return '#fe7f2d';
+    } else if (difficulty === 'hard') {
+      return '#00509d';
+    } else {
+      return 'gray';
+    }
+  };
+
+  const getCircleHoverText = () => {
+    if (difficulty === 'easy') {
+      return 'Easy';
+    } else if (difficulty === 'medium') {
+      return 'Medium';
+    } else if (difficulty === 'hard') {
+      return 'Hard';
+    } else {
+      return 'Unknown';
+    }
+  };
 
   const handleFileClick = (event) => {
     event.preventDefault();
@@ -30,11 +72,31 @@ const TRecomFileItem = ({ file, level, tags }) => {
       key={file}
       onClick={handleFileClick}
     >
-      <FontAwesomeIcon icon={faFileAlt} style={{ marginRight: '0.5em', color: '#4b6cb7' }} />
+      <FontAwesomeIcon
+        icon={faCircle}
+        style={{ marginRight: '0.5em', color: getCircleColor() }}
+        title={getCircleHoverText()}
+      />
       <p style={{ fontSize: '0.9rem', margin: '0' }}>{fileName}</p>
       <div className="actions" style={{ marginLeft: 'auto' }}>
-        <div className="loading"></div>
+        <FontAwesomeIcon
+          icon={faAngleDown}
+          style={{ cursor: 'pointer' }}
+          onClick={(e)=>{handleDropdownClick(e);}}
+        />
       </div>
+      {dropdownOpen && (
+        <div
+          style={{
+            marginTop: '0.5em',
+            backgroundColor: 'white',
+            padding: '0.5em',
+            borderRadius: '5px',
+          }}
+        >
+          {renderTags()}
+        </div>
+      )}
     </li>
   );
 };

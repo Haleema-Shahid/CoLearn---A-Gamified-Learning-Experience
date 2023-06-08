@@ -15,7 +15,11 @@ import Button from '@mui/material/Button';
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import FileItem from "../AssignmentPage/FileItem";
-
+import TeacherDashboardHeader from "../DashboardHeader";
+import Grid from '@mui/material/Grid';
+import { Paper } from "@mui/material";
+import ClassHeader from "../ClassHeader/ClassHeader";
+import CircularProgress from "@mui/material/CircularProgress";
 // //import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 //-----------------------------------
@@ -36,7 +40,7 @@ function TeacherMaterial() {
     const [creationDate, setCreationDate] = useState("");
     const [creationTime, setCreationTime] = useState("");
     const [MaterialAttachmentFiles, setMaterialAttachmentFiles] = useState("")
-
+    const [isUploading, setIsUploading] = useState(false);
     const [materialData, setMaterialData]=useState([]);//full file of material
 
     //const [AssignmentTags, setAssignmentTags] = useState(['chip1'])
@@ -47,11 +51,10 @@ function TeacherMaterial() {
         setMaterialAttachmentFiles(MaterialAttachmentFiles.filter(file => file.name !== filename))
     }
 
-
-    
     const handleSubmit = async (event) => {
         //here goes the backend for uploading the material
         event.preventDefault();
+        setIsUploading(true);
 
         try {
             const newMaterialFiles = [];
@@ -129,40 +132,95 @@ function TeacherMaterial() {
         catch (error) {
             console.error('Error adding material:', error);
         }
+        finally{
+            setIsUploading(false);
+        }
         
 
     };
 
 
-    
-
     const deleteMaterialFileItem = (name) => {
         setMaterialData(Files => Files.filter((File) => File.name !== name))
     }
 
-    return (
-        <div>
-            <div>
-                <div className="split left" style={{ width: "50%", left: 0 }}>
-                    <div className="assignment header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
-                        <h1>{`Material`}</h1>
-                    </div>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                        sx={{
-                            margin: "auto",
-                            display: "flex",
-                            flexDirection: "column",
-                            "& .MuiTextField-root": { m: 1, width: "50ch" },
-                            paddingLeft: "50px",
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}
-                        noValidate
-                        autoComplete="off"
+    const uploadingProgressStyle = {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: '20px',
+        color: 'white',
+        borderRadius: '8px',
+        zIndex: '9999',
+      };
+      
+      const blurStyle = {
+        filter: 'blur(5px)',
+        pointerEvents: 'none',
+      };
 
-                    >
+    return (
+        
+        <div style={{
+            backgroundColor: 'white',
+            backgroundSize: "cover",
+            minHeight: "100vh",
+            paddingTop: "0%",
+            paddingBottom: "5%",
+           
+          }} >
+            <div style={isUploading ? blurStyle : {}}>
+            <ClassHeader userId={userId} classId={classId} />
+            <div style={{ marginLeft: '10%', marginRight: '10%',  marginTop:'20px' }}>
+            <Grid container spacing={2}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
+        <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+
+                    borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                    backgroundColor: "white",
+                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+
+
+
+                  }}
+                >
+          
+            <div>
+              <div className="HelpingMaterial header" style={{ color: "#4b6cb7", padding: "5%", paddingLeft: "25%" }}>
+                <h1>Teacher Material</h1>
+                <h5>Upload a material for your students</h5>
+              </div >
+              <div style={{margin:'10px', padding:'20px'}}>
+            {/* ............. */}
+        
+                <Box
+                component="form"
+                sx={{
+                
+                  display: "flex",
+                  flexDirection: "column",
+                  "& .MuiTextField-root": { m: 1, width: "50ch" },
+                  
+                  justifyContent: "center",
+                  alignItems: "center",
+                  
+          marginLeft: "20px",
+          marginRight: "20px", 
+                 
+                }}
+                noValidate
+                autoComplete="off"
+              >
                         <Stack spacing={2}>
                             <TextField
                                 required
@@ -181,67 +239,11 @@ function TeacherMaterial() {
                                 rows={4}
                                 fullWidth
                             />
-                            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DatePicker
-                                    label="Deadline"
-                                    value={deadline}
-                                    onChange={(newValue) => setDeadline(newValue)}
-                                    renderInput={(params) => <TextField {...params} />}
-                                    fullWidth
-                                />
-                            </LocalizationProvider> */}
-                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateTimePicker
-                                    label="Deadline"
-                                    defaultValue={yesterday}
-                                    disablePast
-                                    views={['year', 'month', 'day', 'hours', 'minutes']}
-                                    onChange={(newValue) => setDeadline(newValue)}
-                                />
-                            </LocalizationProvider> */}
-
-                            {/* <TextField
-                                required
-                                id="total-marks"
-                                label="Total Marks"
-                                type="number"
-                                inputProps={{ min: 0, max: 1000 }}
-                                value={totalMarks}
-                                onChange={handleTotalMarksChange}
-                                onKeyDown={handleTotalMarksChange}
-                                error={totalMarks > 1000}
-                                helperText={totalMarks > 1000 || totalMarks < 0 ? "Maximum 1000 marks allowed" : ""}
-                                sx={{ width: "100%", mt: 2 }}
-                            /> */}
-
-                            {/* <div className="Tags-Assignment">
-                                <TextField
-                                    required
-                                    id="AssignmentTags"
-                                    label="Input Tags for Assignment"
-                                    value={CurrentTag}
-                                    onChange={handleCurrentTagChange}
-                                    sx={{ width: "100%", mt: 2 }}
-                                />
-                                <Button className='HandleTags' onClick={handleAssignmentTags} sx={{
-                                backgroundColor: '#1e3c72',
-                                color: 'white',
-                                borderRadius: '10px',
-                                padding: '5px 15px',
-                                fontSize: '0.75rem',
-                                '&:hover': {
-                                    backgroundColor: '#0c2461',
-                                },
-                            }}>Add Tag</Button>
-                                {
-                                    AssignmentTags.map((tag) => (
-                                        <Chip key={tag} label={tag} onDelete={() => handleDeleteTag(tag)} />
-                                    ))
-                                }
-
-                            </div> */}
+                           
                             <Button
                                 type="submit"
+                                onClick={handleSubmit}
+                                
                                 variant="contained"
                                 sx={{
                                     backgroundColor: '#1e3c72',
@@ -260,23 +262,44 @@ function TeacherMaterial() {
                         </Stack>
 
                     </Box>
-
-
-                </div>
-                <div className="split right" >
-                    <div className="file-uploader-container">
-                        <FileUploader files={MaterialAttachmentFiles} setFiles={setMaterialAttachmentFiles} remFile={removeFile} assignmentData={materialData} setData={setMaterialData}></FileUploader>
                     </div>
-                    <div style={{ height: '300px', overflowY: 'auto', padding: '10px' }}>
-      {materialData.map((file, index) => (
+                    </div>
+                    </Paper>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12} lg={6}>
+          <Paper elevation={3} style={{ padding: '40px' }}>
+            <div>
+              <div style={{ marginBottom: '30px', marginTop: '20px' }}>
+                <FileUploader files={MaterialAttachmentFiles} setFiles={setMaterialAttachmentFiles} remFile={removeFile} assignmentData={materialData} setData={setMaterialData}></FileUploader>
+            </div>
+                    <div style={{  padding: '10px' }}>
+              <div className="HelpingMaterial header" style={{ color: "#4b6cb7"}}>
+                <h3>These materials have been added</h3>
+             </div >
+      {materialData && materialData.map((file, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
           <FileItem file={file} deleteFile={deleteMaterialFileItem} />
         </div>
       ))}
-    </div>
-                </div>
+     </div>
+     
             </div>
-        </div>
+          </Paper>
+        </Grid>
+      </Grid>
+    </div>
+    </div>
+    
+{isUploading && (
+    <div style={{justifyContent:'center'}}>
+  <div style={uploadingProgressStyle}>
+    <CircularProgress />
+    <p>Uploading...</p>
+  </div>
+  </div>
+)}
+    </div>
+ 
     );
 }
 

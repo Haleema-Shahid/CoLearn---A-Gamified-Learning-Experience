@@ -12,7 +12,7 @@ function TRecomMaterialUI({ recomFiles }) {
 
       {fileUrls.map((file, index) => (
         <div key={index} style={{ marginBottom: '10px' }}>
-          <TRecomFileItem file={file.file} level={file.level} tags={file.tags} />
+          <TRecomFileItem file={file.file} difficulty={file.level} tags={file.tags} />
         </div>
       ))}
     </div>
