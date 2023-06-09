@@ -31,14 +31,20 @@ import { Description } from "@mui/icons-material";
 import CircleProgress from "./CircleProgress";
 import RecomMaterialUI from "./RecomMaterialUI";
 import ClassHeader from "../ClassHeader/ClassHeader";
+import createClassBg from '../../images/classaddcard.jpg'
 
 import storage from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import AsgnFilesUI from "./AsgnFilesUI";
+import FileItem from "../../components/AssignmentPage/FileItem";
+
+import TRecomMaterialUI from "../../components/AssignmentPage/TRecomMaterialUI";
+import CircularProgress from "@mui/material/CircularProgress";
 
 
 function Assignment() {
     const { userId, classId, weekId, topicId, assignmentId } = useParams();
+    const [isUploading, setIsUploading] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState(null);
@@ -56,6 +62,8 @@ function Assignment() {
 
     //To-Do: I want helping material ID in submission and want to save helping material objects in a state
     const [helpingMaterials, setHelpingMaterials] = useState([]);
+    const [asgnTags, setAsgnTags]=useState([]);
+    const [weakTags, setWeakTags]=useState([])
 
     const removeFile = (filename) => {
         setAssignmentFiles(assignmentFiles.filter(file => file.name !== filename))
@@ -110,22 +118,22 @@ function Assignment() {
                     setDescription(data.assignment.description);
                     setTotalMarks(data.assignment.totalmarks);
                     setDeadline(getDateTimeString(data.assignment.deadline));
+                    setUploadTime(getDateTimeString(data.assignment.uploadtime));
+                    setAsgnTags(data.assignment.tags);
+                    setWeakTags(data.submission.weaktags);
+                    //setAssignmentFiles(data.assignment.files);
 
+                   
 
-                    console.log("data.assignment.files: ", data.assignment.files);
                     let index = 0;
-                    //console.log("assignmentfiles: ", assignmentFiles);
+                    console.log("assignmentfiles: ", assignmentFiles);
                     if (data.assignment.files) {
-                        data.assignment.files.forEach((downloadUrl) => {
-                            console.log("looping");
-                            const filename = downloadUrl.substring(downloadUrl.lastIndexOf('%2F') + 3, downloadUrl.indexOf('?'));
-                            const thisFile = { id: index, name: filename, link: downloadUrl };
-                            console.log(thisFile);
-                            setAssignmentFiles([...assignmentFiles, thisFile]);
-                            //console.log(fileNames);
-                            index = index + 1;
+                        const files = data.assignment.files.map((downloadUrl, index) => {
+                          const filename = downloadUrl.substring(downloadUrl.lastIndexOf('%2F') + 3, downloadUrl.indexOf('?'));
+                          return { id: index, name: filename, link: downloadUrl };
                         });
-                    }
+                        setAssignmentFiles(files);
+                      }
                     console.log("outside marked is ", data.submission.marked)
                     console.log("submitted is ", submitted);
 
@@ -136,12 +144,11 @@ function Assignment() {
 
 
 
-                    //console.log("F: ", fileNames);
-                    console.log("A: ", assignmentFiles);
                     //setMaterials(data.assignment.materials);
                     setHelpingMaterials(data.submission.recommended);
                     console.log("data.recommended: ", data.submission.recommended);
                     console.log("helping material: ", helpingMaterials);
+                    console.log("obtained marks", obtainedMarks)
 
 
 
@@ -151,11 +158,15 @@ function Assignment() {
                     console.log("no classes found");
                     //setClasses([]);
                 }
+                console.log( data.assignment.files);
 
 
             } catch (error) {
                 console.log(error);
             }
+            
+                    //console.log("F: ", fileNames);
+                    console.log("A: ", assignmentFiles);
         };
         fetchData();
     }, [topicId]);
@@ -172,7 +183,8 @@ function Assignment() {
 
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+       // event.preventDefault();
+        setIsUploading(true);
         try {
             const newSubmissionFiles = []
 
@@ -259,12 +271,42 @@ function Assignment() {
         catch {
 
         }
+        finally{
+            setIsUploading(false);
+        }
     };
 
     const handleDeleteTag = (tagToDelete) => {
 
     }
     const defaultTheme = createTheme();
+
+    const deleteSubmissionFileItem = (name) => {
+        setSubmissionData(Files => Files.filter((File) => File.name !== name))
+    }
+
+    
+const uploadingProgressStyle = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '20px',
+    color: 'white',
+    borderRadius: '8px',
+    zIndex: '9999',
+  };
+  
+  const blurStyle = {
+    filter: 'blur(5px)',
+    pointerEvents: 'none',
+  };
+  
 
     return (
         <div style={{
@@ -274,16 +316,9 @@ function Assignment() {
             paddingTop: "5%",
             paddingBottom: "5%",
         }} >
+            <div style={isUploading ? blurStyle : {}}>
              <ClassHeader userId={userId} classId={classId} />
 
-            {/* <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginLeft: '10%',
-                    marginRight: '10%',
-                    backgroundColor: 'white'
-                }}> */}
             <Box
                 sx={{
                     marginLeft: '10%',
@@ -298,114 +333,116 @@ function Assignment() {
             >
                 <Box sx={{ flexGrow: 1 }}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6} md={6} lg={6}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
+                    <Grid item xs={12} sm={12} md={12} lg={6}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
 
-                                    borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                                    backgroundColor: "white",
-                                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-                                    overflow: 'auto'
-
-
-                                }}
-                            >
+                    borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                    backgroundColor: "white",
+                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
 
 
 
-                                <Box
+                  }}
+                >
+                  <Box
+                    sx={{
+                      margin: 'auto',
+                      border: 2,
+                      borderRadius: "10px",
+                      borderColor: "#4b6cb7",
+                      width: "100%",
+                      padding: "30px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      "& .MuiTextField-root": { m: 1, width: "50ch" },
+                      paddingLeft: "50px"
+                    }}
+                  >
+                    <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
+                      <Typography variant="h4" component="h1" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                      }}>
+                        Assignment
+                      </Typography>
+                      <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                      }}>
+                        Marks: {totalMarks}
+                      </Typography>
+                      <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                      }}>
+                        Deadline: {deadline}
+                      </Typography>
+                      <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                      }}>
+                        Uploaded on: {uploadTime}
+                      </Typography>
+                    </div>
+                    <Stack spacing={2}>
+                      <TextField
+                        id="standard-read-only-input"
+                        label="Title"
+                        value={title}
+                        defaultValue={title}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        variant="standard"
+                      />
+                      <TextField
+                        id="standard-multiline-static"
+                        label="Description"
+                        multiline
+                        rows={4}
+                        value={description}
+                        defaultValue={description}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        variant="standard"
+                      />
+                      <div>
+                      <Typography variant="h5" component="h2" gutterBottom sx={{
+                        fontFamily: 'Montserrat'
+                      }}>
+                        Assignment is tagged as: 
+                      </Typography>
+                        {asgnTags.map((tag, index) => (
+                          <Chip key={index} label={tag} style={{ marginRight: '5px' }} />
+                        ))}
+                      </div>
+                    </Stack>
+                  </Box>
+                </Paper>
+              </Grid>
 
+                            <Grid item xs={12} md={6} lg={4} style={{ display: 'flex', }}>
+                            <Paper elevation={3} style={{ padding: '40px', flexGrow: 1 }}>
 
-                                    sx={{
-                                        border: 2,
-                                        borderRadius: "20px",
-                                        borderColor: "#4b6cb7",
-                                        width: "100%",
-                                        padding: "30px",
-                                        margin: "auto",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        "& .MuiTextField-root": { m: 1, width: "50ch" },
-                                        paddingLeft: "50px",
-                                        justifyContent: "center",
-                                        alignItems: "center"
-                                    }}
-
-                                >
-                                    <div className="assignment header" style={{ color: "#4b6cb7", alignContent: "flex-start" }}>
-                                        <h1>Assignment</h1>
-                                        <h2>Marks: {totalMarks}</h2>
-                                        <h2>Deadline: {deadline}</h2>
-                                        {console.log(marked)}
-                                        {marked ? <h2>Obtained Marks: {obtainedMarks}</h2> : null}
-                                    </div>
-                                    <Stack spacing={2}>
-                                        <TextField
-                                            id="standard-read-only-input"
-                                            label="Title"
-                                            value={title}
-                                            defaultValue={title}
-                                            InputProps={{
-                                                readOnly: true,
-                                            }}
-                                            variant="standard"
-                                        />
-                                        <TextField
-                                            id="standard-multiline-static"
-                                            label="Description"
-                                            multiline
-                                            rows={4}
-                                            value={description}
-                                            defaultValue={description}
-                                            InputProps={{
-                                                readOnly: true,
-                                            }}
-                                            variant="standard"
-                                        />
-                                    </Stack>
-                                </Box>
-                            </Paper>
-                        </Grid>
-
-                        <div style={{
-
-                            marginTop: '30px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '50%'
-                        }}>
-                            <Grid item xs={12} sm={6} md={6} lg={6} sx={{ width: '100%', }}>
-                                <Paper
-                                    sx={{
-
-                                        width: '100%',
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        height: 'auto',
-                                        backgroundColor: 'white',
-                                        borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                                        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-
-
-
-                                    }}
-                                >
+                                <div >
+                                    <div style={{ marginBottom: '30px', marginTop: '20px' }}>
 
                                     <div>
                                         {submitted ? (
                                             <p>Already submitted!</p>
                                         ) : (
                                             <FileUploader files={submissionFiles} setFiles={setSubmissionFiles} remFile={removeFile} fileData={submissionData} setData={setSubmissionData} />
+                                           
                                         )}
+                                         {console.log("submissions ", submissionData)}
                                     </div>
+                                   
 
 
+<div>
                                     <Button
                                         type="submit"
                                         variant="contained"
@@ -425,107 +462,21 @@ function Assignment() {
                                     >
                                         {submitted ? 'Submitted' : 'Submit'}
                                     </Button>
+                                    </div>
+                                    <div style={{ padding: '10px' }}>
+                                        {submissionData.map((file, index) => (
+                                            <div key={index} style={{ marginBottom: '10px', }}>
+                                                <FileItem file={file} deleteFile={deleteSubmissionFileItem} />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    </div>
+                                    </div>
                                 </Paper>
                             </Grid>
 
-
-                            {assignmentFiles.length > 0 && (
-                                <Grid item xs={12} sm={6} md={6} lg={6} sx={{ width: '100%', marginTop: '5%' }}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 'auto',
-                                            borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                                            backgroundColor: 'white',
-                                            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-                                            width: '100%',
-
-
-                                        }}
-                                    >
-                                        <Typography variant="h6" component="h6" sx={{
-                                            fontFamily: 'Montserrat',
-
-                                        }}>
-                                            Files
-                                        </Typography>
-
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                height: 'auto',
-                                                backgroundColor: 'white',
-                                                borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                                                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-                                                overflow: "auto",
-                                                marginTop: '3%',
-                                                width: '100%',
-
-                                            }}
-                                        >
-
-                                            <AsgnFilesUI asgnFiles={assignmentFiles} />
-                                        </Paper>
-                                    </Paper>
-                                </Grid>
-                            )}
-
-                            {helpingMaterials.length > 0 && (
-                                <Grid item xs={12} sm={6} md={6} lg={6} sx={{ width: '100%', marginTop: '5%' }}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 'auto',
-                                            backgroundColor: 'white',
-                                            borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                                            width: '100%',
-                                            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-
-
-
-                                        }}
-                                    >
-                                        <Typography variant="h6" component="h6" sx={{
-                                            fontFamily: 'Montserrat',
-
-                                        }}>
-                                            Recommended Materials
-                                        </Typography>
-
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: 'flex',
-                                                width: '100%',
-                                                flexDirection: 'column',
-                                                height: 'auto',
-                                                backgroundColor: 'white',
-                                                borderRadius: "10px", // Adjust the value to control the roundness of the corners
-                                                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-                                                overflow: "auto",
-                                                marginTop: '3%'
-
-                                            }}
-                                        >
-
-                                            <RecomMaterialUI
-                                                recomFiles={helpingMaterials}
-                                            />
-                                        </Paper>
-                                    </Paper>
-                                </Grid>
-                            )}
-
-                        </div>
-
-                        {/* Chart */}
-                        {/* <Grid item xs={12} sm={6} md={6} lg={6}>
+                            {/* Chart */}
+                        {obtainedMarks>=0 && (<Grid item xs={12} sm={12} md={12} lg={12}>
                             <Paper
                                 sx={{
                                     p: 2,
@@ -542,8 +493,101 @@ function Assignment() {
                                 }}
                             >
                                 <CircleProgress percentage={(obtainedMarks / totalMarks) * 100} circleWidth="200" marked={marked} />
+                                <h5>Your Teacher Marked your weak areas as: </h5>
+                                {weakTags.map((tag, index) => (
+                          <Chip key={index} label={tag} style={{ marginRight: '5px' , marginBottom:'5px'}} />
+                        ))}
                             </Paper>
-                        </Grid> */}
+                            
+                               
+                            
+                        </Grid>)}
+                         
+
+
+                            {assignmentFiles.length > 0 && (
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+
+                  <Paper
+                    sx={{
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: 'auto',
+                      borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                      backgroundColor: "white",
+                      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                      backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center'
+
+                    }}
+                  >
+                    <h2 style={{ color: 'white' }}>Assignment Attachments</h2>
+
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 'auto',
+                        width: 'auto',
+                        backgroundColor: '#f8f8f8',
+                        borderRadius: "10px", // Adjust the value to control the roundness of the corners
+
+
+                        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                        overflow: "auto",
+                        marginTop: '3%'
+
+                      }}
+                    >
+                      <AsgnFilesUI asgnFiles={assignmentFiles} />
+                    </Paper>
+                  </Paper>
+                </Grid>
+                            )}
+
+{helpingMaterials.length > 0 && (
+                <Grid item xs={12} sm={12} md={6} lg={6} >
+                  <Paper
+                    sx={{
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: 'auto',
+                      borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                      backgroundColor: "white",
+                      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                      backgroundImage: `url(${createClassBg})`, backgroundSize: 'cover', backgroundPosition: 'center'
+
+                    }}
+                  >
+                    <h2 style={{ color: 'white' }}>Helping Material</h2>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 'auto',
+                        width: 'auto',
+                        backgroundColor: '#f8f8f8',
+                        borderRadius: "10px", // Adjust the value to control the roundness of the corners
+
+
+                        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                        overflow: "auto",
+                        marginTop: '3%'
+
+                      }}
+                    >
+                      <RecomMaterialUI recomFiles={helpingMaterials} />
+                    </Paper>
+                  </Paper>
+                </Grid>
+                            )}
+
+                      
+
+                        
                         {/* Recommended Material */}
 
 
@@ -563,6 +607,13 @@ function Assignment() {
 
 
             {/* </div> */}
+        </div>
+        {isUploading && (
+  <div style={uploadingProgressStyle}>
+    <CircularProgress />
+    <p>Uploading...</p>
+  </div>
+)}
         </div>
     );
 }

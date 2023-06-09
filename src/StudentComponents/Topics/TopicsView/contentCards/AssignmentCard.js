@@ -132,7 +132,7 @@ function AssignmentCard(props) {
         }
         // title={props.name}
         //subheader={props.section}
-        title={content.description}
+        title={content.title}
         sx={{ color: "#2a5298" }}
       />
 

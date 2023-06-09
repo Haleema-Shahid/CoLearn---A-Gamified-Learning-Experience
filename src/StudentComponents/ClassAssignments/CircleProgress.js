@@ -6,6 +6,8 @@
 
 
 function CircleProgress({percentage, circleWidth, marked}){
+    console.log("percentage is: ", percentage)
+    percentage=Math.floor(percentage)
 
     const radius=85;
     let dashArray=radius*Math.PI*2;
@@ -34,7 +36,7 @@ function CircleProgress({percentage, circleWidth, marked}){
         <circle style={{fill:"none", stroke: "#dddd"}} cx={circleWidth/2} cy={circleWidth/2} strokeWidth="15px" r={radius}>{percentage}</circle>
         <circle style={{fill:"none", stroke: `${colorProgress}`, strokeDasharray:dashArray, strokeDashoffset:dashOffset}} transform={`rotate (-90 ${circleWidth/2} ${circleWidth/2})`} cx={circleWidth/2} cy={circleWidth/2} strokeWidth="15px" r={radius}></circle>
         <text style={{ fill: `${colorProgress}`, fontSize: "2rem", fontWeight: "bold", textAnchor: "middle", dominantBaseline: "middle" }} x="50%" y="50%">
-            {percentage}%
+         {percentage}%
         </text>
         </svg>
         </div>

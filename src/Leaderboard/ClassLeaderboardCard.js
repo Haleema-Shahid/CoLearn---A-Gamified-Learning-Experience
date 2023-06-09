@@ -1,6 +1,6 @@
 import React from 'react';
 import cardDesign from '../images/sep11.jpg';
-
+import createClassBg from '../images/classaddcard.jpg'
 function ClassLeaderboardCard({ position, name, points }) {
   return (
     <div
@@ -40,7 +40,7 @@ function ClassLeaderboardCard({ position, name, points }) {
         }}
       ></div>
       <img
-        src={cardDesign}
+        src={createClassBg}
         alt="Card Design"
         style={{
           position: 'absolute',

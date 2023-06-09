@@ -7,6 +7,7 @@ import TopThree from './TopThree';
 import ClassLeaderboard from './ClassLeaderboard';
 import { useParams } from 'react-router-dom';
 import React, { useState } from 'react';
+import ClassHeader from '../StudentComponents/ClassHeader/ClassHeader';
 
 function BoilerClassLeaderboard() {
   // .......
@@ -23,8 +24,9 @@ function BoilerClassLeaderboard() {
 
   return (
     <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-        <TopThree positions={topThreePositions} classId={classId} />
+      <div style={{ marginTop: '20px', marginBottom: '20px', alignContent:'center' }}>
+        <ClassHeader userId={userId} classId={classId}></ClassHeader>
+        {/* <TopThree positions={topThreePositions} classId={classId} /> */}
         <ClassLeaderboard studentData={dataToRender} />
       </div>
     </div>

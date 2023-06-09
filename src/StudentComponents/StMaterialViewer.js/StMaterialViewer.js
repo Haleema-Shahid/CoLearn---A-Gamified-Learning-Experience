@@ -23,6 +23,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Typography } from "@mui/material";
 import MaterialFileUI from "./MaterialFileUI";
 import { Grid } from '@mui/material';
+import ClassHeader from '../ClassHeader/ClassHeader'
 
 
 function StMaterialViewer() {
@@ -92,24 +93,31 @@ function StMaterialViewer() {
     return (
         
         
-        <div  style={{  backgroundColor: '#1e3c72',
+      <div style={{
+        backgroundColor: 'white',
         backgroundSize: "cover",
         minHeight: "100vh",
-        paddingTop: "5%",
-        paddingBottom: "5%",}} >
-       <div style={{ marginLeft: '10%', marginRight: '10%',   backgroundColor: '#1e3c72' }}>
-<Box
-sx={{
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  minHeight: 'calc(100vh - 80px)', // Adjust the value based on your page layout
-}}
->
-<Box sx={{ flexGrow: 1 }}>
+        paddingTop: "0%",
+        paddingBottom: "5%",
+      }} >
+            <ClassHeader userId={userId} classId={classId} />
+            <div style={{ marginLeft: '10%', marginRight: '10%' }}>
+            <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 'calc(100vh - 80px)', // Adjust the value based on your page layout
+            }}
+          >
+            <Box sx={{
+              display: 'flex',
+              flexGrow: 1
+            }}>
+              
   <Grid container spacing={2}>
     
-    <Grid item xs={6} md={6} lg={6}>
+  <Grid item xs={12} sm={6} md={12} lg={6}>
       <Paper 
         sx={{
           p: 2,
@@ -117,7 +125,7 @@ sx={{
           flexDirection: 'column',
       
           borderRadius: "10px", // Adjust the value to control the roundness of the corners
-          backgroundColor: "#f8f8f8",
+          backgroundColor: "white",
           boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
           overflow:'auto'
         
@@ -180,40 +188,39 @@ sx={{
 
     {/* Assignment Material */}
     {MaterialAttachmentFiles.length > 0 && (
-      <Grid item xs={12} sm={6} md={6} lg={6}>
+      <Grid item xs={12} sm={6} md={12} lg={6} >
         <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 350,
-            backgroundColor: '#f8f8f8',
-            borderRadius: "10px", // Adjust the value to control the roundness of the corners
-           
-            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-           
-           
-          
-          }}
-        >
+                    sx={{
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: 'auto',
+                      borderRadius: "10px", // Adjust the value to control the roundness of the corners
+                      backgroundColor: "white",
+                      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                     
+
+                    }}
+                  >
         <h2>Material Attachments</h2>
         
         <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 350,
-            backgroundColor: '#f8f8f8',
-            borderRadius: "10px", // Adjust the value to control the roundness of the corners
-            
-           
-            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
-            overflow: "auto",
-            marginTop:'3%'
-          
-          }}
-        >
+                      sx={{
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        height: 'auto',
+                        width: 'auto',
+                        backgroundColor: '#f8f8f8',
+                        borderRadius: "10px", // Adjust the value to control the roundness of the corners
+
+
+                        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)", // Add box shadow
+                        overflow: "auto",
+                        marginTop: '3%'
+
+                      }}
+                    >
 
           <MaterialFileUI materialFiles={MaterialAttachmentFiles} />
         </Paper>

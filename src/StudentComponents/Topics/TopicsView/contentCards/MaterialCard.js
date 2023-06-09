@@ -97,7 +97,7 @@ function MaterialCard(props) {
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {props.description}
+          {content.description}
         </Typography>
       </CardContent>
     </Card>
