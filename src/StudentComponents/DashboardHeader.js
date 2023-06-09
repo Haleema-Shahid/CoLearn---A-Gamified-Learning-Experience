@@ -9,7 +9,6 @@ import { IconButton, MenuItem, Menu } from '@mui/material';
 import logoblue from '../images/logoblue.png';
 import Box from "@mui/material/Box";
 import { Link } from 'react-router-dom';
-
 import MenuIcon from '@mui/icons-material/Menu';
 
 const HeaderContainer = styled(Paper)(({ theme }) => ({
@@ -77,6 +76,7 @@ const DashboardHeader = () => {
 
     return (
         <HeaderContainer>
+            <Link to={`/s/${userId}`} style={{ textDecoration: 'none' }}>
             <Box
                 component="img"
                 sx={{
@@ -86,6 +86,7 @@ const DashboardHeader = () => {
                 alt="Your logo."
                 src={logoblue}
             />
+            </Link>
             <Link to={`/s/${userId}`} style={{ textDecoration: 'none' }}>
                 <Typography variant="h6" component="div" sx={{
                     fontFamily: 'Montserrat',
