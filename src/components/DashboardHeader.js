@@ -22,7 +22,7 @@ const HeaderContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const CustomMenuIcon = styled(MenuIcon)({
-  color: 'white',
+  color: 'grey',
   marginRight: '10px',
   '& .MuiSvgIcon-root': {
     strokeWidth: '2px',

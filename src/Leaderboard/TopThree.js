@@ -7,7 +7,7 @@ function TopThree({ positions, classId }) {
   return (
     <div
       style={{
-        width: '50%',
+        width: '75%',
         margin: '0 auto',
         backgroundImage: `url(${winnerBg})`,
         backgroundSize: 'cover',
@@ -18,7 +18,7 @@ function TopThree({ positions, classId }) {
     >
       <div className="card" style={{ boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
         <div className="card-body" style={{ padding: '20px' }}>
-          <h2 style={{ color: 'blue', fontSize: '24px', marginBottom: '20px', textAlign: 'center' }}>Top Three Winners</h2>
+          <h2 style={{ color: 'turquoise', fontSize: '24px', marginBottom: '20px', textAlign: 'center' }}>Top Three Winners</h2>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <TopThreeCard
               key={positions[1].studentId}
