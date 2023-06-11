@@ -105,7 +105,7 @@ function TeacherDashboardCard(props) {
                 <Link to={`/t/${props.userId}/class/${props.classId}`}><MenuItem >View Class</MenuItem></Link>
                 {/* <MenuItem onClick={handleMenuClose}>Copy Code</MenuItem> */}
                 <Link to={`/user/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem >Class Analytics</MenuItem></Link>
-                {/* <Link to={`/user/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link> */}
+                <Link to={`/user/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link>
                 <MenuItem onClick={(e) => { handleDeleteClick(e); }}>Delete</MenuItem>
                 <Dialog open={open} onClose={handleCancelDelete}>
                   <DialogTitle>Confirmation</DialogTitle>
@@ -130,7 +130,7 @@ function TeacherDashboardCard(props) {
         </Typography>
       </StyledCardContent>
 
-      <Menu
+      {/* <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
@@ -140,7 +140,7 @@ function TeacherDashboardCard(props) {
         <Link to={`/t/${props.userId}/class/${props.classId}`}><MenuItem>View Class</MenuItem></Link>
         <Link to={`/t/${props.userId}/class/${props.classId}/classAnalytics`}><MenuItem>Class Analytics</MenuItem></Link>
         <Link to={`/t/${props.userId}/class/${props.classId}/classLeaderboard`}><MenuItem>Leaderboard</MenuItem></Link>
-      </Menu>
+      </Menu> */}
     </StyledCard>
   );
 }

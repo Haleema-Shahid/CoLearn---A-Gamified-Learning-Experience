@@ -322,120 +322,60 @@ const SubmissionsDisplay = () => {
                                         />
                                     </td>
                                     <td style={styles.tableCell}>
-                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
-                                            {/* // display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}> */}
-                                            <FormControl style={{ width: '100%', alignItems: 'center' }}>
-                                                <Select
-                                                    labelId="demo-multiple-checkbox-label"
-                                                    id="demo-multiple-checkbox"
-                                                    multiple
-                                                    value={submission.submission.weaktags || []}
-                                                    onChange={(e) => {
-                                                        // Rest of the code
-                                                    }}
-                                                    sx={{
-                                                        height: '35px',
-                                                        width: '100px',
-                                                        alignItems: 'left'
-                                                    }}
-                                                    input={<OutlinedInput style={{ width: '50%', }} label="Tag" />}
-                                                    renderValue={(selected) => {
-                                                        if (Array.isArray(selected)) {
-                                                            return selected.join(', ');
-                                                        }
-                                                        return '';
-                                                    }}
-                                                >
-                                                    {tags.map((tag) => (
-                                                        <MenuItem
-                                                            key={tag}
-                                                            value={tag}
-                                                            sx={{
-                                                                width: '100%',
-                                                                padding: '5px',
-                                                                fontSize: '0.85rem',
-
-                                                            }}
-                                                        >
-                                                            <Checkbox
-                                                                checked={(submission.submission.weaktags || []).indexOf(tag) > -1}
-                                                                sx={{
-
-                                                                    padding: '0px',
-
-
-
-
-                                                                }}
-                                                            />
-                                                            <ListItemText
-                                                                primary={tag}
-                                                                sx={{
-
-                                                                    padding: '1px'
-                                                                }}
-                                                            />
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
-
-                                            {/* <FormControl
-                                            style={{ width: 'auto' }}
-                                            title={submission.submission.weaktags && submission.submission.weaktags.join('\n')}
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
+                                        <FormControl style={{ width: '100%', alignItems: 'center' }}>
+                                        <Select
+                                            labelId="demo-multiple-checkbox-label"
+                                            id="demo-multiple-checkbox"
+                                            multiple
+                                            value={submission.submission.weaktags || []}
+                                            onChange={(e) => {
+                                            const updatedSubmissions = [...submissions];
+                                            const index = updatedSubmissions.findIndex((s) => s.submission._id === submission.submission._id);
+                                            updatedSubmissions[index].submission.weaktags = e.target.value;
+                                            setSubmissions(updatedSubmissions);
+                                            }}
+                                            sx={{
+                                            height: '35px',
+                                            width: '100px',
+                                            alignItems: 'left'
+                                            }}
+                                            input={<OutlinedInput style={{ width: '50%' }} label="Tag" />}
+                                            renderValue={(selected) => {
+                                            if (Array.isArray(selected)) {
+                                                return selected.join(', ');
+                                            }
+                                            return '';
+                                            }}
+                                            MenuProps={MenuProps}
                                         >
-
-                                            <Select
-                                                labelId="demo-multiple-checkbox-label"
-                                                id="demo-multiple-checkbox"
-                                                multiple
-                                                value={submission.submission.weaktags || []}
-                                                onChange={(e) => {
-                                                    const updatedSubmissions = [...submissions];
-                                                    const index = updatedSubmissions.findIndex((s) => s.submission._id === submission.submission._id);
-                                                    const { value } = e.target;
-                                                    updatedSubmissions[index].submission.weaktags = e.target.value;
-                                                    setWeakTags(e.target.value);
-                                                    setUpdated([...updated, updatedSubmissions[index]])
-                                                    setSubmissions(updatedSubmissions);
-                                                }}
+                                            {tags.map((tag) => (
+                                            <MenuItem
+                                                key={tag}
+                                                value={tag}
                                                 sx={{
-                                                    height: '35px',
-                                                    width: '100px'
-                                                }}
-                                                input={<OutlinedInput label="Tag" />}
-                                                renderValue={(selected) => {
-                                                    if (Array.isArray(selected)) {
-                                                        return selected.join(', ');
-                                                    }
-                                                    return '';
+                                                width: '100%',
+                                                padding: '5px',
+                                                fontSize: '0.85rem',
                                                 }}
                                             >
-                                                {console.log("tags:", tags)}
-                                                {tags.map((tag) => (
-                                                    <MenuItem key={tag} value={tag}
-                                                        sx={{
-                                                            width: 'auto',
-                                                            padding: '5px',
-                                                            fontSize: '0.85rem'
-                                                        }}>
-                                                        <Checkbox checked={weakTags.indexOf(tag) > -1}
-                                                            sx={{
-                                                                margin: '0px',
-                                                                padding: '0px'
-                                                            }} />
-                                                        <ListItemText primary={tag}
-                                                            sx={{
-
-                                                                margin: '0px',
-                                                                padding: '1px'
-                                                            }} />
-                                                    </MenuItem>
-                                                ))}
-
-                                            </Select>
-                                        </FormControl> */}
-                                        </div>
+                                                <Checkbox
+                                                checked={(submission.submission.weaktags || []).indexOf(tag) > -1}
+                                                sx={{
+                                                    padding: '0px',
+                                                }}
+                                                />
+                                                <ListItemText
+                                                primary={tag}
+                                                sx={{
+                                                    padding: '1px'
+                                                }}
+                                                />
+                                            </MenuItem>
+                                            ))}
+                                        </Select>
+                                        </FormControl>
+                                    </div>
                                     </td>
                                 </tr>
                             ))}

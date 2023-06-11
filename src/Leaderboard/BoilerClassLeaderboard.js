@@ -26,7 +26,7 @@ function BoilerClassLeaderboard() {
     <div style={{ paddingTop: '20px', paddingBottom: '20px' }}>
       <div style={{ marginTop: '20px', marginBottom: '20px', alignContent:'center' }}>
         <ClassHeader userId={userId} classId={classId}></ClassHeader>
-        {/* <TopThree positions={topThreePositions} classId={classId} /> */}
+        <TopThree positions={topThreePositions} classId={classId} />
         <ClassLeaderboard studentData={dataToRender} />
       </div>
     </div>
