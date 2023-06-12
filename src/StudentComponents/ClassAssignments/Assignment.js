@@ -272,6 +272,7 @@ function Assignment() {
 
         }
         finally{
+            setSubmitted(true);
             setIsUploading(false);
         }
     };

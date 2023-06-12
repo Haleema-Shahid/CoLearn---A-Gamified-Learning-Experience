@@ -31,6 +31,7 @@ import ProgressDashboard from './components/Students/Progress';
 import StudentMaterialViewer from './StudentComponents/StMaterialViewer.js/StMaterialViewer';
 import StudentAnalytics from './Teacher Analytics/AnalyticsDashboard'
 import ViewTopicS from './StudentComponents/Topics/TopicsView/ViewTopic';
+import StAnalyticsBoiler from './Student Analytics/StAnalyticsBoiler';
 
 
 function App() {
@@ -86,6 +87,8 @@ function App() {
           {/* <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId" element={<Assignment />} /> */}
           <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/assignment/:assignmentId/AssignmentViewer" element={<StudentAssignmentViewer />} />
           <Route path="/s/:userId/class/:classId/week/:weekId/topic/:topicId/materialId/:materialId/StudentMaterialViewer" element={<StudentMaterialViewer />} />
+          <Route path="/s/:userId/class/:classId/student/:studentId/StudentAnalytics" element={<StAnalyticsBoiler />} />
+          <Route path="/t/:userId/class/:classId/student/:studentId/StudentAnalytics" element={<StAnalyticsBoiler/>}/>
 
 
         </Routes>

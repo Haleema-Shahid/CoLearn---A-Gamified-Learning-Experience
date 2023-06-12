@@ -1166,4 +1166,163 @@ router.get('/class/:classId/analytics', async (request, response) => {
   }
 });
 
+//Aleena Started backend//.............................
+//gets all the submissions given an asssignment id 
+
+router.get('/assignment/:assignmentId/submissions', async (request, response) => {
+  try {
+    const { assignmentId } = request.params;
+
+    // Check if the classId and assignmentId are valid ObjectId types
+    if (!ObjectId.isValid(assignmentId)) {
+      return response.status(400).json({ message: "Invalid assignment ID" });
+    }
+
+    // Get the 'submissions' collection from the database
+    const submissions = client.db('colearnDb').collection('submission');
+
+    // Find all submissions for the specified assignment
+    const submissionsData = await submissions.find({ assignmentId: new ObjectId(assignmentId) }).toArray();
+
+    // Create a response object containing the assignmentId and the submissions array
+    const responseData = {
+      submissions: submissionsData
+    };
+
+    return response.json(responseData);
+  } catch (err) {
+    console.error(err);
+    return response.status(500).json({ message: "Server error" });
+  }
+});
+
+// Retrieve assignment by only ID
+router.get('/assignments/:assignmentId', async (req, res) => {
+  try {
+    const { assignmentId } = req.params;
+
+    // Check if the assignmentId is a valid ObjectId type
+    if (!ObjectId.isValid(assignmentId)) {
+      return res.status(400).json({ message: "Invalid assignment ID" });
+    }
+
+    // Get the 'assignments' collection from the database
+    const assignments = client.db('colearnDb').collection('assignment');
+
+    // Find the assignment with the specified ID
+    const assignment = await assignments.findOne({ _id: new ObjectId(assignmentId) });
+
+    if (!assignment) {
+      return res.status(404).json({ message: "Assignment not found" });
+    }
+
+    return res.json(assignment);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+//get all assignments of a class
+router.get('/class/:classId/allAssignments', async (request, response) => {
+  try {
+    const classId = new ObjectId(request.params.classId);
+
+    const weeks = await client.db('colearnDb').collection('week').find({ classId }).toArray();
+    let weekIds = [];
+    for (let i = 0; i < weeks.length; i++) {
+      weekIds.push(weeks[i]._id);
+    }
+
+    const topics = await client.db('colearnDb').collection('topic').find({ weekId: { $in: weekIds } }).toArray();
+    let topicIds = [];
+    for (let i = 0; i < topics.length; i++) {
+      topicIds.push(topics[i]._id);
+    }
+
+    const assignments = await client.db('colearnDb').collection('assignment').find({ topicId: { $in: topicIds } }).toArray();
+    let assignmentIds = [];
+    for (let i = 0; i < assignments.length; i++) {
+      assignmentIds.push(assignments[i]._id);
+    }
+
+    return response.json(assignmentIds);
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ message: "Server error" });
+  }
+});
+
+//get all assignment objects in a class
+// router.get('/class/:classId/allAssignmentObjects', async (request, response) => {
+//   try {
+//     const classId = new ObjectId(request.params.classId);
+
+//     const weeks = await client.db('colearnDb').collection('week').find({ classId }).toArray();
+//     let weekIds = [];
+//     for (let i = 0; i < weeks.length; i++) {
+//       weekIds.push(weeks[i]._id);
+//     }
+
+//     const topics = await client.db('colearnDb').collection('topic').find({ weekId: { $in: weekIds } }).toArray();
+//     let topicIds = [];
+//     for (let i = 0; i < topics.length; i++) {
+//       topicIds.push(topics[i]._id);
+//     }
+
+//     const assignments = await client.db('colearnDb').collection('assignment').find({ topicId: { $in: topicIds } }).toArray();
+    
+//     return response.json(assignments);
+//   } catch (error) {
+//     console.error(error);
+//     return response.status(500).json({ message: "Server error" });
+//   }
+// });
+
+// get all assignment objects in a class
+router.get('/class/:classId/allAssignmentObjects', async (request, response) => {
+  try {
+    const classId = new ObjectId(request.params.classId);
+
+    const assignments = await client
+      .db('colearnDb')
+      .collection('assignment')
+      .aggregate([
+        { $match: { classId } },
+        {
+          $lookup: {
+            from: 'topic',
+            localField: 'topicId',
+            foreignField: '_id',
+            as: 'topic',
+          },
+        },
+        {
+          $unwind: '$topic',
+        },
+        {
+          $lookup: {
+            from: 'week',
+            localField: 'topic.weekId',
+            foreignField: '_id',
+            as: 'week',
+          },
+        },
+        {
+          $unwind: '$week',
+        },
+      ])
+      .toArray();
+
+    return response.json(assignments);
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+//....................................
+
+
 module.exports = router

@@ -27,7 +27,11 @@ const StudentsDisplay = (props) => {
     const navigate = useNavigate();
     const handleStudentClick = (studentId) => {
         console.log(studentId, " clicked!")
-        navigate(`/t/${userId}/class/${classId}/student/${studentId}`);
+        if(studentId==userId)
+        navigate(`/s/${userId}/class/${classId}/student/${studentId}/StudentAnalytics`);
+        else
+        return;
+       // navigate(`/t/${userId}/class/${classId}/student/${studentId}`);
     }
 
 

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { Chart, BarController, BarElement, LinearScale, Tooltip } from 'chart.js';
+import { Chart, BarController, BarElement, LinearScale, Tooltip, CategoryScale } from 'chart.js';
 
-Chart.register(BarController, BarElement, LinearScale, Tooltip);
+Chart.register(BarController, BarElement, LinearScale, Tooltip, CategoryScale);
 
 function SingleAssignmentAnalyticsChart({ title, totalMarks, studentData, width, height }) {
   const canvas = useRef(null);
@@ -16,7 +16,7 @@ function SingleAssignmentAnalyticsChart({ title, totalMarks, studentData, width,
           {
             label: 'Number of Students',
             data: studentData.map((data) => data.count),
-            backgroundColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: getBarColors(studentData.length), // Get custom bar colors
           },
         ],
       },
@@ -50,11 +50,28 @@ function SingleAssignmentAnalyticsChart({ title, totalMarks, studentData, width,
     return () => chart.destroy();
   }, [studentData]);
 
+  // Function to generate custom bar colors
+  const getBarColors = (count) => {
+    const colors = [
+      '#56cfe1',
+      '#5e60ce',
+      '#6930c3',
+      '#7400b8',
+      // Add more colors as needed
+    ];
+
+    // If there are fewer colors than the number of data points, repeat the colors
+    const repeatedColors = Array.from({ length: Math.ceil(count / colors.length) }, () => colors).flat();
+
+    // Return the array of colors matching the number of data points
+    return repeatedColors.slice(0, count);
+  };
+
   return (
-    <div className="card" style={{ boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1), 0 -6px 10px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
+    <div className="card" style={{ boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)', borderRadius: '10px' }}>
       <div className="card-body" style={{ boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)', borderRadius: '10px', padding: '20px' }}>
         <h2 className="card-title">{title}</h2>
-        <p>Total Marks: {totalMarks}</p>
+        {/* <p>Total Marks: {totalMarks}</p> */}
         <div style={{ width, height }}>
           <canvas ref={canvas} width={width} height={height}></canvas>
         </div>
