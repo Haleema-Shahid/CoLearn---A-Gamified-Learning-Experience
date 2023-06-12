@@ -6,6 +6,8 @@ import LineChart01 from '../Charts/LineChart01';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Typography } from '@mui/material';
+import ClassHeader from '../StudentComponents/ClassHeader/ClassHeader';
+
 import TeacherDashboardHeader from '../components/DashboardHeader';
 import DashboardHeader from '../StudentComponents/DashboardHeader';
 
@@ -144,7 +146,8 @@ function TeacherAnalyticsDashboard() {
     return (
         <div className="flex flex-col">
             {/* <TeacherDashboardHeader userId={userId} /> */}
-            <DashboardHeader userId={userId} />
+            {/* <DashboardHeader userId={userId} /> */}
+            <ClassHeader userId={userId} classId={classId} />
             <div
                 style={{
                     display: 'flex',

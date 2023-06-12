@@ -909,9 +909,10 @@ router.put('/t/:userId/assignment/:assignmentId/submissions/save', async (reques
     for (let i = 0; i < updatedSubmissions.length; i++) {
       //console.log("in looping");
       const { _id, obtainedmarks, weaktags } = updatedSubmissions[i];
+      console.log("weaktags updated: ", weaktags);
       //console.log("tags: ", weaktags);
       //console.log("marks: ", obtainedmarks);
-      await submissionCollection.updateOne({ _id: new ObjectId(_id), assignmentId: new ObjectId(assignmentId) }, { $set: { obtainedmarks, marked: true, weaktags } });
+      await submissionCollection.updateOne({ _id: new ObjectId(_id), assignmentId: new ObjectId(assignmentId) }, { $set: { obtainedmarks: obtainedmarks, marked: true, weaktags: weaktags } });
     }
 
     response.status(200).json({ message: 'Submissions updated successfully' });
@@ -1029,16 +1030,62 @@ async function storeRecommendations(results, students) {
 }
 
 //save marks and weaknesses and prompt recommender
-router.get('/t/:userId/assignment/:assignmentId/recommend', async (request, response) => {
+router.get('/t/:userId/class/:classId/assignment/:assignmentId/recommend', async (request, response) => {
   try {
     const assignmentId = new ObjectId(request.params.assignmentId);
+    const classId = new ObjectId(request.params.classId);
 
     const submissions = await client.db('colearnDb').collection('submission')
       .find({ assignmentId: assignmentId })
       .sort({ obtainedmarks: -1 }) // Sort in descending order based on obtainedMarks
       .toArray();
 
-    const helpingMaterials = await client.db('colearnDb').collection('helpingmaterial').find().toArray();
+    //const helpingMaterials = await client.db('colearnDb').collection('helpingmaterial').find().toArray();
+    const helpingMaterials = await client
+      .db('colearnDb')
+      .collection('helpingmaterial')
+      .aggregate([
+        {
+          $lookup: {
+            from: 'assignment',
+            localField: 'asnId',
+            foreignField: '_id',
+            as: 'assignment',
+          },
+        },
+        {
+          $unwind: '$assignment',
+        },
+        {
+          $lookup: {
+            from: 'topic',
+            localField: 'assignment.topicId',
+            foreignField: '_id',
+            as: 'topic',
+          },
+        },
+        {
+          $unwind: '$topic',
+        },
+        {
+          $lookup: {
+            from: 'week',
+            localField: 'topic.weekId',
+            foreignField: '_id',
+            as: 'week',
+          },
+        },
+        {
+          $unwind: '$week',
+        },
+        {
+          $match: {
+            'week.classId': classId,
+          },
+        },
+      ])
+      .toArray();
+
     let materials = [];
     for (let i = 0; i < helpingMaterials.length; i++) {
       materials.push({ _id: helpingMaterials[i]._id, tags: helpingMaterials[i].tags, level: helpingMaterials[i].level })

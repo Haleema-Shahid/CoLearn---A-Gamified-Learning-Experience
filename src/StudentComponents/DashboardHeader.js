@@ -36,6 +36,10 @@ const DashboardHeader = () => {
     const { userId } = useParams();
     const [name, setName] = useState('');
 
+    const [role, setRole] = useState('');
+
+    //window.alert(role);
+
     const [anchorEl, setAnchorEl] = useState(null);
 
     const navigate = useNavigate();
@@ -65,6 +69,12 @@ const DashboardHeader = () => {
                 const response = await fetch(`http://localhost:4000/backend/user/${userId}`);
                 const data = await response.json();
                 setName(data.firstname + " " + data.lastname);
+                if (data.role == 'teacher') {
+                    setRole('t');
+                }
+                else {
+                    setRole('s');
+                }
                 console.log("name is ", name);
             } catch (error) {
                 console.log('Error fetching user:', error);
@@ -76,18 +86,18 @@ const DashboardHeader = () => {
 
     return (
         <HeaderContainer>
-            <Link to={`/s/${userId}`} style={{ textDecoration: 'none' }}>
-            <Box
-                component="img"
-                sx={{
-                    height: 64,
-                    marginLeft: '20px'
-                }}
-                alt="Your logo."
-                src={logoblue}
-            />
+            <Link to={`/${role}/${userId}`} style={{ textDecoration: 'none' }}>
+                <Box
+                    component="img"
+                    sx={{
+                        height: 64,
+                        marginLeft: '20px'
+                    }}
+                    alt="Your logo."
+                    src={logoblue}
+                />
             </Link>
-            <Link to={`/s/${userId}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/${role}/${userId}`} style={{ textDecoration: 'none' }}>
                 <Typography variant="h6" component="div" sx={{
                     fontFamily: 'Montserrat',
                     fontSize: '1.5rem',

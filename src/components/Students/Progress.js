@@ -3,9 +3,13 @@ import { Chart, BarController, BarElement, LinearScale, CategoryScale, Tooltip }
 import AllAssignmentsAnalyticsChart from '../../Charts/AllAssignmentsAnalyticsChart';
 import SingleAssignmentAnalyticsChart from '../../Charts/SingleAssignmentAnalyticsChart';
 import LineChart01 from '../../Charts/LineChart01';
+import ClassHeader from '../../StudentComponents/ClassHeader/ClassHeader';
+import { useParams } from 'react-router-dom';
+
 Chart.register(BarController, BarElement, LinearScale, CategoryScale, Tooltip);
 
 function ProgressDashboard(props) {
+    const { userId, classId } = useParams();
     // Sample data for the assignment analytics chart
     const assignmentData = [
         {
@@ -48,6 +52,7 @@ function ProgressDashboard(props) {
 
     return (
         <div className="flex flex-col">
+            <ClassHeader userId={userId} classId={classId} />
             <header className="px-5 py-4 border-b border-slate-100" style={{ marginLeft: '45%', paddingTop: '5%', fontFamily: 'Montserrat' }}>
                 <span className="analytics" style={{ color: 'rgb(30, 41, 59)', fontSize: '1.875rem', lineHeight: '2.25rem', fontWeight: 700, marginRight: '0.5rem', pointerEvents: 'none' }}>Analytics</span>
             </header>
