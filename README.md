@@ -1,7 +1,7 @@
 # **How to run the application**
 First open the project with visual studio code
 
-## After that open a terminal and move to the project folder and install the required depencies by the following command:
+### After that open a terminal and move to the project folder and install the required depencies by the following command:
 
 npm install
 
@@ -18,6 +18,19 @@ npm start
 cd src
 
 npm run start
+
+If you have any further queries on how to run it send an email at:
+l191030@lhr.nu.edu.pk
+
+
+
+
+
+
+
+
+
+
 
 
 
