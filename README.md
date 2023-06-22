@@ -1,3 +1,35 @@
+# **How to run the application**
+First open the project with visual studio code
+After that open a terminal and move to the project folder and install the required depencies by the following command:
+npm install
+
+Open another terminal and move to "Backend folder" by the following command:
+cd backend
+
+Start the backend server by the following command:
+npm start
+
+In the first terminal move to "src" folder and then start the front end by the following commands:
+cd src
+npm run start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
