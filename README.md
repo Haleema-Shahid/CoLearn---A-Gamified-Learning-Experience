@@ -3,21 +3,21 @@ First open the project with visual studio code
 
 ### After that open a terminal and move to the project folder and install the required depencies by the following command:
 
-npm install
+### `npm install`
 
 ### Open another terminal and move to "Backend folder" by the following command:
 
-cd backend
+### `cd backend`
 
 ### Start the backend server by the following command:
 
-npm start
+### `npm start`
 
 ### In the first terminal move to "src" folder and then start the front end by the following commands:
 
-cd src
+### `cd src`
 
-npm run start
+### `npm run start`
 
 If you have any further queries on how to run it send an email at:
 l191030@lhr.nu.edu.pk
